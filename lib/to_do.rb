@@ -1,4 +1,6 @@
-class ToDo
+module ToDo
+  class ToDo
+    include Enumerable
 
   def initialize
     @tasks = Array.new
