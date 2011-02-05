@@ -2,17 +2,28 @@ module ToDo
   class ToDo
     include Enumerable
 
-  def initialize
-    @tasks = Array.new
-  end
+    TODOFILE = File.expand_path('~/.RubyRuby.Do')
 
-  def add(task)
-    @tasks << task
-  end
-  
-  def save
-    @tasks.reduce('') do |buff, t|
-      buff + JSON.dump(t)
+    def initialize
+      @tasks = Array.new
+      @filename = TODOFILE
+      puts @filename
+    end
+
+    def add(task)
+      @tasks << task
+    end
+
+    def each
+      @tasks.each { |t| yield t }
+    end
+
+    def save
+      File.open(@filename, 'w') {|f| f.write(@tasks.to_yaml) }
+    end
+
+    def load
+      @tasks = YAML::load( File.open(@filename, 'r')) # YAML::load_stream( File.open( 'README' ) )
     end
   end
 end
