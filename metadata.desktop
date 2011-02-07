@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=checkbox
+Name[it]=RubyRubyDo
+Name=RubyRubyDo
+ServiceTypes=Plasma/Applet
+Type=Service
+X-KDE-PluginInfo-Author=Antonio Liccardo
+X-KDE-PluginInfo-Category=Utilities
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-Email=tuxmal@tiscali.it
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=RubyRubyDo
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=http://github.com/TuxmAL/RubyRubyDo
+X-Plasma-API=ruby-script
+X-Plasma-MainScript=code/main.rb
