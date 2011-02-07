@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name=RubyRubyDo
+Comment=Simple Ruby ToDo plasmoid
+Icon=checkbox
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-Plasma-API=ruby-script
+X-Plasma-MainScript=code/main.rb
+
+X-KDE-PluginInfo-Author=Antonio Liccardo
+X-KDE-PluginInfo-Email=tuxmal@tiscali.it
+X-KDE-PluginInfo-Name=RubyRubyDo
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://github.com/TuxmAL/RubyRubyDo
+X-KDE-PluginInfo-Category=Utility
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
