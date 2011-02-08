@@ -2,37 +2,52 @@
 #
 #required libraries to rely on.
 #require 'rubygems'
+require 'plasma_applet'
 require 'yaml'
 #require 'enumerator'
-
-#require 'file'
 
 #We need ToDo tasks
 require 'to_do'
 require 'task'
 
-
-require 'plasma_applet'
-
 module RubyRubyDo
   class Main < PlasmaScripting::Applet
-    def initialize parent
-      super parent
-    end
+
+    slots :addText
 
     def init
-      self.has_configuration_interface = false
-      self.aspect_ratio_mode = Plasma::Square
-      self.background_hints = Plasma::Applet.DefaultBackground
+      set_minimum_size 150, 150
 
-      layout = Qt::GraphicsLinearLayout.new Qt::Horizontal, self
-      label = Plasma::Label.new self
-      label.text = "Hello world!"
-      layout.add_item label
-      self.layout = layout
+      @layout = Qt::GraphicsLinearLayout.new Qt::Vertical, self
+      self.layout = @layout
 
-      resize 125, 125
+      @label = Plasma::Label.new self
+      @label.text = 'This plasmoid will copy the text you enter below to the clipboard.'
+      @layout.add_item @label
+
+      @line_edit = Plasma::LineEdit.new self
+
+      begin
+        @line_edit.clear_button_shown = true # not supported in early plasma versions
+      rescue
+        nil # but that doesn't matter
+      end
+
+      @layout.add_item @line_edit
+
+      @button = Plasma::PushButton.new self
+      @button.text = 'Copy to clipboard'
+      @layout.add_item @button
+
+      Qt::Object.connect( @button, SIGNAL(:clicked), self, SLOT(:addText) )
+      Qt::Object.connect( @line_edit, SIGNAL(:returnPressed), self, SLOT(:addText) )
     end
+
+    def addText
+      Qt::Application.clipboard.text = @line_edit.text
+      @line_edit.text = ""
+    end
+
   end
 end
 
