@@ -23,16 +23,28 @@ module RubyRubyDo
       @layout = Qt::GraphicsLinearLayout.new Qt::Vertical, self
       self.layout = @layout
 
-        #self.theme = Plasma::Svg(self)
-        #self.theme.setImagePath("widgets/background")
-        #self.setBackgroundHints(Plasma::Applet.DefaultBackground)
+      @theme = Plasma::Svg.new self
+      puts @theme.inspect
+      @theme.setImagePath("widgets/background")
+      puts @theme.inspect
+      self.BackgroundHints = Plasma::Applet.DefaultBackground
 
       @label = Plasma::Label.new self
       @label.text = 'TreeView Example:'
       @layout.addItem @label
 
       @stringlist = [] #Qt::StringList.new
-      (1..10).each { |i| @stringlist << "Item #{i}" }
+      (1..10).each { |i| @stringlist << "Item #{i}, 1" }
+#################
+#     lv1->addColumn( "Items" );
+#     lv1->setRootIsDecorated( TRUE );
+#     // create a list with 4 ListViewItems which will be parent items of other ListViewItems
+#     QValueList<QListViewItem *> parentList;
+#     parentList.append( new QCheckListItem( lv1, "Parent Item 1", QCheckListItem::CheckBoxController ) );
+#     parentList.append( new QCheckListItem( lv1, "Parent Item 2", QCheckListItem::CheckBoxController ) );
+#     parentList.append( new QCheckListItem( lv1, "Parent Item 3", QCheckListItem::CheckBoxController ) );
+#     parentList.append( new QCheckListItem( lv1, "Parent Item 4", QCheckListItem::CheckBoxController ) );
+#################
 
       @model = Qt::StringListModel.new self
       @model.StringList= @stringlist
@@ -41,6 +53,11 @@ module RubyRubyDo
       @treeview.Model = @model
       @layout.add_item @treeview
 
+      @listview = Qt::ListView.new #self
+      @listview.Model = @model
+      @listview.view_mode = Qt::ListView::IconMode #Qt::ListView::ListMode
+      @listview.show
+      
       @lineedit = Plasma::LineEdit.new self
       begin
         @line_edit.clear_button_shown = true # not supported in early plasma versions
@@ -72,7 +89,7 @@ module RubyRubyDo
     end
 
     def addText
-      Qt::Application.clipboard.text = @lineedit.text
+      #Qt::Application.clipboard.text = @lineedit.text
       @stringlist << @lineedit.text
       @model.string_list = @stringlist
       @lineedit.text = ""
