@@ -17,3 +17,4 @@ X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=http://github.com/TuxmAL/RubyRubyDo
 X-Plasma-API=ruby-script
 X-Plasma-MainScript=code/main.rb
+X-Plasma-DefautSize=250,400
