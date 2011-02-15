@@ -53,6 +53,29 @@ module RubyRubyDo
       @treeview.Model = @model
       @layout.add_item @treeview
 
+#########################################################################
+# working sample in python (altough not as plasma widget)
+# from PyQt4.QtCore import *
+# from PyQt4.QtGui import *
+# import sys
+# from random import randint
+#
+# app = QApplication(sys.argv)
+# model = QStandardItemModel()
+#
+# for n in range(10):
+#   item = QStandardItem('Item %s' % randint(1, 100))
+#   check = Qt.Checked if randint(0, 1) == 1 else Qt.Unchecked
+#   item.setCheckState(check)
+#   item.setCheckable(True)
+#   model.appendRow(item)
+#
+#   view = QListView()
+#   view.setModel(model)
+#   view.show()
+#   app.exec_()
+#########################################################################
+
       @listview = Qt::ListView.new #self
       @listview.Model = @model
       @listview.view_mode = Qt::ListView::IconMode #Qt::ListView::ListMode
