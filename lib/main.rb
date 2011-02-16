@@ -33,58 +33,40 @@ module RubyRubyDo
       @label.text = 'TreeView Example:'
       @layout.addItem @label
 
-      @stringlist = [] #Qt::StringList.new
-      (1..10).each { |i| @stringlist << "Item #{i}, 1" }
-#################
-#     lv1->addColumn( "Items" );
-#     lv1->setRootIsDecorated( TRUE );
-#     // create a list with 4 ListViewItems which will be parent items of other ListViewItems
-#     QValueList<QListViewItem *> parentList;
-#     parentList.append( new QCheckListItem( lv1, "Parent Item 1", QCheckListItem::CheckBoxController ) );
-#     parentList.append( new QCheckListItem( lv1, "Parent Item 2", QCheckListItem::CheckBoxController ) );
-#     parentList.append( new QCheckListItem( lv1, "Parent Item 3", QCheckListItem::CheckBoxController ) );
-#     parentList.append( new QCheckListItem( lv1, "Parent Item 4", QCheckListItem::CheckBoxController ) );
-#################
+      #@stringlist = [] #Qt::StringList.new
+      #(1..10).each { |i| @stringlist << "Item #{i}, 1" }
+      #@model = Qt::StringListModel.new self
+      #@model.StringList= @stringlist
 
-      @model = Qt::StringListModel.new self
-      @model.StringList= @stringlist
+      @model = Qt::StandardItemModel.new self
+      (1..10).each do |i|
+	col1 = Qt::StandardItem.new  "lvElem #{i}" #, "column 2 of #{i}"]
+	col1.check_state = (( i % 3) == 0)? Qt.Checked : Qt.Unchecked 
+	col1.checkable = true
+	col2 = Qt::StandardItem.new("column 2 of #{i}")
+	col3 = Qt::StandardItem.new("due date for #{i}")
+	@model.append_row [col1, col2, col3]
+      end
 
       @treeview = Plasma::TreeView.new self
+      # now we try to camouflage the treeview into a listview 
+      @treeview.native_widget.root_is_decorated = false
+      @treeview.native_widget.all_columns_show_focus = true
+      @treeview.native_widget.items_expandable = false
+      # and more, into a checklistview
       @treeview.Model = @model
       @layout.add_item @treeview
-
-#########################################################################
-# working sample in python (altough not as plasma widget)
-# from PyQt4.QtCore import *
-# from PyQt4.QtGui import *
-# import sys
-# from random import randint
-#
-# app = QApplication(sys.argv)
-# model = QStandardItemModel()
-#
-# for n in range(10):
-#   item = QStandardItem('Item %s' % randint(1, 100))
-#   check = Qt.Checked if randint(0, 1) == 1 else Qt.Unchecked
-#   item.setCheckState(check)
-#   item.setCheckable(True)
-#   model.appendRow(item)
-#
-#   view = QListView()
-#   view.setModel(model)
-#   view.show()
-#   app.exec_()
-#########################################################################
-
-      @listview = Qt::ListView.new #self
-      @listview.Model = @model
-      @listview.view_mode = Qt::ListView::IconMode #Qt::ListView::ListMode
-      @listview.show
+      
+#      @listview = Qt::ListView.new #self
+#      @listview.Model = @modellv
+#      @listview.view_mode = Qt::ListView::ListMode #Qt::ListView::IconMode 
+#      @listview.show
       
       @lineedit = Plasma::LineEdit.new self
       begin
-        @line_edit.clear_button_shown = true # not supported in early plasma versions
+        @lineedit.clear_button_shown = true # not supported in early plasma versions
       rescue
+	puts "clear_button_shown not found!"
         nil # but that doesn't matter
       end
       #@lineedit.click_message = 'Add a new string...'
