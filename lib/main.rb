@@ -16,21 +16,20 @@ module RubyRubyDo
     slots :addText
 
     def init
-      set_minimum_size 250, 400
+      #set_minimum_size 250, 400
+      self.set_minimum_size 350, 350
       self.has_configuration_interface = false
       #self.setAspectRatioMode= Plasma::IgnoreAspectRatio
-      # py: self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
+      self.aspect_ratio_mode = Plasma::IgnoreAspectRatio
       @layout = Qt::GraphicsLinearLayout.new Qt::Vertical, self
       self.layout = @layout
 
       @theme = Plasma::Svg.new self
-      puts @theme.inspect
-      @theme.setImagePath("widgets/background")
-      puts @theme.inspect
+      @theme.ImagePath = 'widgets/background'
       self.BackgroundHints = Plasma::Applet.DefaultBackground
 
       @label = Plasma::Label.new self
-      @label.text = 'TreeView Example:'
+      @label.text = 'RubyRubyDo ToDo list:'
       @layout.addItem @label
 
       #@stringlist = [] #Qt::StringList.new
@@ -73,15 +72,9 @@ module RubyRubyDo
       Qt::Object.connect(@lineedit,  SIGNAL(:returnPressed), self, SLOT(:addText) )
       @layout.addItem @lineedit
 
-        self.setLayout(self.layout)
-        self.resize(250,400)
-
-
-
       #@label = Plasma::Label.new self
       #@label.text = 'This plasmoid will copy the text you enter below to the clipboard.'
       #@layout.add_item @label
-
 
       #@layout.add_item @line_edit
 
