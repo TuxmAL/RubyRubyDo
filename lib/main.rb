@@ -11,9 +11,41 @@ require 'to_do'
 require 'task'
 
 module RubyRubyDo
+
+  class PlasmaTask <  Qt::AbstractItemModel
+    def index()
+    end
+
+    def parent()
+    end
+    def row_count()
+    end
+
+    def column_count()
+    end
+
+    def data(index, role)
+      @to_do[index].description
+    end
+    def data=
+      # The dataChanged() signals must be emitted explicitly when reimplementing the setData() function
+    end
+
+    def flags()
+      #to ensure that ItemIsEditable is returned.
+    end
+
+    def header_Data()
+    end
+    def header_data= 
+      # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
+    end
+  end
+
   class Main < PlasmaScripting::Applet
 
-    slots :addText
+    slots :add_text
+    slots :selected
 
     def init
       #set_minimum_size 250, 400
@@ -39,12 +71,14 @@ module RubyRubyDo
 
       @model = Qt::StandardItemModel.new self
       (1..10).each do |i|
-	col1 = Qt::StandardItem.new  "lvElem #{i}" #, "column 2 of #{i}"]
-	col1.check_state = (( i % 3) == 0)? Qt.Checked : Qt.Unchecked 
-	col1.checkable = true
-	col2 = Qt::StandardItem.new("column 2 of #{i}")
-	col3 = Qt::StandardItem.new("due date for #{i}")
-	@model.append_row [col1, col2, col3]
+        col1 = Qt::StandardItem.new 
+        col1.check_state = (( i % 3) == 0)? Qt.Checked : Qt.Unchecked
+        col1.checkable = true
+        col1.editable= false
+        col2 = Qt::StandardItem.new i.to_s
+        col3 = Qt::StandardItem.new("column 2 of #{i}")
+        col4 = Qt::StandardItem.new("due date for #{i}")
+        @model.append_row [col1, col2, col3, col4]
       end
 
       @treeview = Plasma::TreeView.new self
@@ -69,7 +103,7 @@ module RubyRubyDo
         nil # but that doesn't matter
       end
       #@lineedit.click_message = 'Add a new string...'
-      Qt::Object.connect(@lineedit,  SIGNAL(:returnPressed), self, SLOT(:addText) )
+      Qt::Object.connect(@lineedit,  SIGNAL(:returnPressed), self, SLOT(:add_text) )
       @layout.addItem @lineedit
 
       #@label = Plasma::Label.new self
@@ -86,10 +120,18 @@ module RubyRubyDo
       #Qt::Object.connect( @line_edit, SIGNAL(:returnPressed), self, SLOT(:addText) )
     end
 
-    def addText
+    def add_text
       #Qt::Application.clipboard.text = @lineedit.text
-      @stringlist << @lineedit.text
-      @model.string_list = @stringlist
+      #@stringlist << @lineedit.text
+      col1 = Qt::StandardItem.new
+      col1.check_state = Qt.Unchecked
+      col1.checkable = true
+      col1.editable= false
+      col2 = Qt::StandardItem.new  '1'
+      col3 = Qt::StandardItem.new  @lineedit.text
+      col4 = Qt::StandardItem.new  Time.now.strftime '%d/%m/%Y'
+      @model.append_row [col1, col2, col3, col4]
+      #@model.string_list = @stringlist
       @lineedit.text = ""
     end
 
