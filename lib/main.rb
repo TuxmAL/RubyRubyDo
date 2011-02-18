@@ -71,7 +71,7 @@ module RubyRubyDo
         task = @@todo_list[index.row]
         case index.column
           when 0
-            return Qt::Variant.new task.done
+            return Qt::Variant.new task.done?
           when 1
             return Qt::Variant.new task.priority
           when 2
@@ -82,7 +82,7 @@ module RubyRubyDo
             return Qt::Variant.new 'Pippo!'
         end
       else
-        return Qt::Variant.new
+        return Qt::Variant.new 'pluto'
      end
     end
 
@@ -148,7 +148,7 @@ module RubyRubyDo
       puts column
 
       return Qt::ModelIndex() if ! hasIndex(row, column, parent)
-      super.createIndex(row, column, @@todo_list[row])
+      createIndex(row, column, @@todo_list[row])
     end
 
     #def data=
@@ -284,6 +284,7 @@ end
 #a_task = ToDo::Task.new 'bollette', 5
 #to_do.add a_task
 #
+#puts (to_do[1]).to_yaml
 #to_do.each {|t| puts t.to_yaml}
 #to_do.save
 #
