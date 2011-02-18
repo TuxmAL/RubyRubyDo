@@ -12,12 +12,11 @@ require 'task'
 
 module RubyRubyDo
 
-  class PlasmaTask < Qt::AbstractListModel
+  class PlasmaTask < Qt::AbstractItemModel
 
     @@todo_list = nil
 
     def initialize parent
-      super parent
       if @@todo_list.nil?
         @@todo_list = ToDo::ToDo.new
         #@@todo_list.load
@@ -29,19 +28,27 @@ module RubyRubyDo
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'bollette', 5
         @@todo_list.add a_task
+        a_task = ToDo::Task.new 'test', 1
+        @@todo_list.add a_task
       end
+      super parent
       #@@todo_list.each {|t| puts t.to_yaml}
     end
-    
+
+    def rowCount(index)
+      row_count
+    end
     def row_count()
-      puts @@todo_list.count
       @@todo_list.count
     end
 
     def column_count()
-      puts 1
       #whe will have 4 colums: done, priority, description, due_date
-      return 1
+      return 4
+    end
+
+    def columnCount(index)
+      column_count 
     end
 
     def data(index)
@@ -50,7 +57,7 @@ module RubyRubyDo
     def data()
       data 1, Qt::DisplayRole
     end
-    
+
     def data(index, role)
       puts index.is_valid
       puts index
@@ -72,23 +79,33 @@ module RubyRubyDo
           when 3
             return Qt::Variant.new task.due_date
           else
-            return QT::Variant.new 'Pippo!'
+            return Qt::Variant.new 'Pippo!'
         end
       else
-        return QT::Variant.new
+        return Qt::Variant.new
      end
     end
 
     def header_data(section, orientation, role)
-      puts "section: #{section}, orientation: #{orientation}, role: #{role}"
       if role != Qt::DisplayRole
-        return QT::Variant.new
+        return Qt::Variant.new
       end
-       if orientation == Qt::Horizontal
-         return Qt::Variant.new "Column #{section}"
-       else
-         return Qt::Variant.new "Row #{section}"
+      case section
+        when 0
+          Qt::Variant.new ' '
+        when 1
+          Qt::Variant.new 'Priority'
+        when 2
+          Qt::Variant.new 'Task'
+        when 3
+          Qt::Variant.new 'Due for'
+      else
+        return Qt::Variant.new
       end
+    end
+
+    def headerData(section, orientation, role)
+      header_data section, orientation, role
     end
 
     def flags(index)
@@ -108,13 +125,31 @@ module RubyRubyDo
       end
     end
 
-    def parent(model_index)
+    def parent(index)
       return Qt::ModelIndex.new
     end
 
-    #def index(row,column = 0, parent = Qt::ModelIndex.new )
-    #  super.create_index row, column, parent
-    #end
+    def has_children(index)
+      return false
+    end
+
+    def hasChildren(index)
+      has_children index
+    end
+    
+    def children?(index)
+      has_children index
+    end
+
+
+    def index(row,column = 0, parent = Qt::ModelIndex.new )
+      puts parent
+      puts row
+      puts column
+
+      return Qt::ModelIndex() if ! hasIndex(row, column, parent)
+      super.createIndex(row, column, @@todo_list[row])
+    end
 
     #def data=
     #  # The dataChanged() signals must be emitted explicitly when reimplementing the setData() function
@@ -122,7 +157,6 @@ module RubyRubyDo
     #def header_data=
     #  # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
     #end
-
 
   end
 
@@ -153,7 +187,7 @@ module RubyRubyDo
 #      @model = Qt::StringListModel.new self
 #      @model.StringList= @stringlist
 
- 
+
 #      @model = Qt::StandardItemModel.new self
 #      (1..10).each do |i|
 #        col1 = Qt::StandardItem.new
@@ -179,20 +213,20 @@ module RubyRubyDo
       puts @model.header_data(4,1,0).value
       puts '************************----*************'
 
-#      @treeview = Plasma::TreeView.new self
-#      # now we try to camouflage the treeview into a listview
-#      @treeview.native_widget.root_is_decorated = false
-#      @treeview.native_widget.all_columns_show_focus = true
-#      @treeview.native_widget.items_expandable = false
-#      # and more, into a checklistview
-#      @treeview.native_widget.model = @model
-#      @layout.add_item @treeview
-      
+      @treeview = Plasma::TreeView.new self
+      # now we try to camouflage the treeview into a listview
+      @treeview.native_widget.root_is_decorated = false
+      @treeview.native_widget.all_columns_show_focus = true
+      @treeview.native_widget.items_expandable = false
+      # and more, into a checklistview
+      @treeview.native_widget.model = @model
+      @layout.add_item @treeview
+
 #      @listview = Qt::ListView.new
 #      @listview.model = @model
 #      @listview.view_mode = Qt::ListView::ListMode #Qt::ListView::IconMode
 #      @listview.show
-      
+
       @lineedit = Plasma::LineEdit.new self
       begin
         @lineedit.clear_button_shown = true # not supported in early plasma versions
