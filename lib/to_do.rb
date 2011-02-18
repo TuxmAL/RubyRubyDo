@@ -18,6 +18,10 @@ module ToDo
       @tasks.each { |t| yield t }
     end
 
+    def [](index)
+      @tasks[index]
+    end
+
     def save
       File.open(@filename, 'w') {|f| f.write(@tasks.to_yaml) }
     end
