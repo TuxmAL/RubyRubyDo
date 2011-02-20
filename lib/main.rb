@@ -59,31 +59,46 @@ module RubyRubyDo
     end
 
     def data(index, role)
-      puts index.is_valid
       puts index
-      puts role
+      puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
       return QT::Variant.new unless index.is_valid
       return QT::Variant.new if (index.row >= @@todo_list.count)
-      puts index.row
-      puts index.column
 
-      if role == Qt::DisplayRole
-        task = @@todo_list[index.row]
-        case index.column
-          when 0
-            return Qt::Variant.new task.done?
-          when 1
-            return Qt::Variant.new task.priority
-          when 2
-            return Qt::Variant.new task.description
-          when 3
-            return Qt::Variant.new task.due_date
-          else
-            return Qt::Variant.new 'Pippo!'
-        end
+      case role 
+	when Qt::DisplayRole
+	  task = @@todo_list[index.row]
+	  puts task
+	  case index.column
+	    when 0
+	      #check_state = task.done?
+	      ret_val = (task.done?) ? 'done': 'to do'
+	    when 1
+	      ret_val =  task.priority.to_s
+	    when 2
+	      ret_val =  task.description
+	    when 3
+	      ret_val =  task.due_date.strftime('%d/%m/%Y')
+	    else
+	      ret_val = 'Pippo!'
+	  end
+	when Qt::StatusTipRole, Qt::ToolTipRole
+	  case index.column
+	    when 0
+	      ret_val = 'Is task accomplished?'
+	    when 1
+	      ret_val = 'Task priority.'
+	    when 2
+	      ret_val = 'Task description.'
+	    when 3
+     	      ret_val = 'Task due date.'
+	    else
+	      ret_val = 'Pluto!'
+	  end
       else
-        return Qt::Variant.new 'pluto'
+        ret_val = Qt::Variant.new
      end
+     puts "data: exit for role #{role}, ret_val= #{ret_val}"
+     return ret_val
     end
 
     def header_data(section, orientation, role)
@@ -113,7 +128,8 @@ module RubyRubyDo
       return Qt::NoItemFlags if (index.row >= @@todo_list.count)
       case index.column
         when 0
-          return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
+          #return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 1
           return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 2
@@ -143,12 +159,9 @@ module RubyRubyDo
 
 
     def index(row,column = 0, parent = Qt::ModelIndex.new )
-      puts parent
-      puts row
-      puts column
-
+      puts "index function -> parent:#{parent}, row:#{row}, column:#{column}, hasIndex: #{hasIndex(row, column, parent)}"
       return Qt::ModelIndex() if ! hasIndex(row, column, parent)
-      createIndex(row, column, @@todo_list[row])
+      return createIndex(row, column, @@todo_list[row])
     end
 
     #def data=
@@ -201,16 +214,16 @@ module RubyRubyDo
 #      end
 
       @model = PlasmaTask.new self
-      puts @model.methods(true)
+      #puts @model.methods(true)
       puts '************************----*************'
-      puts @model.methods(false)
+      #puts @model.methods(false)
 
-      puts "#{@model.row_count}, #{@model.column_count}"
-      puts @model.header_data(0,1,0).value
-      puts @model.header_data(1,1,0).value
-      puts @model.header_data(2,1,0).value
-      puts @model.header_data(3,1,0).value
-      puts @model.header_data(4,1,0).value
+      #puts "#{@model.row_count}, #{@model.column_count}"
+      #puts @model.header_data(0,1,0).value
+      #puts @model.header_data(1,1,0).value
+      #puts @model.header_data(2,1,0).value
+      #puts @model.header_data(3,1,0).value
+      #puts @model.header_data(4,1,0).value
       puts '************************----*************'
 
       @treeview = Plasma::TreeView.new self
