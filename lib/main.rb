@@ -63,42 +63,43 @@ module RubyRubyDo
       puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
       return QT::Variant.new unless index.is_valid
       return QT::Variant.new if (index.row >= @@todo_list.count)
+      puts 'case to switch'
 
-      case role 
-	when Qt::DisplayRole
-	  task = @@todo_list[index.row]
-	  puts task
-	  case index.column
-	    when 0
-	      #check_state = task.done?
-	      ret_val = (task.done?) ? 'done': 'to do'
-	    when 1
-	      ret_val =  task.priority.to_s
-	    when 2
-	      ret_val =  task.description
-	    when 3
-	      ret_val =  task.due_date.strftime('%d/%m/%Y')
-	    else
-	      ret_val = 'Pippo!'
-	  end
-	when Qt::StatusTipRole, Qt::ToolTipRole
-	  case index.column
-	    when 0
-	      ret_val = 'Is task accomplished?'
-	    when 1
-	      ret_val = 'Task priority.'
-	    when 2
-	      ret_val = 'Task description.'
-	    when 3
-     	      ret_val = 'Task due date.'
-	    else
-	      ret_val = 'Pluto!'
-	  end
+      if (role & (Qt::DisplayRole).to_i) != 0
+        task = @@todo_list[index.row]
+        puts task
+        case index.column
+          when 0
+            #check_state = task.done?
+            ret_val = (task.done?) ? 'done': 'to do'
+          when 1
+            ret_val =  task.priority.to_s
+          when 2
+            ret_val =  task.description
+          when 3
+            ret_val =  task.due_date.strftime('%d/%m/%Y')
+          else
+            ret_val = 'Pippo!'
+        end
+      end
+      if (role & ((Qt::StatusTipRole).to_i | (Qt::ToolTipRole).to_i)) != 0
+        case index.column
+          when 0
+            ret_val = 'Is task accomplished?'
+          when 1
+            ret_val = 'Task priority.'
+          when 2
+            ret_val = 'Task description.'
+          when 3
+                ret_val = 'Task due date.'
+          else
+            ret_val = 'Pluto!'
+        end
       else
-        ret_val = Qt::Variant.new
+        ret_val = nil
      end
      puts "data: exit for role #{role}, ret_val= #{ret_val}"
-     return ret_val
+     return (ret_val.nil?)?  Qt::Variant.new : Qt::Variant.new(ret_val)
     end
 
     def header_data(section, orientation, role)
