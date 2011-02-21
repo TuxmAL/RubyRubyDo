@@ -52,7 +52,8 @@ module RubyRubyDo
       #puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
       return QT::Variant.new unless index.is_valid
       return QT::Variant.new if (index.row >= @@todo_list.count)
-      task = @@todo_list[index.row]
+      task = index.internal_pointer
+      #puts task.inspect
       #puts 'case switch'
       case role
       when Qt::CheckStateRole
@@ -91,7 +92,7 @@ module RubyRubyDo
       else
         ret_val = nil
      end
-     puts "data: exit for role #{role}, ret_val= #{ret_val}"
+     #puts "data: exit for role #{role}, ret_val= #{ret_val}"
      return (ret_val.nil?)?  Qt::Variant.new : Qt::Variant.new(ret_val)
     end
 
@@ -123,7 +124,6 @@ module RubyRubyDo
       case index.column
         when 0
           return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
-          #return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 1
           return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 2
@@ -145,9 +145,27 @@ module RubyRubyDo
       return createIndex(row, column, @@todo_list[row])
     end
 
-    #def data=
-    #  # The dataChanged() signals must be emitted explicitly when reimplementing the setData() function
-    #end
+    def setData(index, value, role)
+      ret_val = false
+      return QT::Variant.new unless index.is_valid
+      return QT::Variant.new if (index.row >= @@todo_list.count)
+      task = index.internal_pointer      
+      case role
+      when Qt::CheckStateRole
+        if index.column == 0
+          case value.value
+          when (Qt::Checked).to_i
+            task.done!
+            ret_val |= true
+          when (Qt::Unchecked).to_i
+            task.undone!
+            ret_val |= true
+          end
+        end
+      end
+      dataChanged( index, index ) if ret_val
+    end
+
     #def header_data=
     #  # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
     #end
