@@ -17,6 +17,7 @@ module RubyRubyDo
     @@todo_list = nil
 
     def initialize parent
+      super parent
       if @@todo_list.nil?
         @@todo_list = ToDo::ToDo.new
         #@@todo_list.load
@@ -30,59 +31,51 @@ module RubyRubyDo
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'test', 1
         @@todo_list.add a_task
+        a_task = ToDo::Task.new 'fatto', 1
+        a_task.done!
+        @@todo_list.add a_task
       end
-      super parent
       #@@todo_list.each {|t| puts t.to_yaml}
     end
 
     def rowCount(index)
-      row_count
-    end
-    def row_count()
-      @@todo_list.count
-    end
-
-    def column_count()
-      #whe will have 4 colums: done, priority, description, due_date
-      return 4
+      return @@todo_list.count
     end
 
     def columnCount(index)
-      column_count 
-    end
-
-    def data(index)
-      data index, Qt::DisplayRole
-    end
-    def data()
-      data 1, Qt::DisplayRole
+      # we will have 4 colums: done, priority, description, due_date
+      return 4
     end
 
     def data(index, role)
-      puts index
-      puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
+      #puts index
+      #puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
       return QT::Variant.new unless index.is_valid
       return QT::Variant.new if (index.row >= @@todo_list.count)
-      puts 'case to switch'
-
-      if (role & (Qt::DisplayRole).to_i) != 0
-        task = @@todo_list[index.row]
-        puts task
+      task = @@todo_list[index.row]
+      #puts 'case switch'
+      case role
+      when Qt::CheckStateRole
+        if index.column == 0
+            ret_val = ((task.done?)? Qt::Checked: Qt::Unchecked).to_i
+        else
+          ret_val = nil
+        end
+      when Qt::DisplayRole
+        #puts task
         case index.column
-          when 0
-            #check_state = task.done?
-            ret_val = (task.done?) ? 'done': 'to do'
+#          when 0
+            #ret_val = (task.done?) ? 'done': 'to do'
           when 1
             ret_val =  task.priority.to_s
           when 2
             ret_val =  task.description
           when 3
-            ret_val =  task.due_date.strftime('%d/%m/%Y')
+            ret_val =  (task.due_date.nil?)? '-': task.due_date.strftime('%d/%m/%Y')
           else
-            ret_val = 'Pippo!'
+            ret_val = nil
         end
-      end
-      if (role & ((Qt::StatusTipRole).to_i | (Qt::ToolTipRole).to_i)) != 0
+      when Qt::StatusTipRole, Qt::ToolTipRole
         case index.column
           when 0
             ret_val = 'Is task accomplished?'
@@ -129,8 +122,8 @@ module RubyRubyDo
       return Qt::NoItemFlags if (index.row >= @@todo_list.count)
       case index.column
         when 0
-          #return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
-          return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+          return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
+          #return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 1
           return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 2
@@ -146,21 +139,8 @@ module RubyRubyDo
       return Qt::ModelIndex.new
     end
 
-    def has_children(index)
-      return false
-    end
-
-    def hasChildren(index)
-      has_children index
-    end
-    
-    def children?(index)
-      has_children index
-    end
-
-
     def index(row,column = 0, parent = Qt::ModelIndex.new )
-      puts "index function -> parent:#{parent}, row:#{row}, column:#{column}, hasIndex: #{hasIndex(row, column, parent)}"
+      #puts "index function -> parent:#{parent}, row:#{row}, column:#{column}, hasIndex: #{hasIndex(row, column, parent)}"
       return Qt::ModelIndex() if ! hasIndex(row, column, parent)
       return createIndex(row, column, @@todo_list[row])
     end
