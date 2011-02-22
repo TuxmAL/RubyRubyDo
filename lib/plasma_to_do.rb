@@ -9,6 +9,8 @@ require 'plasma_applet'
 require 'to_do'
 require 'task'
 
+require 'plasma_task'
+
 module RubyRubyDo
   class PlasmaToDo  < Qt::AbstractItemModel
      @@todo_list = nil
