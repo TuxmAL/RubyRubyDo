@@ -62,12 +62,15 @@ module RubyRubyDo
       puts '************************----*************'
 
       @treeview = Plasma::TreeView.new self
+      native_tree = @treeview.native_widget
       # now we try to camouflage the treeview into a listview
-      @treeview.native_widget.root_is_decorated = false
-      @treeview.native_widget.all_columns_show_focus = true
-      @treeview.native_widget.items_expandable = false
+      native_tree.root_is_decorated = false
+      native_tree.all_columns_show_focus = true
+      native_tree.items_expandable = false
       # and more, into a checklistview
-      @treeview.native_widget.model = @model
+      native_tree.model = @model
+      (0..@model.columnCount(0)).each { |i| native_tree.resizeColumnToContents i }
+      native_tree.alternatingRowColors = true
       @layout.add_item @treeview
 
 #      @listview = Qt::ListView.new
@@ -79,7 +82,7 @@ module RubyRubyDo
       begin
         @lineedit.clear_button_shown = true # not supported in early plasma versions
       rescue
-	puts "clear_button_shown not found!"
+        puts "clear_button_shown not found!"
         nil # but that doesn't matter
       end
       #@lineedit.click_message = 'Add a new string...'
