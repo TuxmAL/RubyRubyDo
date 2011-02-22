@@ -20,12 +20,11 @@ module RubyRubyDo
       self.has_configuration_interface = false
       #self.setAspectRatioMode= Plasma::IgnoreAspectRatio
       self.aspect_ratio_mode = Plasma::IgnoreAspectRatio
+      @svg = Plasma::Svg.new self
+      @svg.imagePath = package.filePath("widgets", "background.svg") #'widgets/background.svg'
       @layout = Qt::GraphicsLinearLayout.new Qt::Vertical, self
       self.layout = @layout
-
-      @theme = Plasma::Svg.new self
-      @theme.ImagePath = 'widgets/background'
-      self.BackgroundHints = Plasma::Applet.DefaultBackground
+      #self.background_hints = Plasma::Applet.DefaultBackground # Plasma::Applet.NoBackground # Plasma::Applet.TranslucentBackground
 
       @label = Plasma::Label.new self
       @label.text = 'RubyRubyDo ToDo list:'
