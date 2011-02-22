@@ -1,5 +1,8 @@
 module ToDo
   class Task
+    Task::PRIORITYMAX=5
+    Task::PRIORITYMIN=1
+
     attr_accessor :description, :priority, :due_date, :category
 
     def initialize(description = '<empty task>', priority = nil, due_date = nil,
