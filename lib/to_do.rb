@@ -23,7 +23,11 @@ module ToDo
     end
 
     def save
-      File.open(@filename, 'w') {|f| f.write(@tasks.to_yaml) }
+      File.open(@filename, 'w') do |f|
+        f.write(@tasks.to_yaml)
+        @tasks.each {|t| t.saved!}
+
+      end
     end
 
     def load
