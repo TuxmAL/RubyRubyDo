@@ -69,6 +69,7 @@ module RubyRubyDo
       native_tree.items_expandable = false
       # and more, into a checklistview
       native_tree.model = @model
+      native_tree.item_delegate = PriorityEdit.new # self  # setItemDelegate
       (0..@model.columnCount(0)).each { |i| native_tree.resizeColumnToContents i }
       native_tree.alternatingRowColors = true
       @layout.add_item @treeview
