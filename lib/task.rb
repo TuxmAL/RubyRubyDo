@@ -1,7 +1,7 @@
 module ToDo
   class Task
-    Task::PRIORITYMAX=1
-    Task::PRIORITYMIN=5
+    PRIORITYMAX = 1
+    PRIORITYMIN = 5
 
     attr_accessor :description, :due_date, :category
     attr_reader :priority
