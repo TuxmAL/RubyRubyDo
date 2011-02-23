@@ -13,7 +13,7 @@ module ToDo
       @priority = priority
       @due_date = due_date
       @category = category
-      @dirty = true
+      @saved = false
     end
 
     def <=>(a_task)
@@ -25,13 +25,13 @@ module ToDo
     end
 
     def done!
-      @dirty = true
-      return @done = true
+      @saved &= false
+      @done = true
     end
 
     def undone!
-      @dirty = true
-      return @done = false
+      @saved &= false
+      @done = false
     end
 
     def done?
@@ -43,6 +43,14 @@ module ToDo
         @priority = value
         @saved &= false
       end
+    end
+
+    def saved!
+      @saved = true
+    end
+
+    def saved?
+      @saved
     end
 
   end
