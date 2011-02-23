@@ -16,11 +16,12 @@ module ToDo
       @saved = false
     end
 
+    # TODO: see is correctly implemented the spaceship operator!
     def <=>(a_task)
       if due_date.nil?
         @priority <=> a_task.priority
       else
-        @due_date <=> a_task.due_date
+        (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
       end
     end
 
