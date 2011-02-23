@@ -1,12 +1,13 @@
 module ToDo
   class Task
-    Task::PRIORITYMAX=5
-    Task::PRIORITYMIN=1
+    Task::PRIORITYMAX=1
+    Task::PRIORITYMIN=5
 
-    attr_accessor :description, :priority, :due_date, :category
+    attr_accessor :description, :due_date, :category
+    attr_reader :priority
 
-    def initialize(description = '<empty task>', priority = nil, due_date = nil,
-        category = nil)
+    def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
+        due_date = nil,category = nil)
       @done=false
       @description = description
       @priority = priority
@@ -36,5 +37,14 @@ module ToDo
     def done?
       return @done
     end
+
+    def priority=(value)
+      if (PRIORITYMAX..PRIORITYMIN).include? value
+        @priority = value
+        @saved &= false
+      end
+    end
+
   end
+  
 end
