@@ -29,10 +29,10 @@ module RubyRubyDo
       puts "setEditorData: value=#{value}"
       case index.column
       when 1
-	editor.current_index = editor.find_text value
-	editor.current_index = editor.findText value
+        editor.current_index = editor.find_text value.to_s
+        #editor.current_index = editor.findText value
       else
-	editor.text = value
+        editor.text = value
       end
     end
 
