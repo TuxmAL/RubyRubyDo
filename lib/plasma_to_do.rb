@@ -20,11 +20,11 @@ module RubyRubyDo
       if @@todo_list.nil?
         @@todo_list = ToDo::ToDo.new
         #@@todo_list.load
-        a_task = ToDo::Task.new 'compra il latte', 1, Time.now + 1
+        a_task = ToDo::Task.new 'compra il latte', 1, (Date.jd(DateTime.now.jd) + 1)
         @@todo_list.add a_task
-        a_task = ToDo::Task.new 'Telefonare!', 2, Time.now + 3
+        a_task = ToDo::Task.new 'Telefonare!', 2, (Date.jd(DateTime.now.jd) + 3)
         @@todo_list.add a_task
-        a_task = ToDo::Task.new 'Garage', nil, Time.now + 1
+        a_task = ToDo::Task.new 'Garage', nil, (Date.jd(DateTime.now.jd) + 1)
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'bollette', 5
         @@todo_list.add a_task
@@ -67,11 +67,11 @@ module RubyRubyDo
 #          when 0
             #ret_val = (task.done?) ? 'done': 'to do'
           when 1
-            ret_val =  task.priority.to_s
+            ret_val =  task.priority
           when 2
             ret_val =  task.description
           when 3
-            ret_val =  (task.due_date.nil?)? '-': task.due_date.strftime('%d/%m/%Y')
+            ret_val =  (task.due_date.nil?)? '-': task.due_date #task.due_date.strftime('%d/%m/%Y')
           else
             ret_val = nil
         end
