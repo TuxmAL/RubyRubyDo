@@ -10,14 +10,28 @@ require 'plasma_to_do'
 
 module RubyRubyDo
 
-  class Main < Qt::Widget
+  class Main < Qt::MainWindow
 
     slots :add_text
     slots :selected
 
-    def initialize(parent = nil, name = nil)
+    def initialize(parent = nil, fl = Qt::Window)
       super
       self.set_minimum_size 350, 350
+      if objectName.nil?
+          objectName = 'RubyRubyDo'
+      end
+      windowTitle = "RubyRubyDo"
+      central_widget = Qt::Widget.new(self)
+      central_widget.objectName = "centralwidget"
+      widget_layout = Qt::Widget.new(central_widget)
+      widget_layout.objectName = "verticalLayoutWidget"
+      #widget_layout.geometry = Qt::Rect.new(0, 0, 301, 251)
+      @layout = Qt::VBoxLayout.new(widget_layout)
+      @layout.objectName = "verticalLayout"
+      #layout.sizeConstraint = Qt::Layout::SetDefaultConstrain
+      #@layout = Qt::GridLayout.new(central_widget, 1, 1, 11, 6, 'RubyRubyDo')
+
       #@layout = Qt::GraphicsLinearLayout.new Qt::Vertical, self
       #self.layout = @layout
 
@@ -35,9 +49,13 @@ module RubyRubyDo
       native_tree.items_expandable = false
       # and more, into a checklistview
       native_tree.model = @model
-      native_tree.item_delegate = PriorityDelegate.new @treeview #native_tree
+#      native_tree.item_delegate = PriorityDelegate.new @treeview # native_tree
       (0..@model.columnCount(0)).each { |i| native_tree.resizeColumnToContents i }
       native_tree.alternatingRowColors = true
+
+      @layout.addWidget(@treeView)
+
+      centralWidget = central_widget
 
       #@layout.add_item @treeview
       #@lineedit = Plasma::LineEdit.new self
