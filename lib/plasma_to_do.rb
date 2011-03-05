@@ -161,6 +161,15 @@ module RubyRubyDo
             ret_val |= true
           end
         end
+      when Qt::EditRole
+        case index.column
+        when 1
+          task.priority = (value.to_i)
+        when 2
+          task.description = value
+        when 3
+          task.due_date = value.value
+        end
       end
       dataChanged( index, index ) if ret_val
     end

@@ -23,7 +23,7 @@ module RubyRubyDo
             self.items_expandable = false
             # and more, into a checklistview
             self.model = model
-    #      native_tree.item_delegate = PriorityDelegate.new @treeview # native_tree
+           self.item_delegate = PriorityDelegate.new self
             (0..model.columnCount(0)).each { |i| resizeColumnToContents i }
             self.alternatingRowColors = true
           end

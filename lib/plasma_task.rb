@@ -11,7 +11,6 @@ module RubyRubyDo
 
     def initialize(parent = nil)
       super parent
-      puts "initialize."
     end
 
     #def initialize parent
@@ -36,17 +35,17 @@ module RubyRubyDo
       end
     end
 
-    #def setModelData(editor, model,index)
-    #  puts "setModelData: #{editor}, #{model}, #{index}"
-      #editor.interpret_text
-    #  value = editor.text
-    #  model.setData(index, value, Qt::EditRole);
-    #end
-
-    #def updateEditorGeometry editor, option, index
-    #  puts "updateEditorGeometry: #{editor}, #{option}, #{index}"
-    #  editor.setGeometry(option.rect)
-    #end
+    def setModelData(editor, model,index)
+      case index.column
+      when 1
+        value = editor.current_text
+      else
+        #editor.interpret_text
+        value = editor.text
+      end
+      model.setData(index, value, Qt::EditRole);
+      puts "setData: #{value}, #{model}, #{index}"
+    end
 
     def createEditor parent, option, index
       puts "createEditor: #{parent}, #{option}, #{index.column}"
@@ -58,9 +57,14 @@ module RubyRubyDo
         editor = Qt::ComboBox.new parent
         editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
         return editor
+      when 2
+        return super
+      when 3
+        editor = Qt::DateEdit.new parent
+        #editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
       else
 	#super.createEditor parent, option, index
-        return nil #0 #super.createEditor parent, option, index
+        return nil #0
       end
     end
   end
