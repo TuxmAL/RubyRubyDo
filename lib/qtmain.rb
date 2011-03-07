@@ -27,7 +27,7 @@ module RubyRubyDo
         self.alternatingRowColors = true
       end
       button_new = Qt::PushButton.new('New') do
-        connect(SIGNAL :clicked) {treeview.model.insertRow 11, nil}
+        connect(SIGNAL :clicked) {treeview.model.insertRow treeview.model.rowCount(nil)}
       end
       button = Qt::PushButton.new('Quit') do
         connect(SIGNAL :clicked) { Qt::Application.instance.quit }

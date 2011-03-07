@@ -140,7 +140,7 @@ module RubyRubyDo
 
     def index(row,column = 0, parent = Qt::ModelIndex.new )
       #puts "index function -> parent:#{parent}, row:#{row}, column:#{column}, hasIndex: #{hasIndex(row, column, parent)}"
-      return Qt::ModelIndex() if ! hasIndex(row, column, parent)
+      return Qt::ModelIndex.new if ! hasIndex(row, column, parent)
       return createIndex(row, column, @@todo_list[row])
     end
 
@@ -177,9 +177,12 @@ module RubyRubyDo
     #def header_data=
     #  # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
     #end
-    def insertRow(row, parent)
-      @@todo_list.add ToDo::Task.new("riga aggiunta #{row}", 5)
-      dataChanged( index, index )
+    def insertRow(row, parent = Qt::ModelIndex.new)
+      puts "insertRow function -> parent:#{parent}, row:#{row}"
+      beginInsertRows parent, row, row
+      #@@todo_list.add ToDo::Task.new("riga aggiunta #{row}", 5)
+      endInsertRows
+      #dataChanged( index, index )
       return true
     end
   end
