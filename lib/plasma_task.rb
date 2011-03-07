@@ -30,6 +30,9 @@ module RubyRubyDo
       when 1
         editor.current_index = editor.find_text value.to_s
         #editor.current_index = editor.findText value
+      when 3
+        editor.date = value.to_date
+        #editor.setSelectedDate value.to_date
       else
         editor.text = value
       end
@@ -39,6 +42,8 @@ module RubyRubyDo
       case index.column
       when 1
         value = editor.current_text
+      when 3
+        value = Qt::Variant.new(editor.date)
       else
         #editor.interpret_text
         value = editor.text
@@ -61,6 +66,8 @@ module RubyRubyDo
         return super
       when 3
         editor = Qt::DateEdit.new parent
+        #editor.calendar_popup = true
+        #editor.calendar_widget = Qt::CalendarWidget.new parent
         #editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
       else
 	#super.createEditor parent, option, index
