@@ -177,7 +177,11 @@ module RubyRubyDo
     #def header_data=
     #  # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
     #end
-
+    def insertRow(row, parent)
+      @@todo_list.add ToDo::Task.new("riga aggiunta #{row}", 5)
+      dataChanged( index, index )
+      return true
+    end
   end
 end
 
