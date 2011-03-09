@@ -27,7 +27,14 @@ module RubyRubyDo
         self.alternatingRowColors = true
       end
       button_new = Qt::PushButton.new('New') do
-        connect(SIGNAL :clicked) {treeview.model.insertRow treeview.model.rowCount(nil)}
+        connect(SIGNAL :clicked) do
+          todo = PlasmaToDo.todo_list
+          puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
+          a_task = ToDo::Task.new 'inserito a mano', 5, nil
+          todo.add a_task
+          treeview.model.insertRow todo.count - 1
+          puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
+        end
       end
       button = Qt::PushButton.new('Quit') do
         connect(SIGNAL :clicked) { Qt::Application.instance.quit }

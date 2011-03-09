@@ -13,7 +13,12 @@ require 'plasma_task'
 
 module RubyRubyDo
   class PlasmaToDo  < Qt::AbstractItemModel
-     @@todo_list = nil
+
+    @@todo_list = nil
+
+    def self.todo_list
+      @@todo_list
+    end
 
     def initialize parent
       super parent
@@ -37,11 +42,11 @@ module RubyRubyDo
       #@@todo_list.each {|t| puts t.to_yaml}
     end
 
-    def rowCount(index)
+    def rowCount(index = Qt::ModelIndex.new)
       return @@todo_list.count
     end
 
-    def columnCount(index)
+    def columnCount(index = Qt::ModelIndex.new)
       # we will have 4 colums: done, priority, description, due_date
       return 4
     end
@@ -177,14 +182,28 @@ module RubyRubyDo
     #def header_data=
     #  # The headerDataChanged() signals must be emitted explicitly when reimplementing the setHeaderData() function
     #end
+    
     def insertRow(row, parent = Qt::ModelIndex.new)
-      puts "insertRow function -> parent:#{parent}, row:#{row}"
-      beginInsertRows parent, row, row
-      #@@todo_list.add ToDo::Task.new("riga aggiunta #{row}", 5)
-      endInsertRows
-      #dataChanged( index, index )
+      insertRows(row, 1, parent)
+    end
+
+    def insertRows(row, count, parent = Qt::ModelIndex.new)
+      beginInsertRows(parent, row, (row + (count - 1)))
+      endInsertRows()
       return true
     end
+
+    def removeRow(row, parent = Qt::ModelIndex.new)
+      return removeRows(row, 1, parent)
+    end
+
+   def removeRows(row, count, parent= Qt::ModelIndex.new)
+     beginRemoveRows(parent, row, row) # must be beginRemoveRows(parent, row, *count*)?
+     node = nodeFromIndex(parent)
+     node.removeChild(row)
+     endRemoveRows()
+     return true
+   end
   end
 end
 
