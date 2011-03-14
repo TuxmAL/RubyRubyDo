@@ -29,7 +29,7 @@ module RubyRubyDo
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'Telefonare!', 2, (Date.jd(DateTime.now.jd) + 3)
         @@todo_list.add a_task
-        a_task = ToDo::Task.new 'Garage', nil, (Date.jd(DateTime.now.jd) + 1)
+        a_task = ToDo::Task.new 'Garage', nil, (Date.jd(DateTime.now.jd) + 15)
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'bollette', 5
         @@todo_list.add a_task

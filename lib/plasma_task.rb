@@ -25,14 +25,21 @@ module RubyRubyDo
     
     def setEditorData(editor, index)
       value = index.data.value
-      puts "setEditorData: value=#{value}"
+      puts "setEditorData: value=#{value}; value.to_s=#{value.to_s}, #{value.to_s == '-'}"
       case index.column
       when 1
         editor.current_index = editor.find_text value.to_s
         #editor.current_index = editor.findText value
       when 3
-        editor.date = value.to_date
+	case value.to_s
+	when '-'
+	  editor.current_index = 9
+	else 
+	  idx = editor.findData Qt::Variant.new(value)
+	  puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
+	  editor.current_index = (idx != -1)? idx: 10
         #editor.setSelectedDate value.to_date
+	end
       else
         editor.text = value
       end
@@ -65,7 +72,20 @@ module RubyRubyDo
       when 2
         return super
       when 3
-        editor = Qt::DateEdit.new parent
+        editor = Qt::ComboBox.new parent
+	a_date = Date.jd(DateTime.now.jd)
+        editor.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
+	a_date += 1
+	editor.add_item a_date.strftime('%a %d/%m/%y - Tomorrow'), Qt::Variant.new(a_date)
+	a_date += 1
+	a_date.upto(a_date + 5) do |d|
+	  editor.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
+	end  
+        editor.add_item((a_date + 6).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
+	editor.add_item 'No date', Qt::Variant.new('-')
+	editor.add_item 'Choose date...', Qt::Variant.new()
+	return editor
+        #editor = Qt::DateEdit.new 
         #editor.calendar_popup = true
         #editor.calendar_widget = Qt::CalendarWidget.new parent
         #editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
