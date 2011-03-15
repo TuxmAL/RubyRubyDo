@@ -37,8 +37,7 @@ module RubyRubyDo
 	else 
 	  idx = editor.findData Qt::Variant.new(value)
 	  puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
-	  editor.current_index = (idx != -1)? idx: 10
-        #editor.setSelectedDate value.to_date
+	  editor.current_index = (idx != -1)? idx: 10        
 	end
       else
         editor.text = value
@@ -50,9 +49,13 @@ module RubyRubyDo
       when 1
         value = editor.current_text
       when 3
-        value = Qt::Variant.new(editor.date)
+	value = editor.item_data(editor.current_index())
+	puts "setData date: #{value}. #{value.is_valid}"
+	value = nil if value.to_s == '-'
+	unless value.is_valid
+	  #createIndex(index.row, 4, Qvariant.new)	  
+	end
       else
-        #editor.interpret_text
         value = editor.text
       end
       model.setData(index, value, Qt::EditRole);
