@@ -87,6 +87,10 @@ module RubyRubyDo
         editor.add_item((a_date + 6).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
 	editor.add_item 'No date', Qt::Variant.new('-')
 	editor.add_item 'Choose date...', Qt::Variant.new()
+	# get the minimum width that fits the largest item.
+	width = editor.minimum_size_hint.width
+	# set the ComboBox to that width.
+	editor.minimum_width = width
 	return editor
         #editor = Qt::DateEdit.new 
         #editor.calendar_popup = true
