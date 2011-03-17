@@ -173,7 +173,8 @@ module RubyRubyDo
         when 2
           task.description = value
         when 3
-          task.due_date = value.value
+          puts
+          task.due_date = value
         end
       end
       dataChanged( index, index ) if ret_val
