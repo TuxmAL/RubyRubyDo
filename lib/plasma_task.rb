@@ -9,7 +9,8 @@ module RubyRubyDo
 
   class CalendarDialog < Qt::Dialog
     attr_reader :selected_date
-        
+    slots 'goto_today()'
+
     def initialize(parent = nil, name = nil)
       super
       setWindowTitle("Set due date")
@@ -27,11 +28,18 @@ module RubyRubyDo
       cancel_button = Qt::PushButton.new('Cancel', self)
       connect(ok_button, SIGNAL('clicked()'), self, SLOT('accept()'))
       connect(cancel_button, SIGNAL('clicked()'), self, SLOT('reject()'))
+      today_button = Qt::PushButton.new('Today', self)
+      today_button.connect(SIGNAL('clicked()')) do
+        cal.selected_date = Qt::Date.fromJulianDay(DateTime.now.jd)
+        @selected_date = cal.selected_date.toJulianDay
+      end
       vertical_layout = Qt::VBoxLayout.new
       vertical_layout.addWidget(cal)
       horizontal_layout = Qt::HBoxLayout.new
       horizontal_layout.addWidget(ok_button)
       horizontal_layout.insertStretch(1)
+      horizontal_layout.addWidget(today_button)
+      horizontal_layout.insertStretch(3)
       horizontal_layout.addWidget(cancel_button)
       vertical_layout.addLayout horizontal_layout
       setLayout vertical_layout
