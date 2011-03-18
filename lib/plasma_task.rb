@@ -141,11 +141,6 @@ module RubyRubyDo
         #editor.calendar_popup = true
         #editor.calendar_widget = Qt::CalendarWidget.new parent
         #editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
-      when 4
-        editor = Qt::CalendarWidget.new parent
-        editor.grid_visible = true
-        editor.vertical_header_format = Qt::CalendarWidget::NoVerticalHeader
-        editor.setFirstDayOfWeek(Qt::Monday)
       else
         #super.createEditor parent, option, index
         return nil #0
