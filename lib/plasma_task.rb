@@ -9,7 +9,7 @@ module RubyRubyDo
 
   class CalendarDialog < Qt::Dialog
     attr_reader :selected_date
-    
+        
     def initialize(parent = nil, name = nil)
       super
       setWindowTitle("Set due date")
@@ -22,8 +22,8 @@ module RubyRubyDo
       cal.setFirstDayOfWeek(Qt::Monday)
       cal.connect(SIGNAL('clicked(const QDate)')) do |d|
         puts "#{d.day}/#{d.month}/#{d.year}"
-        @selected_date = d
-        puts "#{d} #{@selected_date} #{@selected_date.day}/#{@selected_date.month}/#{@selected_date.year}"
+        @selected_date = d.toJulianDay
+        puts "#{d} #{@selected_date} {#selected_date.day}/{#selected_date.month}/{#selected_date.year}"
       end
       layout.addWidget(cal)
       ok_button = Qt::PushButton.new('Ok', self)
@@ -85,10 +85,9 @@ module RubyRubyDo
         unless value.is_valid
           dlg = CalendarDialog.new editor
           if (dlg.exec == Qt::Dialog::Accepted)
-              puts "setModelData calendar: #{dlg.selected_date} #{dlg.selected_date.day}/#{dlg.selected_date.month}/#{dlg.selected_date.year}"
-              puts dlg.selected_date
-              value = dlg.selected_date
-              puts "setModelData calendar: #{value}, #{dlg.selected_date.day}/#{dlg.selected_date.month}/#{dlg.selected_date.year}"
+            puts "setModelData calendar (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
+            value = Date.jd(dlg.selected_date)
+            puts "setModelData calendar (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
           end
         end
       else
