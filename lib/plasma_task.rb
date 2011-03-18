@@ -22,6 +22,7 @@ module RubyRubyDo
         puts "#{d.day}/#{d.month}/#{d.year}"
         @selected_date = d.toJulianDay
         puts "#{d} #{@selected_date} {#selected_date.day}/{#selected_date.month}/{#selected_date.year}"
+	accept()
       end
       ok_button = Qt::PushButton.new('Ok', self)
       ok_button.default = true
