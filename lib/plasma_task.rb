@@ -13,9 +13,6 @@ module RubyRubyDo
     def initialize(parent = nil, name = nil)
       super
       setWindowTitle("Set due date")
-      resize(400, 120)
-      layout = Qt::VBoxLayout.new
-      setLayout(layout)
       cal = Qt::CalendarWidget.new self
       cal.grid_visible = true
       cal.vertical_header_format = Qt::CalendarWidget::NoVerticalHeader
@@ -25,14 +22,19 @@ module RubyRubyDo
         @selected_date = d.toJulianDay
         puts "#{d} #{@selected_date} {#selected_date.day}/{#selected_date.month}/{#selected_date.year}"
       end
-      layout.addWidget(cal)
       ok_button = Qt::PushButton.new('Ok', self)
       ok_button.default = true
       cancel_button = Qt::PushButton.new('Cancel', self)
-      layout.addWidget(ok_button)
-      layout.addWidget(cancel_button)      
       connect(ok_button, SIGNAL('clicked()'), self, SLOT('accept()'))
       connect(cancel_button, SIGNAL('clicked()'), self, SLOT('reject()'))
+      vertical_layout = Qt::VBoxLayout.new
+      vertical_layout.addWidget(cal)
+      horizontal_layout = Qt::HBoxLayout.new
+      horizontal_layout.addWidget(ok_button)
+      horizontal_layout.insertStretch(1)
+      horizontal_layout.addWidget(cancel_button)
+      vertical_layout.addLayout horizontal_layout
+      setLayout vertical_layout
     end
 
   end
