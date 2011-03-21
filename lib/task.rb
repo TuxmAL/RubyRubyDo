@@ -46,6 +46,10 @@ module ToDo
       end
     end
 
+    def overdue?
+      !@due_date.nil? && (@due_date > Date.jd(DateTime.new.jd))
+    end
+
     def saved!
       @saved = true
     end
