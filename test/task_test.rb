@@ -4,7 +4,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'test_unit_extensions'
+require File.join(File.join(File.dirname(__FILE__), 'helper'), 'test_unit_extensions')
 require 'date'
 require 'task'
 
@@ -33,7 +33,7 @@ class TaskTest < Test::Unit::TestCase
     end
   end
 
-   must "task default priority be minimal (#{ToDo::Task::PRIORITYMIN})" do
+  must "task default priority be minimal (#{ToDo::Task::PRIORITYMIN})" do
     a_task = ToDo::Task.new("task with default priority")
     assert_equal(ToDo::Task::PRIORITYMIN, a_task.priority)
   end
