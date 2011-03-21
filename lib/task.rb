@@ -8,6 +8,7 @@ module ToDo
 
     def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
         due_date = nil,category = nil)
+      raise "Priority out of range (#{PRIORITYMAX} - #{PRIORITYMIN})" unless priority.between?(PRIORITYMAX, PRIORITYMIN)
       @done=false
       @description = description
       @priority = priority
