@@ -17,7 +17,7 @@ class TaskTest < Test::Unit::TestCase
 
   must 'create a default task' do
     default = ToDo::Task.new
-    assert_block('is not ') do
+    assert_block("Expected #{default.inspect} not as the default task") do
       default.description == '<empty task>' &&
       default.priority == ToDo::Task::PRIORITYMIN &&
       !default.done? &&
@@ -26,14 +26,14 @@ class TaskTest < Test::Unit::TestCase
     end
   end
 
-  must "task priority be between #{ToDo::Task::PRIORITYMAX} and #{ToDo::Task::PRIORITYMIN}" do
+  must "priority be between #{ToDo::Task::PRIORITYMAX} and #{ToDo::Task::PRIORITYMIN}" do
     ToDo::Task::PRIORITYMIN.downto(ToDo::Task::PRIORITYMAX) do |p|
       a_task = ToDo::Task.new("task with priority #{p}", p)
       assert_equal(p, a_task.priority)
     end
   end
 
-  must "task default priority be minimal (#{ToDo::Task::PRIORITYMIN})" do
+  must "default priority be minimal (#{ToDo::Task::PRIORITYMIN})" do
     a_task = ToDo::Task.new("task with default priority")
     assert_equal(ToDo::Task::PRIORITYMIN, a_task.priority)
   end
