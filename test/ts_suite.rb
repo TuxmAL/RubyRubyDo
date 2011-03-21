@@ -4,6 +4,3 @@
 require 'test/unit' 
 
 # Add your testcases here
-
-require 'task_test'
-require 'to_do_test'

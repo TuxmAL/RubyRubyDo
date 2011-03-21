@@ -4,7 +4,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'to_do'
+#require 'to_do'
 
 class ToDoTest < Test::Unit::TestCase
   def test_foo
