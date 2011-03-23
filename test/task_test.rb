@@ -40,9 +40,26 @@ class TaskTest < Test::Unit::TestCase
 
   must "fail when priority is outside #{ToDo::Task::PRIORITYMAX} and #{ToDo::Task::PRIORITYMIN}" do
     [-1, 0, 6, 7, 10].each do |p|
-      assert_raise RuntimeError do
+      assert_raise RangeError do
         a_task = ToDo::Task.new("task with priority (#{p}) outside range", p)
       end
+    end
+  end
+
+  must "fail when assigning a priority outside #{ToDo::Task::PRIORITYMAX} and #{ToDo::Task::PRIORITYMIN}" do
+    a_task = ToDo::Task.new("task with priority 1", 1)
+    [-1, 0, 6, 7, 10].each do |p|
+      assert_raise RangeError do
+        a_task.priority= p
+      end
+    end
+  end
+
+  must "change priority assignement" do
+    a_task = ToDo::Task.new("task with priority 1", 1)
+    (ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).each do |p|
+      a_task.priority = p
+      assert_equal p, a_task.priority
     end
   end
 
