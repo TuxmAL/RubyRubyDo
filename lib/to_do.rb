@@ -22,6 +22,10 @@ module ToDo
       @tasks[index]
     end
 
+    def length
+      @tasks.length
+    end
+    
     def save
       File.open(@filename, 'w') do |f|
         f.write(@tasks.to_yaml)
