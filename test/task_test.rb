@@ -55,7 +55,20 @@ class TaskTest < Test::Unit::TestCase
     end
   end
 
-  must "change priority assignement" do
+  must 'priority not be nil' do
+    assert_raise RangeError do
+      a_task = ToDo::Task.new('task with priority nil', nil)
+    end
+  end
+
+  must 'priority not be changed to nil' do
+    a_task = ToDo::Task.new('task',1)
+    assert_raise RangeError do
+      a_task.priority = nil
+    end
+  end
+
+  must "change priority assignment" do
     a_task = ToDo::Task.new("task with priority 1", 1)
     (ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).each do |p|
       a_task.priority = p
