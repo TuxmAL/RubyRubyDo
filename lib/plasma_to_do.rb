@@ -100,7 +100,7 @@ module RubyRubyDo
      return (ret_val.nil?)?  Qt::Variant.new : Qt::Variant.new(ret_val)
     end
 
-    def header_data(section, orientation, role)
+    def headerData(section, orientation, role)
       if role != Qt::DisplayRole
         return Qt::Variant.new
       end
@@ -118,10 +118,6 @@ module RubyRubyDo
       end
     end
     
-    def headerData(section, orientation, role)
-      header_data section, orientation, role
-    end
-
     def flags(index)
       return Qt::NoItemFlags unless index.is_valid
       return Qt::NoItemFlags if (index.row >= @@todo_list.count)
