@@ -70,7 +70,7 @@ class TaskTest < Test::Unit::TestCase
 
   must 'task be done' do
     a_task = ToDo::Task.new('test task', 3, @today)
-    a_task.done!
+    a_task.done
     assert_equal(true, a_task.done?)
   end
 

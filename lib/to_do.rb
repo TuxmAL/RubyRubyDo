@@ -25,7 +25,7 @@ module ToDo
     def save
       File.open(@filename, 'w') do |f|
         f.write(@tasks.to_yaml)
-        @tasks.each {|t| t.saved!}
+        @tasks.each {|t| t.saved}
 
       end
     end

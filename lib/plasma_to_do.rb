@@ -36,7 +36,7 @@ module RubyRubyDo
         a_task = ToDo::Task.new 'test', 1
         @@todo_list.add a_task
         a_task = ToDo::Task.new 'fatto', 1
-        a_task.done!
+        a_task.done
         @@todo_list.add a_task
       end
       #@@todo_list.each {|t| puts t.to_yaml}
@@ -159,10 +159,10 @@ module RubyRubyDo
         if index.column == 0
           case value.value
           when (Qt::Checked).to_i
-            task.done!
+            task.done
             ret_val |= true
           when (Qt::Unchecked).to_i
-            task.undone!
+            task.undone
             ret_val |= true
           end
         end

@@ -26,12 +26,12 @@ module ToDo
       end
     end
 
-    def done!
+    def done
       @saved &= false
       @done = true
     end
 
-    def undone!
+    def undone
       @saved &= false
       @done = false
     end
@@ -50,7 +50,7 @@ module ToDo
       !@due_date.nil? && (@due_date > Date.jd(DateTime.new.jd))
     end
 
-    def saved!
+    def saved
       @saved = true
     end
 
