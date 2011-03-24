@@ -10,8 +10,9 @@ module ToDo
       puts @filename
     end
 
-    def add(task)
+    def <<(task)
       @tasks << task
+      self
     end
 
     def each
