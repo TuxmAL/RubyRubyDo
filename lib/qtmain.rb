@@ -38,12 +38,14 @@ module RubyRubyDo
       button = Qt::PushButton.new('Quit') do
         connect(SIGNAL :clicked) { Qt::Application.instance.quit }
       end
-
       self.layout = Qt::VBoxLayout.new do
         add_widget treeview
-        add_widget(button_new, 0, Qt::AlignLeft)
-        add_widget(button, 0, Qt::AlignRight)
-        self.activate
+        h_layout =  Qt::HBoxLayout.new  do
+          add_widget(button_new, 0, Qt::AlignLeft)
+          add_widget(button, 0, Qt::AlignRight)
+        end
+        add_layout h_layout
+        #self.activate
       end
       show
     end
