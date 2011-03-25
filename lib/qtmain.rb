@@ -30,8 +30,7 @@ module RubyRubyDo
         connect(SIGNAL :clicked) do
           todo = PlasmaToDo.todo_list
           puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
-          a_task = ToDo::Task.new 'inserito a mano', 5, nil
-          todo.add a_task
+          todo << ToDo::Task.new('inserito a mano', 5 )
           treeview.model.insertRow todo.count - 1
           puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
         end
