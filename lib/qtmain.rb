@@ -11,7 +11,7 @@ require 'plasma_to_do'
 module RubyRubyDo
   Qt::Application.new(ARGV) do
     Qt::Widget.new do
-      self.window_title = "RubyRubyDo"
+      self.window_title = Qt::Object.trUtf8('RubyRubyDo')
       self.set_minimum_size 250, 250
 
       model = PlasmaToDo.new self
@@ -26,7 +26,7 @@ module RubyRubyDo
         (0..model.columnCount(0)).each { |i| resizeColumnToContents i }
         self.alternatingRowColors = true
       end
-      button_new = Qt::PushButton.new('New') do
+      button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
         connect(SIGNAL :clicked) do
           todo = PlasmaToDo.todo_list
           puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
@@ -35,7 +35,7 @@ module RubyRubyDo
           puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
         end
       end
-      button = Qt::PushButton.new('Quit') do
+      button = Qt::PushButton.new(Qt::Object.trUtf8('Quit')) do
         connect(SIGNAL :clicked) { Qt::Application.instance.quit }
       end
       self.layout = Qt::VBoxLayout.new do

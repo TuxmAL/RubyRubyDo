@@ -83,15 +83,15 @@ module RubyRubyDo
       when Qt::StatusTipRole, Qt::ToolTipRole
         case index.column
           when 0
-            ret_val = 'Is task accomplished?'
+            ret_val = Qt::Object.trUtf8('Is task accomplished?')
           when 1
-            ret_val = 'Task priority.'
+            ret_val = Qt::Object.trUtf8('Task priority.')
           when 2
-            ret_val = 'Task description.'
+            ret_val = Qt::Object.trUtf8('Task description.')
           when 3
-                ret_val = 'Task due date.'
+                ret_val = Qt::Object.trUtf8('Task due date.')
           else
-            ret_val = 'Pluto!'
+            ret_val = ''
         end
       else
         ret_val = nil
@@ -108,11 +108,11 @@ module RubyRubyDo
         when 0
           Qt::Variant.new ' '
         when 1
-          Qt::Variant.new 'Priority'
+          Qt::Variant.new Qt::Object.trUtf8('Priority')
         when 2
-          Qt::Variant.new 'Task'
+          Qt::Variant.new Qt::Object.trUtf8('Task')
         when 3
-          Qt::Variant.new 'Due for'
+          Qt::Variant.new Qt::Object.trUtf8('Due for')
       else
         return Qt::Variant.new
       end

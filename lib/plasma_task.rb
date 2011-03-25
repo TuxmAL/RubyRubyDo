@@ -13,7 +13,7 @@ module RubyRubyDo
 
     def initialize(parent = nil, name = nil)
       super
-      self.window_title = "Set due date"
+      self.window_title = Qt::Object.trUtf8('Set due date')
       self.modal = true      
       cal = Qt::CalendarWidget.new self
       cal.grid_visible = true
@@ -25,12 +25,12 @@ module RubyRubyDo
         puts "#{d} #{@selected_date} {#selected_date.day}/{#selected_date.month}/{#selected_date.year}"
 	accept()
       end
-      ok_button = Qt::PushButton.new('Ok', self)
+      ok_button = Qt::PushButton.new(Qt::Object.trUtf8('Ok'), self)
       ok_button.default = true
-      cancel_button = Qt::PushButton.new('Cancel', self)
+      cancel_button = Qt::PushButton.new(Qt::Object.trUtf8('Cancel'), self)
       connect(ok_button, SIGNAL('clicked()'), self, SLOT('accept()'))
       connect(cancel_button, SIGNAL('clicked()'), self, SLOT('reject()'))
-      today_button = Qt::PushButton.new('Today', self)
+      today_button = Qt::PushButton.new(Qt::Object.trUtf8('Today'), self)
       today_button.connect(SIGNAL('clicked()')) do
         cal.selected_date = Qt::Date.fromJulianDay(DateTime.now.jd)
         @selected_date = cal.selected_date.toJulianDay
@@ -135,8 +135,8 @@ module RubyRubyDo
           editor.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
         end
         editor.add_item((a_date + 6).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
-        editor.add_item 'No date', Qt::Variant.new('-')
-        editor.add_item 'Choose date...', Qt::Variant.new()
+        editor.add_item Qt::Object.trUtf8('No date'), Qt::Variant.new('-')
+        editor.add_item Qt::Object.trUtf8('Choose date...'), Qt::Variant.new()
         # get the minimum width that fits the largest item.
         width = editor.minimum_size_hint.width
         # set the ComboBox to that width.
