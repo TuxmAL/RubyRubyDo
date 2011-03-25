@@ -36,7 +36,7 @@ module ToDo
     end
 
     def load
-      @tasks = YAML::load( File.open(@filename, 'r')) # YAML::load_stream( File.open( 'README' ) )
+      @tasks = YAML::load( File.open(@filename, 'r')) # YAML::load_stream( File.open(@filename) )
     end
   end
 end
