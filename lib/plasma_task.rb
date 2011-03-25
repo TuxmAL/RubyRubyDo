@@ -13,7 +13,8 @@ module RubyRubyDo
 
     def initialize(parent = nil, name = nil)
       super
-      setWindowTitle("Set due date")
+      self.window_title = "Set due date"
+      self.modal = true      
       cal = Qt::CalendarWidget.new self
       cal.grid_visible = true
       cal.vertical_header_format = Qt::CalendarWidget::NoVerticalHeader
