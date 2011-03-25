@@ -101,7 +101,7 @@ module RubyRubyDo
             value = Date.jd(dlg.selected_date)
             puts "setModelData calendar (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
           else
-            value = model.getData(index, value, Qt::EditRole)
+            value = index.data.value
           end
           
         end
