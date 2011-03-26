@@ -23,7 +23,7 @@ module RubyRubyDo
         puts "#{d.day}/#{d.month}/#{d.year}"
         @selected_date = d.toJulianDay
         puts "#{d} #{@selected_date} {#selected_date.day}/{#selected_date.month}/{#selected_date.year}"
-	accept()
+        accept()
       end
       ok_button = Qt::PushButton.new(Qt::Object.trUtf8('Ok'), self)
       ok_button.default = true
@@ -54,16 +54,6 @@ module RubyRubyDo
     def initialize(parent = nil)
       super parent
     end
-
-    #def initialize parent
-    #  super parent
-    #  puts "initialize #{parent.inspect}"
-    #end
-
-    #def paint painter, option, index
-    #  puts "paint: #{painter}, #{option}, #{index}"
-    #   super.paint painter, option, index
-    #end
     
     def setEditorData(editor, index)
       value = index.data.value
@@ -73,14 +63,14 @@ module RubyRubyDo
         editor.current_index = editor.find_text value.to_s
         #editor.current_index = editor.findText value
       when 3
-	case value.to_s
-	when '-'
-	  editor.current_index = 9
-	else 
-	  idx = editor.findData Qt::Variant.new(value)
-	  puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
-	  editor.current_index = (idx != -1)? idx: 10        
-	end
+        case value.to_s
+        when '-'
+          editor.current_index = 9
+        else
+          idx = editor.findData Qt::Variant.new(value)
+          puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
+          editor.current_index = (idx != -1)? idx: 10
+        end
       else
         editor.text = value
       end
