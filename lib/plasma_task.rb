@@ -32,7 +32,7 @@ module RubyRubyDo
       connect(cancel_button, SIGNAL('clicked()'), self, SLOT('reject()'))
       today_button = Qt::PushButton.new(Qt::Object.trUtf8('Today'), self)
       today_button.connect(SIGNAL('clicked()')) do
-        cal.selected_date = Qt::Date.fromJulianDay(DateTime.now.jd)
+        cal.selected_date = Qt::Date.fromJulianDay(Date.today.jd)
         @selected_date = cal.selected_date.toJulianDay
       end
       vertical_layout = Qt::VBoxLayout.new
@@ -116,7 +116,7 @@ module RubyRubyDo
         return super
       when 3
         editor = Qt::ComboBox.new parent
-      	a_date = Date.jd(DateTime.now.jd)
+      	a_date = Date.today
         editor.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
         a_date += 1
         editor.add_item a_date.strftime('%a %d/%m/%y - Tomorrow'), Qt::Variant.new(a_date)

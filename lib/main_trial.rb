@@ -35,8 +35,8 @@ module RubyRubyDo
         col1.editable= false
         col2 = Qt::StandardItem.new((((i -1) % 5) + 1).to_s)
         col3 = Qt::StandardItem.new 'stringa'
-	date = Date.jd(DateTime.now.jd) + i
-	date = (date + 3 * 365) if ((i % 3) == 0)
+        date = Date.today + i
+        date = (date + 3 * 365) if ((i % 3) == 0)
         col4 = Qt::StandardItem.new date.strftime "%d/%m#{(date.year != DateTime.now.year)? '/%y':''}"
         @model.append_row [col1, col2, col3, col4]
       end

@@ -25,11 +25,11 @@ module RubyRubyDo
       if @@todo_list.nil?
         @@todo_list = ToDo::ToDo.new
         #@@todo_list.load        
-        a_task = ToDo::Task.new 'compra il latte', 1, (Date.jd(DateTime.now.jd) + 1)
+        a_task = ToDo::Task.new 'compra il latte', 1, Date.today + 1
         @@todo_list << a_task
-        a_task = ToDo::Task.new 'Telefonare!', 2, (Date.jd(DateTime.now.jd) + 3)
+        a_task = ToDo::Task.new 'Telefonare!', 2, Date.today + 3
         @@todo_list << a_task
-        a_task = ToDo::Task.new 'Garage', 1, (Date.jd(DateTime.now.jd) + 15)
+        a_task = ToDo::Task.new 'Garage', 1, Date.today + 15
         @@todo_list << a_task
         a_task = ToDo::Task.new 'bollette', 5
         @@todo_list << a_task

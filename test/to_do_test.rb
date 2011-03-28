@@ -13,7 +13,7 @@ require 'to_do'
 class ToDoTest < Test::Unit::TestCase
 
   def setup
-    @today = Date.jd(DateTime.now.jd)
+    @today = Date.today
     @yesterday = @today - 1
     @tomorrow = @today + 1
     @todo_list = ToDo::ToDo.new
