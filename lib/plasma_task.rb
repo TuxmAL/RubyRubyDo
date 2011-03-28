@@ -13,6 +13,7 @@ module RubyRubyDo
 
     def initialize(parent = nil, name = nil)
       super
+      @selected_date = Date.today      
       self.window_title = Qt::Object.trUtf8('Set due date')
       self.modal = true      
       cal = Qt::CalendarWidget.new self
