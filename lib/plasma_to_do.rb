@@ -48,7 +48,7 @@ module RubyRubyDo
 
     def columnCount(index = Qt::ModelIndex.new)
       # we will have 4 colums: done, priority, description, due_date
-      return 4
+      return 5
     end
 
     def data(index, role)
@@ -76,7 +76,9 @@ module RubyRubyDo
           when 2
             ret_val =  task.description
           when 3
-            ret_val =  (task.due_date.nil?)? '-': task.due_date #task.due_date.strftime('%d/%m/%Y')
+            ret_val = (task.overdue?)? '!': ''
+          when 4
+            ret_val =  (task.due_date.nil?)? '-': task.due_date
           else
             ret_val = nil
         end
@@ -89,7 +91,9 @@ module RubyRubyDo
           when 2
             ret_val = Qt::Object.trUtf8('Task description.')
           when 3
-                ret_val = Qt::Object.trUtf8('Task due date.')
+            ret_val = Qt::Object.trUtf8('Is task overdue?')
+          when 4
+            ret_val = Qt::Object.trUtf8('Task due date.')
           else
             ret_val = ''
         end
@@ -111,7 +115,7 @@ module RubyRubyDo
           Qt::Variant.new Qt::Object.trUtf8('Priority')
         when 2
           Qt::Variant.new Qt::Object.trUtf8('Task')
-        when 3
+        when 4
           Qt::Variant.new Qt::Object.trUtf8('Due for')
       else
         return Qt::Variant.new
@@ -129,6 +133,8 @@ module RubyRubyDo
         when 2
           return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         when 3
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled
+        when 4
           return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
         else
           return Qt::NoItemFlags
@@ -168,8 +174,7 @@ module RubyRubyDo
           task.priority = (value.to_i)
         when 2
           task.description = value
-        when 3
-          puts
+        when 4
           task.due_date = value
         end
       end
@@ -203,4 +208,3 @@ module RubyRubyDo
    end
   end
 end
-

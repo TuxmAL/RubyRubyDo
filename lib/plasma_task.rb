@@ -63,7 +63,7 @@ module RubyRubyDo
       when 1
         editor.current_index = editor.find_text value.to_s
         #editor.current_index = editor.findText value
-      when 3
+      when 4
         case value.to_s
         when '-'
           editor.current_index = 9
@@ -81,7 +81,7 @@ module RubyRubyDo
       case index.column
       when 1
         value = editor.current_text
-      when 3
+      when 4
         value = editor.item_data(editor.current_index())
         puts "setModelData date: #{value}. #{value.is_valid}"
         value = nil if value.to_s == '-'
@@ -115,7 +115,7 @@ module RubyRubyDo
         return editor
       when 2
         return super
-      when 3
+      when 4
         editor = Qt::ComboBox.new parent
       	a_date = Date.today
         editor.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
@@ -145,4 +145,3 @@ module RubyRubyDo
   end
 
 end
-
