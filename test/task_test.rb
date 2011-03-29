@@ -92,4 +92,8 @@ class TaskTest < Test::Unit::TestCase
     assert_equal(true, a_task.overdue?)
   end
 
+  must 'task without due date never be overdue' do
+    a_task = ToDo::Task.new('test task', 3)
+    assert_equal(false, a_task.overdue?)
+  end
 end
