@@ -7,7 +7,6 @@ module ToDo
     def initialize
       @tasks = Array.new
       @filename = TODOFILE
-      puts @filename
     end
 
     def <<(task)
