@@ -133,10 +133,6 @@ module RubyRubyDo
         # set the ComboBox to that width.
         editor.minimum_width = width
         return editor
-        #editor = Qt::DateEdit.new 
-        #editor.calendar_popup = true
-        #editor.calendar_widget = Qt::CalendarWidget.new parent
-        #editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
       else
         #super.createEditor parent, option, index
         return nil #0
