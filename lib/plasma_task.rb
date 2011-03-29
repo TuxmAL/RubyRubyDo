@@ -84,15 +84,15 @@ module RubyRubyDo
       when 4
         value = editor.item_data(editor.current_index())
         puts "setModelData date: #{value}. #{value.is_valid}"
-        value = nil if value.to_s == '-'
+        value = Qt::Variant.new if value.to_s == '-'
         unless value.is_valid
           dlg = CalendarDialog.new editor
           if (dlg.exec == Qt::Dialog::Accepted)
             puts "setModelData calendar (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
-            value = Date.jd(dlg.selected_date)
+            value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
             puts "setModelData calendar (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
           else
-            value = index.data.value
+            value = Qt::Variant.new index.data.value
           end
           
         end

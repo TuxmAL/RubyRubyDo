@@ -175,7 +175,10 @@ module RubyRubyDo
         when 2
           task.description = value
         when 4
-          task.due_date = value
+          task.due_date = nil
+          puts "setData: value=#{value.value}; isValid=#{value.is_valid}"
+
+          task.due_date = Date.jd(value.toDate.toJulianDay) if value.is_valid and value.value != '-'
         end
       end
       dataChanged( index, index ) if ret_val
