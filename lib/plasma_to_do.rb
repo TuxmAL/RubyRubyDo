@@ -41,6 +41,7 @@ module RubyRubyDo
         a_task.done
         @@todo_list << a_task
       end
+      @font = Qt::Font.new('DejaVu Sans') #'Droid Sans'
       #@@todo_list.each {|t| puts t.to_yaml}
     end
 
@@ -99,6 +100,17 @@ module RubyRubyDo
           else
             ret_val = ''
         end
+      when Qt::FontRole
+        ret_val = @font
+        #ret_val.italic = true
+        if index.column == 3
+          ret_val.weight = Qt::Font.Bold
+        else
+          ret_val.weight = Qt::Font.Light #Normal
+        end
+        ret_val.setStrikeOut(task.done?)
+        #ret_val.setStrikeOut(true)
+        return Qt::Variant.fromValue(ret_val)
       when Qt::TextAlignmentRole
         if index.column == 3
           ret_val = Qt::AlignHCenter.to_i
