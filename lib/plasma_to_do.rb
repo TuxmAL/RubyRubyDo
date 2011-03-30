@@ -14,6 +14,8 @@ require 'plasma_task'
 module RubyRubyDo
   class PlasmaToDo  < Qt::AbstractItemModel
 
+    signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
+
     @@todo_list = nil
 
     def self.todo_list
@@ -180,7 +182,7 @@ module RubyRubyDo
           task.due_date = Date.jd(value.toDate.toJulianDay) if value.is_valid and value.value != '-'
         end
       end
-      dataChanged( index, index ) if ret_val
+      emit dataChanged( index, index ) if ret_val
     end
 
     #def header_data=
