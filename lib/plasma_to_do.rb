@@ -47,7 +47,7 @@ module RubyRubyDo
     end
 
     def columnCount(index = Qt::ModelIndex.new)
-      # we will have 4 colums: done, priority, description, due_date
+      # we will have 5 colums: done, priority, description, due_date
       return 5
     end
 
