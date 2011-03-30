@@ -99,6 +99,12 @@ module RubyRubyDo
           else
             ret_val = ''
         end
+      when Qt::TextAlignmentRole
+        if index.column == 3
+          ret_val = Qt::AlignHCenter.to_i
+        else
+          ret_val = Qt::AlignLeft.to_i
+        end
       else
         ret_val = nil
      end
