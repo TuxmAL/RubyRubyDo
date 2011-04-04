@@ -33,7 +33,7 @@ module RubyRubyDo
         @@todo_list << a_task
         a_task = ToDo::Task.new 'Garage', 1, Date.today + 15
         @@todo_list << a_task
-        a_task = ToDo::Task.new 'bollette', 5
+        a_task = ToDo::Task.new 'bollette', 5, Date.today - 5
         @@todo_list << a_task
         a_task = ToDo::Task.new 'test', 1
         @@todo_list << a_task
