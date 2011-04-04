@@ -57,8 +57,8 @@ module RubyRubyDo
     def data(index, role)
       #puts index
       #puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
-      return QT::Variant.new unless index.is_valid
-      return QT::Variant.new if (index.row >= @@todo_list.count)
+      return Qt::Variant.new unless index.is_valid
+      return Qt::Variant.new if (index.row >= @@todo_list.count)
       task = index.internal_pointer
       #puts task.inspect
       #puts 'case switch'
