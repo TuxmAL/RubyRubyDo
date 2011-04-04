@@ -171,7 +171,6 @@ module RubyRubyDo
     end
 
     def setData(index, value, role)
-      ret_val = false
       return QT::Variant.new unless index.is_valid
       return QT::Variant.new if (index.row >= @@todo_list.count)
       task = index.internal_pointer
@@ -181,10 +180,8 @@ module RubyRubyDo
           case value.value
           when (Qt::Checked).to_i
             task.done
-            ret_val |= true
           when (Qt::Unchecked).to_i
             task.undone
-            ret_val |= true
           end
         end
       emit layoutAboutToBeChanged
@@ -204,7 +201,7 @@ module RubyRubyDo
           task.due_date = Date.jd(value.toDate.toJulianDay) if value.is_valid and value.value != '-'
         end
       end
-      emit dataChanged( index, index ) if ret_val
+      emit(dataChanged( index, index )) if [Qt::CheckStateRole, Qt::EditRole].include? role
     end
 
     #def header_data=
