@@ -4,7 +4,7 @@ module ToDo
     PRIORITYMIN = 5
 
     attr_accessor :description, :due_date, :category
-    attr_reader :priority
+    attr_reader :priority, :fulfilled_date
 
     def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
         due_date = nil,category = nil)
@@ -13,6 +13,7 @@ module ToDo
       @description = description
       @priority = priority
       @due_date = due_date
+      @fulfilled_date = nil
       @category = category
       @saved = false
     end
@@ -28,11 +29,13 @@ module ToDo
 
     def done
       @saved &= false
+      @fulfilled_date = Date.today
       @done = true
     end
 
     def undone
       @saved &= false
+      @fulfilled_date = nil
       @done = false
     end
 

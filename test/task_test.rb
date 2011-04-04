@@ -1,3 +1,4 @@
+#coding: UTF-8
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
@@ -95,5 +96,31 @@ class TaskTest < Test::Unit::TestCase
   must 'task without due date never be overdue' do
     a_task = ToDo::Task.new('test task', 3)
     assert_equal(false, a_task.overdue?)
+  end
+
+  must 'task not done has fulfilled date set to nil' do
+    a_task = ToDo::Task.new('test task', 3)
+    assert_equal(nil, a_task.fulfilled_date)
+  end
+
+  must 'task done has fulfilled date set to the date of fulfilment' do
+    a_task = ToDo::Task.new('test task', 3)
+    a_task.done
+    assert_equal(Date.today, a_task.fulfilled_date)
+  end
+
+  must 'task undone has fulfilled date reset to nil' do
+    a_task = ToDo::Task.new('test task', 3)
+    a_task.done
+    a_task.undone
+    assert_equal(nil, a_task.fulfilled_date)
+  end
+
+  must 'task cannot alter fulfilled date directly' do
+    a_task = ToDo::Task.new('test task', 3)
+    a_task.done
+    assert_raise NoMethodError do
+      a_task.fulfillment_date = Date.Today + 3
+    end
   end
 end
