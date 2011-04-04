@@ -187,6 +187,11 @@ module RubyRubyDo
             ret_val |= true
           end
         end
+      emit layoutAboutToBeChanged
+      idx = index # Remember the QModelIndex that will change
+      # Update your internal data
+      changePersistentIndex(idx, idx)
+      emit layoutChanged
       when Qt::EditRole
         case index.column
         when 1
