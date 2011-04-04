@@ -37,7 +37,7 @@ class TreeViewExample(plasmascript.Applet):
         self.theme = Plasma.Svg(self)
         self.theme.setImagePath("widgets/background")
         self.setBackgroundHints(Plasma.Applet.DefaultBackground)
-
+	self.font.seStrikeOut = true
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
 
         self.label = Plasma.Label(self.applet)
