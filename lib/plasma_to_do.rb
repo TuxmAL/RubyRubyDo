@@ -96,15 +96,15 @@ module RubyRubyDo
       when Qt::StatusTipRole, Qt::ToolTipRole
         case index.column
           when 0
-            ret_val = Qt::Object.trUtf8('Is task accomplished?')
+            ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
           when 1
-            ret_val = Qt::Object.trUtf8('Task priority.')
+            ret_val = Qt::Object.trUtf8('Priority.')
           when 2
             ret_val = Qt::Object.trUtf8('Task description.')
           when 3
-            ret_val = Qt::Object.trUtf8('Is task overdue?')
+            ret_val = Qt::Object.trUtf8('Overdue if marked.')
           when 4
-            ret_val = Qt::Object.trUtf8('Task due date.')
+            ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
           else
             ret_val = ''
         end
