@@ -42,7 +42,10 @@ module RubyRubyDo
         @@todo_list << a_task
       end
       @font = parent.font
-      @font.weight = (Qt::Font.Normal + 1)
+      # Work around for QT4.6.2 bug that prevent italic, underline, overline
+      # and strikeout on a font if the weight is Qt::Font.Normal.
+      @font_normal = Qt::Font.Normal
+      @font_normal += 1 if Qt.version == '4.6.2'
       #@@todo_list.each {|t| puts t.to_yaml}
     end
 
@@ -106,7 +109,7 @@ module RubyRubyDo
         if index.column == 3
           ret_val.weight = Qt::Font.Bold
         else
-          ret_val.weight = (Qt::Font.Normal + 1)
+          ret_val.weight = @font_normal
         end
         ret_val.setStrikeOut(task.done?)
         return Qt::Variant.fromValue(ret_val)
