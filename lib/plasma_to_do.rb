@@ -83,9 +83,13 @@ module RubyRubyDo
           when 2
             ret_val =  task.description
           when 3
-            ret_val = (task.overdue?)? '!': ''
+            ret_val = (task.overdue? and !task.done?)? '!': ''
           when 4
-            ret_val =  (task.due_date.nil?)? '-': task.due_date
+            if task.done?
+              ret_val =  task.fulfilled_date
+            else
+              ret_val =  (task.due_date.nil?)? '-': task.due_date
+            end
           else
             ret_val = nil
         end
