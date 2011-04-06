@@ -107,7 +107,7 @@ module RubyRubyDo
       puts "createEditor: #{parent}, #{option}, #{index.column}"
       #try returning 0 if nil is not good!
       #return nil unless index.is_valid
-      #return nil if (index.row >= @@todo_list.count)
+      #return nil if (index.row >= @@todo.count)
       case index.column
       when 1
         editor = Qt::ComboBox.new parent

@@ -29,7 +29,7 @@ module RubyRubyDo
       end
       button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
         connect(SIGNAL :clicked) do
-          todo = PlasmaToDo.todo_list
+          todo = PlasmaToDo.todo
           puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
           todo << ToDo::Task.new('inserito a mano', 5 )
           treeview.model.insertRow todo.count - 1

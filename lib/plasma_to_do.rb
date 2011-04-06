@@ -13,41 +13,29 @@ require 'plasma_task'
 
 module RubyRubyDo
   class PlasmaToDo  < Qt::AbstractItemModel
-
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
 
     @@todo_list = nil
 
-    def self.todo_list
+    def self.todo
       @@todo_list
+    end
+    
+    def todo
+      @@todo_list ||= load_to_do_list
     end
 
     def initialize parent
       super parent
-      if @@todo_list.nil?
-        @@todo_list = ToDo::ToDo.new
-        #@@todo_list.load        
-        a_task = ToDo::Task.new 'compra il latte', 1, Date.today + 1
-        @@todo_list << a_task
-        a_task = ToDo::Task.new 'Telefonare!', 2, Date.today + 3
-        @@todo_list << a_task
-        a_task = ToDo::Task.new 'Garage', 1, Date.today + 15
-        @@todo_list << a_task
-        a_task = ToDo::Task.new 'bollette', 5, Date.today - 5
-        @@todo_list << a_task
-        a_task = ToDo::Task.new 'test', 1
-        @@todo_list << a_task
-        a_task = ToDo::Task.new 'fatto', 1
-        a_task.done
-        @@todo_list << a_task
-      end
       @font = parent.font
-      @font.weight = (Qt::Font.Normal + 1)
-      #@@todo_list.each {|t| puts t.to_yaml}
+      # Work around for QT4.6.2 bug that prevent italic, underline, overline
+      # and strikeout on a font if the weight is Qt::Font.Normal.
+      @font_normal = Qt::Font.Normal
+      @font_normal += 1 if Qt.version == '4.6.2'      
     end
 
     def rowCount(index = Qt::ModelIndex.new)
-      return @@todo_list.count
+      return todo.count
     end
 
     def columnCount(index = Qt::ModelIndex.new)
@@ -59,7 +47,7 @@ module RubyRubyDo
       #puts index
       #puts "data function -> index: is_valid? #{index.is_valid}, row:#{index.row}, column: #{index.column}; Role: #{role}"
       return Qt::Variant.new unless index.is_valid
-      return Qt::Variant.new if (index.row >= @@todo_list.count)
+      return Qt::Variant.new if (index.row >= todo.count)
       task = index.internal_pointer
       #puts task.inspect
       #puts 'case switch'
@@ -80,24 +68,28 @@ module RubyRubyDo
           when 2
             ret_val =  task.description
           when 3
-            ret_val = (task.overdue?)? '!': ''
+            ret_val = (task.overdue? and !task.done?)? '!': ''
           when 4
-            ret_val =  (task.due_date.nil?)? '-': task.due_date
+            if task.done?
+              ret_val =  task.fulfilled_date
+            else
+              ret_val =  (task.due_date.nil?)? '-': task.due_date
+            end
           else
             ret_val = nil
         end
       when Qt::StatusTipRole, Qt::ToolTipRole
         case index.column
           when 0
-            ret_val = Qt::Object.trUtf8('Is task accomplished?')
+            ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
           when 1
-            ret_val = Qt::Object.trUtf8('Task priority.')
+            ret_val = Qt::Object.trUtf8('Priority.')
           when 2
             ret_val = Qt::Object.trUtf8('Task description.')
           when 3
-            ret_val = Qt::Object.trUtf8('Is task overdue?')
+            ret_val = Qt::Object.trUtf8('Overdue if marked.')
           when 4
-            ret_val = Qt::Object.trUtf8('Task due date.')
+            ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
           else
             ret_val = ''
         end
@@ -106,7 +98,7 @@ module RubyRubyDo
         if index.column == 3
           ret_val.weight = Qt::Font.Bold
         else
-          ret_val.weight = (Qt::Font.Normal + 1)
+          ret_val.weight = @font_normal
         end
         ret_val.setStrikeOut(task.done?)
         return Qt::Variant.fromValue(ret_val)
@@ -143,7 +135,7 @@ module RubyRubyDo
     
     def flags(index)
       return Qt::NoItemFlags unless index.is_valid
-      return Qt::NoItemFlags if (index.row >= @@todo_list.count)
+      return Qt::NoItemFlags if (index.row >= todo.count)
       case index.column
         when 0
           return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
@@ -167,12 +159,12 @@ module RubyRubyDo
     def index(row,column = 0, parent = Qt::ModelIndex.new )
       #puts "index function -> parent:#{parent}, row:#{row}, column:#{column}, hasIndex: #{hasIndex(row, column, parent)}"
       return Qt::ModelIndex.new if ! hasIndex(row, column, parent)
-      return createIndex(row, column, @@todo_list[row])
+      return createIndex(row, column, todo[row])
     end
 
     def setData(index, value, role)
       return QT::Variant.new unless index.is_valid
-      return QT::Variant.new if (index.row >= @@todo_list.count)
+      return QT::Variant.new if (index.row >= todo.count)
       task = index.internal_pointer
       case role
       when Qt::CheckStateRole
@@ -229,5 +221,28 @@ module RubyRubyDo
      endRemoveRows()
      return true
    end
-  end
+
+   private
+   
+   def load_to_do_list
+      todo = ToDo::ToDo.new
+      a_task = ToDo::Task.new 'compra il latte', 1, Date.today + 1
+      todo << a_task
+      a_task = ToDo::Task.new 'Telefonare!', 2, Date.today + 3
+      todo << a_task
+      a_task = ToDo::Task.new 'Garage', 1, Date.today + 15
+      todo << a_task
+      a_task = ToDo::Task.new 'bollette', 5, Date.today - 5
+      todo << a_task
+      a_task = ToDo::Task.new 'test', 1
+      todo << a_task
+      a_task = ToDo::Task.new 'fatto', 1
+      a_task.done
+      todo << a_task
+      #todo.load
+      #todo.each {|t| puts t.to_yaml}
+    end
+
+ end
+
 end
