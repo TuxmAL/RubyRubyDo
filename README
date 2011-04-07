@@ -1,3 +1,56 @@
-== RubyRubyDo
+== Description
 
-a Ruby ToDo application, aiming to be used from CLI, web and from a KDE plasmoid!
+This is RubyRubyDo ready for you.
+
+RubyRubyDo is a Ruby ToDo application, aiming to be used as a KDE plasmoid.
+I really missed this feature on KDE and whay I found already was too overkill
+(integration with nepomuk, web server on local machine!) or required to give
+away your data on the web.
+Currently is under development the desktop application in QT, as playground for
+writing the plasmoid itself.
+Aside that, I hope to create even a CLI interface and a web interface and, for
+free, an API to manage ToDo lists of your own in your projects.
+
+== Documentation
+See ToDo::ToDo and ToDo::Task for the core todo list and task management.
+More information will be posted here as I'll develop the QT app, plasmoid, CLI
+and web interface.
+
+== Examples
+Basic usage:
+
+  todo_list = ToDo::ToDo.new  
+  task1 = ToDo::Task.new 'Buy the milk!', 1, Date.today 
+  task2 = ToDo::Task.new 'Phone John for ticket!', 2, Date.today + 1
+  task3 = ToDo::Task.new 'Clean the car', 3, Date.today - 7
+  task4 = ToDo::Task.new 'Go fishing!', 5
+  todo_list << task1 << task2 << task3 << task4
+  todo_list.save
+
+Check if a task is overdue:
+
+  puts todo_list[3].overdue?
+
+Mark a task as fulfilled:
+
+  todo_list[1].done
+  puts todo_list[1].fulfilled_date
+
+Unmark a task as done:
+
+  todo_list[1].undone
+  puts todo_list[1].due_date
+
+Retrieve a saved todo:
+  todo_list = ToDo::ToDo.new
+  todo_list.load
+
+= Installing RubyRubyDo
+To be completed.
+== Installing the Gem
+To be completed.
+== Installing Manually
+To be completed.
+
+== Comments, Info and/or Questions
+Feel free to email {TuxmAL}[mailto:tuxmal@tiscali.it] for any question or info.
