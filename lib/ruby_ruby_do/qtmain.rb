@@ -6,6 +6,7 @@ require 'Qt4'
 require 'yaml'
 #require 'enumerator'
 
+require 'to_do'
 require 'plasma_to_do'
 
 module RubyRubyDo

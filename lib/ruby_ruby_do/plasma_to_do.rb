@@ -2,13 +2,10 @@
 #
 #required libraries to rely on.
 #require 'rubygems'
-require 'plasma_applet'
+#require 'plasma_applet'
 #require 'enumerator'
 
-#We need ToDo tasks
-require 'to_do'
-require 'task'
-
+#We need ToDo Library
 require 'plasma_task'
 
 module RubyRubyDo

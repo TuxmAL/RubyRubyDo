@@ -2,8 +2,8 @@
 #
 #required libraries to rely on.
 #require 'rubygems'
-require 'plasma_applet'
-require 'task'
+#require 'plasma_applet'
+#require 'task'
 
 module RubyRubyDo
 
