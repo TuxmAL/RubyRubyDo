@@ -6,9 +6,11 @@
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
 =end
+if $0 == __FILE__
+  require 'Qt4'
+  require 'to_do'
+end
 
-require 'Qt4'
-require 'task'
 
 class PlasmaEditTask < Qt::Dialog
     attr_reader :task
@@ -42,54 +44,38 @@ class PlasmaEditTask < Qt::Dialog
       self.window_title = title
       self.windowModality = Qt::WindowModal
       self.resize(259, 174)
-      sizePolicy = Qt::SizePolicy.new(Qt::SizePolicy::Fixed, Qt::SizePolicy::Fixed)
-      sizePolicy.setHorizontalStretch(0)
-      sizePolicy.setVerticalStretch(0)
       sizePolicy.heightForWidth = self.sizePolicy.hasHeightForWidth
-      self.sizePolicy = sizePolicy
       self.modal = true
       button_box = nil
       delete_button = nil
+      first_tool_button = nil
+      combo_box = nil
       vertical_layout = Qt::VBoxLayout.new() do
         setContentsMargins(0, 0, 0, 0)
         horizontal_layout = Qt::HBoxLayout.new() do
-          spacing = 0
-          label = Qt::Label.new(Qt::Object.trUtf8('Priority:')) do
-            sizePolicy = Qt::SizePolicy.new(Qt::SizePolicy::Minimum, Qt::SizePolicy::Preferred)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
-            sizePolicy.heightForWidth = sizePolicy.hasHeightForWidth
-            sizePolicy = sizePolicy
-          end
+          label = Qt::Label.new(Qt::Object.trUtf8('Priority:'))
           addWidget(label)
           addItem(Qt::SpacerItem.new(5, 20, Qt::SizePolicy::Fixed, Qt::SizePolicy::Minimum))
-          tool_button = []
           ToDo::Task::PRIORITYMAX.upto ToDo::Task::PRIORITYMIN do |pri|
-            tool_button.push Qt::ToolButton.new() do
-              checkable = true
-              autoExclusive = true
+            tool_button =  Qt::ToolButton.new() do
+              self.checkable = true
+              self.autoExclusive = true
+              self.text = Qt::Object.trUtf8(pri.to_s)
             end
-            tool_button.last.text = Qt::Object.trUtf8(pri.to_s)
-
-            addWidget(tool_button.last)
+            first_tool_button ||= tool_button
+            addWidget(tool_button)
           end
-          # FIX: label buddy is the last tool button instead of the first!
-          label.buddy = tool_button.first
+          first_tool_button.checked = true
+          label.buddy = first_tool_button
           addItem(Qt::SpacerItem.new(40, 20, Qt::SizePolicy::Expanding, Qt::SizePolicy::Minimum))
         end
         addLayout(horizontal_layout)
         label = Qt::Label.new(Qt::Object.trUtf8('Description:'))
         addWidget(label)
         description = Qt::PlainTextEdit.new() do
-          sizePolicy2 = Qt::SizePolicy.new(Qt::SizePolicy::Minimum, Qt::SizePolicy::Minimum)
-          sizePolicy2.setHorizontalStretch(0)
-          sizePolicy2.setVerticalStretch(0)
-          sizePolicy2.heightForWidth = sizePolicy.hasHeightForWidth
-          sizePolicy = sizePolicy2
-          maximumSize = Qt::Size.new(256, 256)
-          frameShadow = Qt::Frame::Sunken
-          horizontalScrollBarPolicy = Qt::ScrollBarAlwaysOff
-          tabChangesFocus = true
+          self.frameShadow = Qt::Frame::Sunken
+          self.horizontalScrollBarPolicy = Qt::ScrollBarAlwaysOff
+          self.tabChangesFocus = true
         end
         addWidget(description)
         label.buddy = description
@@ -97,9 +83,7 @@ class PlasmaEditTask < Qt::Dialog
           label = Qt::Label.new(Qt::Object.trUtf8('Due for:'))
           addWidget(label)
           combo_box = Qt::ComboBox.new() do
-            size_policy.heightForWidth = sizePolicy.hasHeightForWidth
-            sizePolicy = size_policy
-            sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
+            self.sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
           end
           addWidget(combo_box)
           label.buddy = combo_box
@@ -107,38 +91,25 @@ class PlasmaEditTask < Qt::Dialog
         end
         addLayout(horizontal_layout)
         button_box = Qt::DialogButtonBox.new(Qt::DialogButtonBox::Cancel|Qt::DialogButtonBox::Ok, Qt::Horizontal) do
-          centerButtons = false
+          self.centerButtons = false
           delete_button = Qt::PushButton.new(Qt::Object.trUtf8('Delete'))
           addButton(delete_button, Qt::DialogButtonBox::ActionRole)
           delete_button.visible = !task.nil?
         end
         addWidget(button_box)
+        Qt::Widget.setTabOrder(first_tool_button, description)
+        Qt::Widget.setTabOrder(description, combo_box)
+        Qt::Widget.setTabOrder(combo_box, button_box)
       end
       connect(button_box, SIGNAL('accepted()'), self, SLOT('accept()'))
       connect(button_box, SIGNAL('rejected()'), self, SLOT('reject()'))
       connect(delete_button, SIGNAL('clicked()'), self, SLOT('accept()'))
       Qt::MetaObject.connectSlotsByName(self)
       setLayout vertical_layout
-#    Qt::Widget.setTabOrder(@toolButton, @toolButton_2)
-#    Qt::Widget.setTabOrder(@toolButton_2, @toolButton_3)
-#    Qt::Widget.setTabOrder(@toolButton_3, @toolButton_4)
-#    Qt::Widget.setTabOrder(@toolButton_4, @toolButton_5)
-#    Qt::Widget.setTabOrder(@toolButton_5, @Description)
-#    Qt::Widget.setTabOrder(@Description, @comboBox)
-#    Qt::Widget.setTabOrder(@comboBox, @buttonBox)
     end
 
-#    def setupUi(dialog)
-#    @layoutWidget = Qt::Widget.new(dialog)
-#    @layoutWidget.objectName = "layoutWidget"
-#    @layoutWidget.geometry = Qt::Rect.new(0, 10, 258, 191)
-#
-#    retranslateUi(dialog)
-#
-#    end # setupUi
-#
 #    def setup_ui(dialog)
-#        setupUi(dialog)
+#      retranslateUi(dialog)
 #    end
 #
 #    def retranslateUi(dialog)
@@ -152,26 +123,12 @@ class PlasmaEditTask < Qt::Dialog
 
 end
 
-#module Ui
-#    class Dialog < Ui_Dialog
-#    end
-#end  # module Ui
-
 if $0 == __FILE__
-#    about = KDE::AboutData.new("dialog", "Dialog", KDE.ki18n(""), "0.1")
-#    KDE::CmdLineArgs.init(ARGV, about)
-#    a = KDE::Application.new
-#    u = Ui_Dialog.new
-#    w = Qt::Dialog.new
-#    u.setupUi(w)
-#    a.topWidget = w
-#    w.show
-#    a.exec
-    Qt::Application.new(ARGV) do
-      task = ToDo::Task.new #nil
-      PlasmaEditTask.new nil, nil, task do
-        show
-      end
-    exec
+  Qt::Application.new(ARGV) do
+    task = ToDo::Task.new #nil
+    PlasmaEditTask.new nil, nil, nil do
+      show
     end
+  exec
+  end
 end
