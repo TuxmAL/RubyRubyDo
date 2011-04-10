@@ -8,6 +8,7 @@ require 'yaml'
 
 require 'to_do'
 require 'plasma_to_do'
+require 'plasma_edit_task'
 
 module RubyRubyDo
   Qt::Application.new(ARGV) do
@@ -28,23 +29,35 @@ module RubyRubyDo
         (0..model.columnCount(0)).each { |i| resizeColumnToContents i }
         self.alternatingRowColors = true
       end
-      button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
-        connect(SIGNAL :clicked) do
-          todo = PlasmaToDo.todo
-          puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
-          todo << ToDo::Task.new('inserito a mano', 5 )
-          treeview.model.insertRow todo.count - 1
-          puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
-        end
-      end
-      button = Qt::PushButton.new(Qt::Object.trUtf8('Quit')) do
-        connect(SIGNAL :clicked) { Qt::Application.instance.quit }
-      end
       self.layout = Qt::VBoxLayout.new do
         add_widget treeview
         h_layout =  Qt::HBoxLayout.new  do
+          button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
+            connect(SIGNAL :clicked) do
+              todo = PlasmaToDo.todo
+              puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
+              todo << ToDo::Task.new('inserito a mano', 5 )
+              treeview.model.insertRow todo.count - 1
+              puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
+            end
+          end
           add_widget(button_new, 0, Qt::AlignLeft)
-          add_widget(button, 0, Qt::AlignRight)
+          button_detail = Qt::PushButton.new(Qt::Object.trUtf8('Details...')) do
+            connect(SIGNAL :clicked) do
+              # TODO: set parameter correctly!
+              dlg = PlasmaEditTask.new #(self.parent, 'edit', nil) #treeview.selected
+              if (dlg.exec == Qt::Dialog::Accepted)
+                puts "ok"
+              else
+                puts "cancel"
+              end
+            end
+          end
+          add_widget(button_detail, 0, Qt::AlignCenter)
+          button_quit = Qt::PushButton.new(Qt::Object.trUtf8('Quit')) do
+            connect(SIGNAL :clicked) { Qt::Application.instance.quit }
+          end
+          add_widget(button_quit, 0, Qt::AlignRight)
         end
         add_layout h_layout
         #self.activate

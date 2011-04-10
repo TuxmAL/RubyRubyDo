@@ -1,38 +1,10 @@
-=begin
-** Form generated from reading ui file 'new_task.ui'
-**
-** Created: mer apr 6 02:32:44 2011
-**      by: Qt User Interface Compiler version 4.6.2
-**
-** WARNING! All changes made in this file will be lost when recompiling ui file!
-=end
 if $0 == __FILE__
   require 'Qt4'
   require 'to_do'
 end
 
-
 class PlasmaEditTask < Qt::Dialog
     attr_reader :task
-
-#    attr_reader :layoutWidget
-#    attr_reader :verticalLayout
-#    attr_reader :horizontalLayout
-#    attr_reader :label
-#    attr_reader :horizontalSpacer_2
-#    attr_reader :toolButton
-#    attr_reader :toolButton_2
-#    attr_reader :toolButton_3
-#    attr_reader :toolButton_4
-#    attr_reader :toolButton_5
-#    attr_reader :horizontalSpacer
-#    attr_reader :label_2
-#    attr_reader :description
-#    attr_reader :horizontalLayout_2
-#    attr_reader :label_3
-#    attr_reader :comboBox
-#    attr_reader :buttonBox
-#    attr_reader :deleteButton
 
     def initialize (parent = nil, name = nil, task = nil)
       super parent, name
