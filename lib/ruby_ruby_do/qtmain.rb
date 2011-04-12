@@ -1,11 +1,9 @@
 # <Copyright and license information goes here.>
 #
 #required libraries to rely on.
-#require 'rubygems'
 require 'Qt4'
 require 'yaml'
-#require 'enumerator'
-
+$:.unshift File.join(File.dirname(__FILE__))
 require 'to_do'
 require 'plasma_to_do'
 require 'plasma_edit_task'
