@@ -117,6 +117,7 @@ module RubyRubyDo
         return super
       when 4
         editor = Qt::ComboBox.new parent
+      # TODO: this code, has been stolen into plasma_edit_task and *must* be _refactored_!
       	a_date = Date.today
         editor.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
         a_date += 1
