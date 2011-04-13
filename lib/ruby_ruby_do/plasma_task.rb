@@ -114,6 +114,10 @@ module RubyRubyDo
       when 1
         editor = Qt::ComboBox.new parent
         editor.add_items((ToDo::Task::PRIORITYMAX..ToDo::Task::PRIORITYMIN).map { |e| e.to_s })
+        editor.connect(SIGNAL('activated(int)')) do |idx|
+          self.commitData editor
+          self.closeEditor editor
+        end
         return editor
       when 2
         return super
