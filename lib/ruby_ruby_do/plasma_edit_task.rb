@@ -79,7 +79,8 @@ class PlasmaEditTask < Qt::Dialog
       a_date.upto(a_date + 5) do |d|
         combo_box.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
       end
-      combo_box.add_item((a_date + 6).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
+      a_date += 6
+      combo_box.add_item((a_date).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
       combo_box.add_item Qt::Object.trUtf8('No date'), Qt::Variant.new('-')
       combo_box.add_item Qt::Object.trUtf8('Choose date...'), Qt::Variant.new()
       # get the minimum width that fits the largest item.

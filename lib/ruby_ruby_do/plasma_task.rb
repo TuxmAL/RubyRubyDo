@@ -85,7 +85,7 @@ module RubyRubyDo
         value = editor.current_text
       when 4
         value = editor.item_data(editor.current_index())
-        puts "setModelData date: #{value}. #{value.is_valid}"
+        puts "setModelData date: #{value.value}. #{value.is_valid}"
         value = Qt::Variant.new if value.to_s == '-'
         unless value.is_valid
           dlg = CalendarDialog.new editor
@@ -102,7 +102,7 @@ module RubyRubyDo
         value = editor.text
       end
       model.setData(index, value, Qt::EditRole)
-      puts "setData: #{value}, #{model}, #{index}"
+      puts "setData: #{value.value}, #{model}, #{index}"
     end
 
     def createEditor parent, option, index
@@ -132,7 +132,8 @@ module RubyRubyDo
         a_date.upto(a_date + 5) do |d|
           editor.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
         end
-        editor.add_item((a_date + 6).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
+        a_date += 6
+        editor.add_item((a_date).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
         editor.add_item Qt::Object.trUtf8('No date'), Qt::Variant.new('-')
         editor.add_item Qt::Object.trUtf8('Choose date...'), Qt::Variant.new()
         # get the minimum width that fits the largest item.
