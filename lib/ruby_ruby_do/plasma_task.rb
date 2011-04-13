@@ -68,9 +68,11 @@ module RubyRubyDo
         when '-'
           editor.current_index = 9
         else
+          # TODO: this code, has been stolen by plasma_edit_task and *must* be _refactored_!
           idx = editor.findData Qt::Variant.new(value)
           puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
           editor.current_index = (idx != -1)? idx: 10
+          #################################################################
         end
       else
         editor.text = value
@@ -117,7 +119,7 @@ module RubyRubyDo
         return super
       when 4
         editor = Qt::ComboBox.new parent
-      # TODO: this code, has been stolen into plasma_edit_task and *must* be _refactored_!
+        # TODO: this code, has been stolen by plasma_edit_task and *must* be _refactored_!
       	a_date = Date.today
         editor.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
         a_date += 1
@@ -133,6 +135,7 @@ module RubyRubyDo
         width = editor.minimum_size_hint.width
         # set the ComboBox to that width.
         editor.minimum_width = width
+        #################################################################
         return editor
       else
         #super.createEditor parent, option, index

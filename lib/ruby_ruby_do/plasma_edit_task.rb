@@ -98,9 +98,14 @@ class PlasmaEditTask < Qt::Dialog
     else
       title = Qt::Object.trUtf8('Edit Task')
       description.plain_text = task.description
-      puts task.priority
       (tool_buttons[task.priority - 1]).checked = true
-      #combo_box = nil
+      # TODO: this code, stolen from plasma_task, *must* be _refactored_!
+      idx = combo_box.findData Qt::Variant.new(task.due_date)
+      puts " find_data=#{idx}; task.due_date=#{task.due_date}"
+      combo_box.current_index = (idx != -1)? idx: 10
+      # TODO set the combo selected value for date not founn with findData (idx returned == -1)
+      combo_box.setEditText(task.due_date.strftime('%d/%m/%')) if idx == -1
+      ############################################
     end
     self.window_title = title
   end
