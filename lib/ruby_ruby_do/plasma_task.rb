@@ -136,6 +136,10 @@ module RubyRubyDo
         # set the ComboBox to that width.
         editor.minimum_width = width
         #################################################################
+        editor.connect(SIGNAL('activated(int)')) do |idx|
+          self.commitData editor
+          self.closeEditor editor
+        end
         return editor
       else
         #super.createEditor parent, option, index
