@@ -102,7 +102,7 @@ module RubyRubyDo
         value = editor.text
       end
       model.setData(index, value, Qt::EditRole)
-      puts "setData: #{value.value}, #{model}, #{index}"
+      puts "setData: #{value}, #{model}, #{index}"
     end
 
     def createEditor parent, option, index
