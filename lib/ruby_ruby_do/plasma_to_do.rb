@@ -28,7 +28,10 @@ module RubyRubyDo
       # Work around for QT4.6.2 bug that prevent italic, underline, overline
       # and strikeout on a font if the weight is Qt::Font.Normal.
       @font_normal = Qt::Font.Normal
-      @font_normal += 1 if Qt.version == '4.6.2'      
+      @font_normal += 1 if Qt.version[0...4] == '4.6.' and ((2..3).map {|i| i.to_s}).include? Qt.version[4].chr
+p Qt.version[0...4]
+p((2..3).map {|i| i.to_s})      
+p (Qt.version[4]).chr
     end
 
     def rowCount(index = Qt::ModelIndex.new)
