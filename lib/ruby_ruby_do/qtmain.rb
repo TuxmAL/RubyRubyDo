@@ -20,7 +20,7 @@ module RubyRubyDo
         self.root_is_decorated = false
         self.all_columns_show_focus = true
         self.items_expandable = false
-        self.edit_triggers =Qt::AbstractItemView.SelectedClicked | Qt::AbstractItemView.CurrentChanged
+        self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model
         self.item_delegate = PriorityDelegate.new self

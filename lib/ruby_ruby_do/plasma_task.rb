@@ -62,6 +62,7 @@ module RubyRubyDo
       case index.column
       when 1
         editor.current_index = editor.find_text value.to_s
+        editor.showPopup
         #editor.current_index = editor.findText value
       when 4
         case value.to_s
@@ -72,6 +73,7 @@ module RubyRubyDo
           idx = editor.findData Qt::Variant.new(value)
           puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
           editor.current_index = (idx != -1)? idx: 10
+          editor.showPopup
           #################################################################
         end
       else
@@ -95,8 +97,7 @@ module RubyRubyDo
             puts "setModelData calendar (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
           else
             value = Qt::Variant.new index.data.value
-          end
-          
+          end          
         end
       else
         value = editor.text
