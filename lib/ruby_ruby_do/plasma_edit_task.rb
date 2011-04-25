@@ -111,6 +111,7 @@ class PlasmaEditTask < Qt::Dialog
     self.window_title = title
   end
 
+
 #    def setup_ui(dialog)
 #      retranslateUi(dialog)
 #    end
