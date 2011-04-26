@@ -5,6 +5,8 @@ end
 
 class PlasmaEditTask < Qt::Dialog
   attr_reader :task
+  slots :edit_ok
+  slots :delete_task
 
   def initialize (parent = nil, task = nil)
     super parent, nil
@@ -12,6 +14,7 @@ class PlasmaEditTask < Qt::Dialog
     self.resize(259, 174)
     sizePolicy.heightForWidth = self.sizePolicy.hasHeightForWidth
     self.modal = true
+    @task = task
     button_box = nil
     delete_button = nil
     tool_buttons = []
@@ -32,7 +35,7 @@ class PlasmaEditTask < Qt::Dialog
           addWidget(tool_button)
           tool_buttons << tool_button
         end
-        tool_buttons.first.checked = true
+         tool_buttons.first.checked = true
         label.buddy = tool_buttons.first
         addItem(Qt::SpacerItem.new(40, 20, Qt::SizePolicy::Expanding, Qt::SizePolicy::Minimum))
       end
@@ -89,9 +92,9 @@ class PlasmaEditTask < Qt::Dialog
       combo_box.minimum_width = width
       ############################################
     end
-    connect(button_box, SIGNAL('accepted()'), self, SLOT('accept()'))
+    connect(button_box, SIGNAL('accepted()'), self, SLOT('edit_ok()'))
     connect(button_box, SIGNAL('rejected()'), self, SLOT('reject()'))
-    connect(delete_button, SIGNAL('clicked()'), self, SLOT('accept()'))
+    connect(delete_button, SIGNAL('clicked()'), self, SLOT('delete_task()'))
     Qt::MetaObject.connectSlotsByName(self)
     setLayout vertical_layout
     if task.nil?
@@ -109,6 +112,33 @@ class PlasmaEditTask < Qt::Dialog
       ############################################
     end
     self.window_title = title
+    @description = description
+    @tool_buttons = tool_buttons
+    @combo_box = combo_box
+  end
+
+  def delete_task
+
+    emit accept()
+  end
+
+  def edit_ok
+    unless @description.to_plain_text.strip.empty?
+      #@task = ToDo::Task.new() if task.nil?
+      @task.description = @description.to_plain_text.strip
+      @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
+      value = @combo_box.item_data(@combo_box.current_index())
+      @task.due_date = Date.jd(value.toDate.toJulianDay)
+
+      # TODO: signal to treeview (via AbstractModel?) that a row is changed!
+      #emit itemChanged()
+      
+      emit accept()
+    else
+       Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo:'),
+         Qt::Object.trUtf8('Task cannot have empty description.'),
+         Qt::MessageBox.Ok)
+    end
   end
 
 
