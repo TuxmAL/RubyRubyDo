@@ -97,18 +97,18 @@ class PlasmaEditTask < Qt::Dialog
     connect(delete_button, SIGNAL('clicked()'), self, SLOT('delete_task()'))
     Qt::MetaObject.connectSlotsByName(self)
     setLayout vertical_layout
-    if task.nil?
+    if @task.nil?
       title = Qt::Object.trUtf8('New Task')
     else
       title = Qt::Object.trUtf8('Edit Task')
-      description.plain_text = task.description
-      (tool_buttons[task.priority - 1]).checked = true
+      description.plain_text = @task.description
+      (tool_buttons[@task.priority - 1]).checked = true
       # TODO: this code, stolen from plasma_task, *must* be _refactored_!
       idx = combo_box.findData Qt::Variant.new(task.due_date)
       puts " find_data=#{idx}; task.due_date=#{task.due_date}"
       combo_box.current_index = (idx != -1)? idx: 10
       # TODO set the combo selected value for date not founn with findData (idx returned == -1)
-      combo_box.setEditText(task.due_date.strftime('%d/%m/%')) if idx == -1
+      combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
       ############################################
     end
     self.window_title = title
@@ -124,7 +124,7 @@ class PlasmaEditTask < Qt::Dialog
 
   def edit_ok
     unless @description.to_plain_text.strip.empty?
-      #@task = ToDo::Task.new() if task.nil?
+      @task ||= ToDo::Task.new()
       @task.description = @description.to_plain_text.strip
       @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
       value = @combo_box.item_data(@combo_box.current_index())
