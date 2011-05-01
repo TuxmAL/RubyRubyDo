@@ -20,6 +20,7 @@ class PlasmaEditTask < Qt::Dialog
     tool_buttons = []
     combo_box = nil
     description = nil
+    done_check = nil
     vertical_layout = Qt::VBoxLayout.new() do
       setContentsMargins(0, 0, 0, 0)
       horizontal_layout = Qt::HBoxLayout.new() do
@@ -59,6 +60,17 @@ class PlasmaEditTask < Qt::Dialog
         label.buddy = combo_box
         addItem(Qt::SpacerItem.new(40, 20, Qt::SizePolicy::Expanding, Qt::SizePolicy::Minimum))
       end
+      done_check = Qt::CheckBox.new(Qt::Object.trUtf8('Done'))
+      done_check.connect(SIGNAL('stateChanged(int)')) do |state|
+        if state == Qt::Unchecked
+          done_check.text = Qt::Object.trUtf8('Done')
+        else
+          done_check.text = Qt::Object.trUtf8("Fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}")
+        end
+      end
+      addWidget(done_check)
+      label = Qt::Label.new(Qt::Object.trUtf8('Due for:'))
+      addWidget(label)
       addLayout(horizontal_layout)
       button_box = Qt::DialogButtonBox.new(Qt::DialogButtonBox::Cancel|Qt::DialogButtonBox::Ok, Qt::Horizontal) do
         self.centerButtons = false
@@ -110,11 +122,14 @@ class PlasmaEditTask < Qt::Dialog
       # TODO set the combo selected value for date not founn with findData (idx returned == -1)
       combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
       ############################################
+      done_check.checked = @task.done?
+      done_check.text = Qt::Object.trUtf8("Fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
     end
     self.window_title = title
     @description = description
     @tool_buttons = tool_buttons
     @combo_box = combo_box
+    @done_check = done_check
   end
 
   def delete_task
@@ -129,10 +144,11 @@ class PlasmaEditTask < Qt::Dialog
       @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
       value = @combo_box.item_data(@combo_box.current_index())
       @task.due_date = Date.jd(value.toDate.toJulianDay)
-
-      # TODO: signal to treeview (via AbstractModel?) that a row is changed!
-      #emit itemChanged()
-      
+      if @done_check.checked
+        @task.done
+      else
+        @task.undone
+      end
       emit accept()
     else
        Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo:'),
