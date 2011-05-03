@@ -103,6 +103,12 @@ class PlasmaEditTask < Qt::Dialog
     connect(delete_button, SIGNAL('clicked()'), self, SLOT('delete_task()'))
     Qt::MetaObject.connectSlotsByName(self)
     setLayout vertical_layout
+
+    @description = description
+    @tool_buttons = tool_buttons
+    @combo_box = combo_box
+    @done_check = done_check
+
     if @task.nil?
       title = Qt::Object.trUtf8('New Task')
     else
@@ -123,10 +129,6 @@ class PlasmaEditTask < Qt::Dialog
       label_data.text = "#{Qt::Object.trUtf8('Task is ')} #{msg.join(',')}." if msg.size > 0
     end
     self.window_title = title
-    @description = description
-    @tool_buttons = tool_buttons
-    @combo_box = combo_box
-    @done_check = done_check
   end
 
   def delete_task
