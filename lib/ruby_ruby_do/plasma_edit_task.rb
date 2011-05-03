@@ -21,6 +21,7 @@ class PlasmaEditTask < Qt::Dialog
     combo_box = nil
     description = nil
     done_check = nil
+    label_data = nil
     vertical_layout = Qt::VBoxLayout.new() do
       setContentsMargins(0, 0, 0, 0)
       horizontal_layout = Qt::HBoxLayout.new() do
@@ -60,18 +61,11 @@ class PlasmaEditTask < Qt::Dialog
         label.buddy = combo_box
         addItem(Qt::SpacerItem.new(40, 20, Qt::SizePolicy::Expanding, Qt::SizePolicy::Minimum))
       end
-      done_check = Qt::CheckBox.new(Qt::Object.trUtf8('Done'))
-      done_check.connect(SIGNAL('stateChanged(int)')) do |state|
-        if state == Qt::Unchecked
-          done_check.text = Qt::Object.trUtf8('Done')
-        else
-          done_check.text = Qt::Object.trUtf8("Fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}")
-        end
-      end
-      addWidget(done_check)
-      label = Qt::Label.new(Qt::Object.trUtf8('Due for:'))
-      addWidget(label)
       addLayout(horizontal_layout)
+      done_check = Qt::CheckBox.new(Qt::Object.trUtf8('Done'))
+      addWidget(done_check)
+      label_data = Qt::Label.new()
+      addWidget(label_data)
       button_box = Qt::DialogButtonBox.new(Qt::DialogButtonBox::Cancel|Qt::DialogButtonBox::Ok, Qt::Horizontal) do
         self.centerButtons = false
         delete_button = Qt::PushButton.new(Qt::Object.trUtf8('Delete'))
@@ -123,7 +117,10 @@ class PlasmaEditTask < Qt::Dialog
       combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
       ############################################
       done_check.checked = @task.done?
-      done_check.text = Qt::Object.trUtf8("Fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
+      msg = []
+      msg << Qt::Object.trUtf8('overdue') if @task.overdue?
+      msg << Qt::Object.trUtf8("fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
+      label_data.text = "#{Qt::Object.trUtf8('Task is ')} #{msg.join(',')}." if msg.size > 0
     end
     self.window_title = title
     @description = description
