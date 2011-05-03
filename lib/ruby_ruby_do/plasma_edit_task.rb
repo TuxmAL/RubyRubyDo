@@ -10,18 +10,70 @@ class PlasmaEditTask < Qt::Dialog
 
   def initialize (parent = nil, task = nil)
     super parent, nil
-    self.windowModality = Qt::WindowModal
-    self.resize(259, 174)
-    sizePolicy.heightForWidth = self.sizePolicy.hasHeightForWidth
-    self.modal = true
     @task = task
+    setup_dialog self
+    if @task.nil?
+      title = Qt::Object.trUtf8('New Task')
+      @delete_button.visible = false
+    else
+      title = Qt::Object.trUtf8('Edit Task')
+      @delete_button.visible = true
+      @description.plain_text = @task.description
+      (@tool_buttons[@task.priority - 1]).checked = true
+      # TODO: this code, stolen from plasma_task, *must* be _refactored_!
+      idx = @combo_box.findData Qt::Variant.new(task.due_date)
+      puts " find_data=#{idx}; task.due_date=#{task.due_date}"
+      @combo_box.current_index = (idx != -1)? idx: 10
+      # TODO set the combo selected value for date not founn with findData (idx returned == -1)
+      @combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
+      ############################################
+      @done_check.checked = @task.done?
+      msg = []
+      msg << Qt::Object.trUtf8('overdue') if @task.overdue?
+      msg << Qt::Object.trUtf8("fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
+      @task_info.text = "#{Qt::Object.trUtf8('Task is')} #{msg.join(Qt::Object.trUtf8(' and '))}." if msg.size > 0
+    end
+    self.window_title = title
+  end
+
+  def delete_task
+    # TODO
+    emit accept()
+  end
+
+  def edit_ok
+    unless @description.to_plain_text.strip.empty?
+      @task ||= ToDo::Task.new()
+      @task.description = @description.to_plain_text.strip
+      @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
+      value = @combo_box.item_data(@combo_box.current_index())
+      @task.due_date = Date.jd(value.toDate.toJulianDay)
+      if @done_check.checked
+        @task.done
+      else
+        @task.undone
+      end
+      emit accept()
+    else
+       Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo:'),
+         Qt::Object.trUtf8('Task cannot have empty description.'),
+         Qt::MessageBox.Ok)
+    end
+  end
+
+
+  def setup_dialog(dialog)
+    dialog.windowModality = Qt::WindowModal
+    dialog.resize(259, 174)
+    sizePolicy.heightForWidth = dialog.sizePolicy.hasHeightForWidth
+    dialog.modal = true
     button_box = nil
     delete_button = nil
     tool_buttons = []
     combo_box = nil
     description = nil
     done_check = nil
-    label_data = nil
+    task_info = nil
     vertical_layout = Qt::VBoxLayout.new() do
       setContentsMargins(0, 0, 0, 0)
       horizontal_layout = Qt::HBoxLayout.new() do
@@ -64,13 +116,12 @@ class PlasmaEditTask < Qt::Dialog
       addLayout(horizontal_layout)
       done_check = Qt::CheckBox.new(Qt::Object.trUtf8('Done'))
       addWidget(done_check)
-      label_data = Qt::Label.new()
-      addWidget(label_data)
+      task_info = Qt::Label.new()
+      addWidget(task_info)
       button_box = Qt::DialogButtonBox.new(Qt::DialogButtonBox::Cancel|Qt::DialogButtonBox::Ok, Qt::Horizontal) do
         self.centerButtons = false
         delete_button = Qt::PushButton.new(Qt::Object.trUtf8('Delete'))
         addButton(delete_button, Qt::DialogButtonBox::ActionRole)
-        delete_button.visible = !task.nil?
       end
       addWidget(button_box)
       ToDo::Task::PRIORITYMAX.upto(ToDo::Task::PRIORITYMIN - 1) do |pri|
@@ -98,65 +149,19 @@ class PlasmaEditTask < Qt::Dialog
       combo_box.minimum_width = width
       ############################################
     end
-    connect(button_box, SIGNAL('accepted()'), self, SLOT('edit_ok()'))
-    connect(button_box, SIGNAL('rejected()'), self, SLOT('reject()'))
-    connect(delete_button, SIGNAL('clicked()'), self, SLOT('delete_task()'))
-    Qt::MetaObject.connectSlotsByName(self)
+    connect(button_box, SIGNAL('accepted()'), dialog, SLOT('edit_ok()'))
+    connect(button_box, SIGNAL('rejected()'), dialog, SLOT('reject()'))
+    connect(delete_button, SIGNAL('clicked()'), dialog, SLOT('delete_task()'))
+    Qt::MetaObject.connectSlotsByName(dialog)
     setLayout vertical_layout
 
     @description = description
     @tool_buttons = tool_buttons
     @combo_box = combo_box
     @done_check = done_check
-
-    if @task.nil?
-      title = Qt::Object.trUtf8('New Task')
-    else
-      title = Qt::Object.trUtf8('Edit Task')
-      description.plain_text = @task.description
-      (tool_buttons[@task.priority - 1]).checked = true
-      # TODO: this code, stolen from plasma_task, *must* be _refactored_!
-      idx = combo_box.findData Qt::Variant.new(task.due_date)
-      puts " find_data=#{idx}; task.due_date=#{task.due_date}"
-      combo_box.current_index = (idx != -1)? idx: 10
-      # TODO set the combo selected value for date not founn with findData (idx returned == -1)
-      combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
-      ############################################
-      done_check.checked = @task.done?
-      msg = []
-      msg << Qt::Object.trUtf8('overdue') if @task.overdue?
-      msg << Qt::Object.trUtf8("fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
-      label_data.text = "#{Qt::Object.trUtf8('Task is ')} #{msg.join(',')}." if msg.size > 0
-    end
-    self.window_title = title
+    @task_info = task_info
+    @delete_button = delete_button
   end
-
-  def delete_task
-    # TODO
-    emit accept()
-  end
-
-  def edit_ok
-    unless @description.to_plain_text.strip.empty?
-      @task ||= ToDo::Task.new()
-      @task.description = @description.to_plain_text.strip
-      @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
-      value = @combo_box.item_data(@combo_box.current_index())
-      @task.due_date = Date.jd(value.toDate.toJulianDay)
-      if @done_check.checked
-        @task.done
-      else
-        @task.undone
-      end
-      emit accept()
-    else
-       Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo:'),
-         Qt::Object.trUtf8('Task cannot have empty description.'),
-         Qt::MessageBox.Ok)
-    end
-  end
-
-
 #    def setup_ui(dialog)
 #      retranslateUi(dialog)
 #    end
