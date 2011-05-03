@@ -132,7 +132,7 @@ class PlasmaEditTask < Qt::Dialog
   end
 
   def delete_task
-
+    # TODO
     emit accept()
   end
 
