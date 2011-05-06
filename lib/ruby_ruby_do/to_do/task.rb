@@ -12,7 +12,7 @@ module ToDo
     PRIORITYMIN = 5
 
     attr_accessor :description, :due_date, :category
-    attr_reader :priority, :fulfilled_date
+    attr_reader :id, :priority, :fulfilled_date
 
     def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
         due_date = nil,category = nil)
@@ -24,6 +24,7 @@ module ToDo
       @fulfilled_date = nil
       @category = category
       @saved = false
+      @id = Time.now.tv_usec
     end
 
     # TODO: see is correctly implemented the spaceship operator!
