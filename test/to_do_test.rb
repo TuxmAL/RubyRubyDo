@@ -6,9 +6,7 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 require 'test/unit'
 require 'test/unit'
 require File.join(File.join(File.dirname(__FILE__), 'helper'), 'test_unit_extensions')
-require 'date'
-require 'task'
-require 'to_do'
+require 'ruby_ruby_do'
 
 class ToDoTest < Test::Unit::TestCase
 
