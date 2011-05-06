@@ -3,6 +3,7 @@
 # Author::    TuxmAL (mailto:tuxmal@tiscali.it)
 # Copyright:: Copyright (c) 2011 TuxmAL
 # License::   _to be choosen_
+require 'date'
 
 $KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 module ToDo
