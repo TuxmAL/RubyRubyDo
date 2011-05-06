@@ -4,6 +4,8 @@
 # Copyright:: Copyright (c) 2011 TuxmAL
 # License::   _to be choosen_
 
+require 'yaml'
+
 $KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 module ToDo
   class ToDo
@@ -37,7 +39,6 @@ module ToDo
       File.open(@filename, 'w') do |f|
         f.write(@tasks.to_yaml)
         @tasks.each {|t| t.saved}
-
       end
     end
 

@@ -2,7 +2,7 @@
 #
 #required libraries to rely on.
 require 'Qt4'
-require 'yaml'
+
 $:.unshift File.join(File.dirname(__FILE__))
 require 'to_do'
 require 'plasma_to_do'
