@@ -122,4 +122,13 @@ class TaskTest < Test::Unit::TestCase
       a_task.fulfillment_date = Date.Today + 3
     end
   end
+
+  must 'task have different id' do
+    t1, t2 = ToDo::Task.new, ToDo::Task.new
+    t3 = ToDo::Task.new
+    t4 = ToDo::Task.new
+    assert(t1.id != t2.id, "1/2) t1.id (#{t1.id.inspect}) same as t2.id (#{t2.id.inspect}).")
+    assert(t3.id != t4.id, "2/2) t3.id (#{t3.id.inspect}) same as t4.id (#{t4.id.inspect}).")
+  end
+
 end
