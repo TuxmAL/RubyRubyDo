@@ -37,8 +37,13 @@ class PlasmaEditTask < Qt::Dialog
   end
 
   def delete_task
-    # TODO
-    emit accept()
+    ret_val = Qt::MessageBox.question(self, Qt::Object.trUtf8('RubyRubyDo'),
+         Qt::Object.trUtf8("Do you really want to delete this task?"), 
+         Qt::MessageBox.Yes | Qt::MessageBox.No, Qt::MessageBox.No)
+    if ret_val == Qt::MessageBox.Yes
+      # TODO remove the task.
+      emit accept
+    end
   end
 
   def edit_ok
@@ -55,12 +60,11 @@ class PlasmaEditTask < Qt::Dialog
       end
       emit accept()
     else
-       Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo:'),
+       Qt::MessageBox.warning(self, Qt::Object.trUtf8('RubyRubyDo'),
          Qt::Object.trUtf8('Task cannot have empty description.'),
          Qt::MessageBox.Ok)
     end
   end
-
 
   def setup_dialog(dialog)
     dialog.windowModality = Qt::WindowModal
