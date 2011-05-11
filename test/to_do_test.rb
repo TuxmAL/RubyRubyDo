@@ -15,13 +15,13 @@ class ToDoTest < Test::Unit::TestCase
     @yesterday = @today - 1
     @tomorrow = @today + 1
     @todo_list = ToDo::ToDo.new
+    @task1 = ToDo::Task.new 'compra il latte', 1, @today
+    @task2 = ToDo::Task.new 'Telefonare!', 2, @tomorrow
+    @task3 = ToDo::Task.new 'Garage', 3
   end
 
-  must 'add moultiple task at once' do
-    task1 = ToDo::Task.new 'compra il latte', 1, @today
-    task2 = ToDo::Task.new 'Telefonare!', 2, @tomorrow
-    task3 = ToDo::Task.new 'Garage', 3
-    @todo_list << task1 << task2 << task3
+  must 'add multiple task at once' do
+    @todo_list << @task1 << @task2 << @task3
     assert_equal(3, @todo_list.length)
   end
 
