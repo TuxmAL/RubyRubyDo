@@ -44,7 +44,7 @@ class PlasmaEditTask < Qt::Dialog
          Qt::Object.trUtf8("Do you really want to delete this task?"), 
          Qt::MessageBox.Yes | Qt::MessageBox.No, Qt::MessageBox.No)
     if ret_val == Qt::MessageBox.Yes
-      # TODO remove the task.
+      @task_idx.model.removeRow(@task_idx.row)
       emit accept
     end
   end

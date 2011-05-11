@@ -212,9 +212,9 @@ module RubyRubyDo
     end
 
    def removeRows(row, count, parent= Qt::ModelIndex.new)
-     beginRemoveRows(parent, row, row) # must be beginRemoveRows(parent, row, *count*)?
-     node = nodeFromIndex(parent)
-     node.removeChild(row)
+     beginRemoveRows(parent, row, count) 
+     # TODO: delete task at model row "row"
+     #todo.delete()
      endRemoveRows()
      return true
    end
