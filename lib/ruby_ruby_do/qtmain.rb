@@ -43,9 +43,8 @@ module RubyRubyDo
           button_detail = Qt::PushButton.new(Qt::Object.trUtf8('Details...')) do
             connect(SIGNAL :clicked) do
               # TODO: set parameter correctly!
-              task = nil
-              task = treeview.selectedIndexes.first.internalPointer if treeview.selectionModel.hasSelection
-              dlg = PlasmaEditTask.new self.parent, task
+              task_idx ||= treeview.selectedIndexes.first if treeview.selectionModel.hasSelection
+              dlg = PlasmaEditTask.new self.parent, task_idx
               if (dlg.exec == Qt::Dialog::Accepted)
                 puts "ok"
               else

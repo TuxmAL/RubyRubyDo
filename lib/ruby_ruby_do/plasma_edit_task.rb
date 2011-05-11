@@ -8,29 +8,32 @@ class PlasmaEditTask < Qt::Dialog
   slots :edit_ok
   slots :delete_task
 
-  def initialize (parent = nil, task = nil)
+  def initialize (parent = nil, task_idx = nil)
     super parent, nil
-    @task = task
+    @task_idx = task_idx
     setup_dialog self
-    if @task.nil?
+    if @task_idx.nil?
+      # TODO find how to add a new elemwnt to the tereview
+      #@task_idx =
       title = Qt::Object.trUtf8('New Task')
       @delete_button.visible = false
     else
+      task = task_idx.internal_pointer
       title = Qt::Object.trUtf8('Edit Task')
       @delete_button.visible = true
-      @description.plain_text = @task.description
-      (@tool_buttons[@task.priority - 1]).checked = true
+      @description.plain_text = task.description
+      (@tool_buttons[task.priority - 1]).checked = true
       # TODO: this code, stolen from plasma_task, *must* be _refactored_!
       idx = @combo_box.findData Qt::Variant.new(task.due_date)
       puts " find_data=#{idx}; task.due_date=#{task.due_date}"
       @combo_box.current_index = (idx != -1)? idx: 10
       # TODO set the combo selected value for date not founn with findData (idx returned == -1)
-      @combo_box.setEditText(@task.due_date.strftime('%d/%m/%Y')) if idx == -1
+      @combo_box.setEditText(task.due_date.strftime('%d/%m/%Y')) if idx == -1
       ############################################
-      @done_check.checked = @task.done?
+      @done_check.checked = task.done?
       msg = []
-      msg << Qt::Object.trUtf8('overdue') if @task.overdue?
-      msg << Qt::Object.trUtf8("fulfilled at #{@task.fulfilled_date.strftime('%d/%m/%Y')}") if @task.done?
+      msg << Qt::Object.trUtf8('overdue') if task.overdue?
+      msg << Qt::Object.trUtf8("fulfilled at #{task.fulfilled_date.strftime('%d/%m/%Y')}") if task.done?
       @task_info.text = "#{Qt::Object.trUtf8('Task is')} #{msg.join(Qt::Object.trUtf8(' and '))}." if msg.size > 0
     end
     self.window_title = title
@@ -48,15 +51,17 @@ class PlasmaEditTask < Qt::Dialog
 
   def edit_ok
     unless @description.to_plain_text.strip.empty?
-      @task ||= ToDo::Task.new()
-      @task.description = @description.to_plain_text.strip
-      @tool_buttons.each_with_index { |itm, idx| @task.priority = (idx+1) if itm.checked }
+      # TODO Now cannot create a new element the old way: @task ||= ToDo::Task.new() because we now use a Qt:ModelIndex object.
+      #@task_idx.internal_pointer ||= ToDo::Task.new()
+      task = @task_idx.internal_pointer
+      task.description = @description.to_plain_text.strip
+      @tool_buttons.each_with_index { |itm, idx| task.priority = (idx+1) if itm.checked }
       value = @combo_box.item_data(@combo_box.current_index())
-      @task.due_date = Date.jd(value.toDate.toJulianDay)
+      task.due_date = Date.jd(value.toDate.toJulianDay)
       if @done_check.checked
-        @task.done
+        task.done
       else
-        @task.undone
+        task.undone
       end
       emit accept()
     else
