@@ -25,4 +25,14 @@ class ToDoTest < Test::Unit::TestCase
     assert_equal(3, @todo_list.length)
   end
 
+  must 'delete a task by task object' do
+    @todo_list << @task1 << @task2 << @task3
+    @todo_list.delete(@task2)
+    assert_equal(2, @todo_list.length)
+    assert_block("Expected #{@task2.inspect} to be deleted") do
+      @todo_list.first == @task1 &&
+      @todo_list.last == @task3
+    end
+  end
+
 end
