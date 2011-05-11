@@ -23,12 +23,29 @@ module ToDo
       self
     end
 
+    # Remove a new task by task object
+    def delete(task)
+      @tasks.delete task
+      self
+    end
+
+    # Remove a new task by index
+    def delete_at(index)
+      @tasks.delete_at index
+      self
+    end
+
     def each
       @tasks.each { |t| yield t }
     end
 
     def [](index)
       @tasks[index]
+    end
+
+    # Return the last task
+    def last()
+      @tasks.last
     end
 
     def length
