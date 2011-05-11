@@ -18,6 +18,7 @@ module ToDo
       @filename = TODOFILE
     end
 
+    # Add a new task
     def <<(task)
       @tasks << task
       self
@@ -62,5 +63,6 @@ module ToDo
     def load
       @tasks = YAML::load( File.open(@filename, 'r')) # YAML::load_stream( File.open(@filename) )
     end
+
   end
 end
