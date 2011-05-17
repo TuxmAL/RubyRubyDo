@@ -213,8 +213,10 @@ module RubyRubyDo
 
    def removeRows(row, count, parent= Qt::ModelIndex.new)
      beginRemoveRows(parent, row, count) 
-     # TODO: delete task at model row "row"
-     #todo.delete()
+     #puts "removeRows function -> parent:#{parent}, row:#{row}}"
+     idx = index(row, 0, parent)
+     #puts "removeRows function -> index:#{idx.inspect}, task:#{idx.internal_pointer}"
+     todo.delete idx.internal_pointer
      endRemoveRows()
      return true
    end
