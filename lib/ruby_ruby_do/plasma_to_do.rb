@@ -15,11 +15,11 @@ module RubyRubyDo
     @@todo_list = nil
 
     def self.todo
-      @@todo_list
+      @@todo_list ||= load_to_do_list
     end
     
     def todo
-      @@todo_list ||= load_to_do_list
+      self.class.todo
     end
 
     def initialize parent
@@ -221,7 +221,7 @@ module RubyRubyDo
 
    private
    
-   def load_to_do_list
+   def self.load_to_do_list
       todo = ToDo::ToDo.new
       a_task = ToDo::Task.new 'compra il latte', 1, Date.today + 1
       todo << a_task
