@@ -13,7 +13,7 @@ class PlasmaEditTask < Qt::Dialog
     @task_idx = task_idx
     setup_dialog self
     if @task_idx.nil?
-      # TODO find how to add a new elemwnt to the tereview
+      # TODO find how to add a new element to the treeview
       #@task_idx =
       title = Qt::Object.trUtf8('New Task')
       @delete_button.visible = false
