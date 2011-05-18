@@ -23,13 +23,12 @@ class PlasmaEditTask < Qt::Dialog
       @delete_button.visible = true
       @description.plain_text = task.description
       (@tool_buttons[task.priority - 1]).checked = true
-      # TODO: this code, stolen from plasma_task, *must* be _refactored_!
-      idx = @combo_box.findData Qt::Variant.new(task.due_date)
-      puts " find_data=#{idx}; task.due_date=#{task.due_date}"
+      data = Qt::Variant.new((task.due_date.nil?)? '-': task.due_date)
+      idx = @combo_box.findData data
+
+      puts "find_data=#{idx}; data=#{data.inspect}"
+      @combo_box.insert_item(10, task.due_date.strftime('%a %d/%m/%Y'), Qt::Variant.new(task.due_date)) if idx == -1
       @combo_box.current_index = (idx != -1)? idx: 10
-      # TODO set the combo selected value for date not founn with findData (idx returned == -1)
-      @combo_box.setEditText(task.due_date.strftime('%d/%m/%Y')) if idx == -1
-      ############################################
       @done_check.checked = task.done?
       msg = []
       msg << Qt::Object.trUtf8('overdue') if task.overdue?
@@ -157,6 +156,7 @@ class PlasmaEditTask < Qt::Dialog
       # set the ComboBox to that width.
       combo_box.minimum_width = width
       ############################################
+      combo_box.max_visible_items = 11
     end
     connect(button_box, SIGNAL('accepted()'), dialog, SLOT('edit_ok()'))
     connect(button_box, SIGNAL('rejected()'), dialog, SLOT('reject()'))
