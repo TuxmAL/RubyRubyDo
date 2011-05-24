@@ -18,9 +18,15 @@ module ToDo
       @filename = TODOFILE
     end
 
-    # Add a new task
+    # Append the given _task_ to the end of the ToDo list. This expression returns the ToDo list itself, so several appends may be chained together.
     def <<(task)
       @tasks << task
+      self
+    end
+
+    # Insert the given _task_  before the element with the given _index_ (which may be negative).
+    def insert(index, task)
+      @tasks.insert(index, task)
       self
     end
 

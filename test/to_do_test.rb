@@ -20,7 +20,7 @@ class ToDoTest < Test::Unit::TestCase
     @task3 = ToDo::Task.new 'Garage', 3
   end
 
-  must 'add multiple task at once' do
+  must 'append multiple task at once' do
     @todo_list << @task1 << @task2 << @task3
     assert_equal(3, @todo_list.length)
   end
@@ -35,4 +35,14 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
 
+  must 'insert a task at specified index' do
+    @todo_list << @task1 << @task2 << @task3
+    task_x = ToDo::Task.new 'must be the second!', 5
+    @todo_list.insert(1, task_x)
+    assert_equal(4, @todo_list.length)
+    assert_block("Expected #{task_x.inspect} to be 2nd place in the list") do
+      @todo_list[0] == @task1 &&
+      @todo_list[1] == task_x
+    end
+  end
 end
