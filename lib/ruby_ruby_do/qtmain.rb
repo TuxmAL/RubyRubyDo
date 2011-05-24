@@ -32,10 +32,19 @@ module RubyRubyDo
         h_layout =  Qt::HBoxLayout.new  do
           button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
             connect(SIGNAL :clicked) do
-              todo = PlasmaToDo.todo
+              todo = treeview.model.todo
+              if treeview.selectionModel.hasSelection
+                puts "selection: #{treeview.selected_indexes.first.inspect}"
+                priority = treeview.selected_indexes.first.internal_pointer.priority
+                row = treeview.selected_indexes.first.row
+              else
+                priority = 3
+                row = todo.count - 1
+              end              
               puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
-              todo << ToDo::Task.new('inserito a mano', 5 )
-              treeview.model.insertRow todo.count - 1
+              todo.insert(row + 1, ToDo::Task.new('<description>', priority ))
+              treeview.model.insertRow row
+              treeview.edit treeview.model.index(row + 1, 2)
               puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
             end
           end
