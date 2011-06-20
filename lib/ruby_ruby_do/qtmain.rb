@@ -13,6 +13,7 @@ module RubyRubyDo
     Qt::Widget.new do
       self.window_title = Qt::Object.trUtf8('RubyRubyDo')
       self.set_minimum_size 250, 250
+      self.windowIcon=Qt::Icon.fromTheme('mail-mark-task')
 
       model = PlasmaToDo.new self
       treeview = Qt::TreeView.new do #self
