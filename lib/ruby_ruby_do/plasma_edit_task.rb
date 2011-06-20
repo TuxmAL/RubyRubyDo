@@ -23,6 +23,8 @@ class PlasmaEditTask < Qt::Dialog
       @delete_button.visible = true
       @description.plain_text = task.description
       (@tool_buttons[task.priority - 1]).checked = true
+      puts "task.due_date=#{task.due_date.inspect}"
+
       data = Qt::Variant.new((task.due_date.nil?)? '-': task.due_date)
       idx = @combo_box.findData data
 
@@ -56,7 +58,8 @@ class PlasmaEditTask < Qt::Dialog
       task.description = @description.to_plain_text.strip
       @tool_buttons.each_with_index { |itm, idx| task.priority = (idx+1) if itm.checked }
       value = @combo_box.item_data(@combo_box.current_index())
-      task.due_date = Date.jd(value.toDate.toJulianDay)
+      puts "current_index=#{@combo_box.current_index()}; value=#{value.value.to_s}"
+      task.due_date = value.value.to_s == '-'? nil: Date.jd(value.toDate.toJulianDay)
       if @done_check.checked
         task.done
       else
