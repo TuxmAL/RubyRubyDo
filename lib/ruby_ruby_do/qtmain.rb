@@ -9,6 +9,7 @@ require 'plasma_to_do'
 require 'plasma_edit_task'
 
 module RubyRubyDo
+  line_edit = nil
   Qt::Application.new(ARGV) do
     Qt::Widget.new do
       self.window_title = Qt::Object.trUtf8('RubyRubyDo')
@@ -29,27 +30,47 @@ module RubyRubyDo
         self.alternatingRowColors = true
       end
       self.layout = Qt::VBoxLayout.new do
-        add_widget treeview
-        h_layout =  Qt::HBoxLayout.new  do
-          button_new = Qt::PushButton.new(Qt::Object.trUtf8('New')) do
-            connect(SIGNAL :clicked) do
-              todo = treeview.model.todo
-              if treeview.selectionModel.hasSelection
-                puts "selection: #{treeview.selected_indexes.first.inspect}"
-                priority = treeview.selected_indexes.first.internal_pointer.priority
-                row = treeview.selected_indexes.first.row
-              else
-                priority = 3
-                row = todo.count - 1
-              end              
-              puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
-              todo.insert(row + 1, ToDo::Task.new('<description>', priority ))
-              treeview.model.insertRow row
-              treeview.edit treeview.model.index(row + 1, 2)
-              puts "todo: #{todo.count}, treeview: #{treeview.model.rowCount}"
+        h_layout = Qt::HBoxLayout.new do
+          line_edit = Qt::LineEdit.new do
+            begin
+              self.placeholder_text = Qt::Object.trUtf8('Add a new Task...')
+              #self.clear_button_shown = true
+            rescue
+              puts "clear_button_shown or click_message not found!"
+              nil # but that doesn't matter
             end
           end
-          add_widget(button_new, 0, Qt::AlignLeft)
+          #Qt::Object.connect(@lineedit,  SIGNAL(:returnPressed), self, SLOT(:add_text) )
+          add_widget line_edit
+          button_add = Qt::PushButton.new() do
+            self.icon = Qt::Icon.fromTheme('list-add') #'view-task-add'
+            connect(SIGNAL :clicked) do
+              if line_edit.display_text != ""
+                todo = treeview.model.todo              
+                if treeview.selectionModel.hasSelection
+                  puts "selection: #{treeview.selected_indexes.first.inspect}"
+                  priority = treeview.selected_indexes.first.internal_pointer.priority
+                  row = treeview.selected_indexes.first.row
+                else
+                  priority = 3
+                  row = todo.count - 1
+                end              
+                todo.insert(row + 1, ToDo::Task.new(line_edit.display_text , priority ))
+                treeview.model.insertRow row
+              end
+              line_edit.text = ""
+            end
+          end
+          add_widget button_add
+          button_conf = Qt::PushButton.new() do
+            self.icon = Qt::Icon.fromTheme('configure')
+          end
+          add_widget button_conf
+        end
+        #add_widget button_add
+        add_item h_layout
+        add_widget treeview
+        h_layout =  Qt::HBoxLayout.new  do
           button_detail = Qt::PushButton.new(Qt::Object.trUtf8('Details...')) do
             connect(SIGNAL :clicked) do
               # TODO: set parameter correctly!
