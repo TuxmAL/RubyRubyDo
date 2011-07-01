@@ -39,11 +39,11 @@ module RubyRubyDo
               puts "clear_button_shown or click_message not found!"
               nil # but that doesn't matter
             end
-          end
-          #Qt::Object.connect(@lineedit,  SIGNAL(:returnPressed), self, SLOT(:add_text) )
+          end          
           add_widget line_edit
           button_add = Qt::PushButton.new() do
             self.icon = Qt::Icon.fromTheme('list-add') #'view-task-add'
+            self.flat = true
             connect(SIGNAL :clicked) do
               if line_edit.display_text != ""
                 todo = treeview.model.todo              
@@ -61,9 +61,12 @@ module RubyRubyDo
               line_edit.text = ""
             end
           end
+          Qt::Object.connect(line_edit,  SIGNAL(:returnPressed), button_add, SIGNAL(:clicked) )
           add_widget button_add
           button_conf = Qt::PushButton.new() do
+            self.flat = true
             self.icon = Qt::Icon.fromTheme('configure')
+            self.enabled= false
           end
           add_widget button_conf
         end
