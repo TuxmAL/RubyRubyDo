@@ -5,6 +5,7 @@ require 'Qt4'
 
 $:.unshift File.join(File.dirname(__FILE__))
 require 'to_do'
+require 'to_do_model'
 require 'plasma_to_do'
 require 'plasma_edit_task'
 
@@ -16,19 +17,24 @@ module RubyRubyDo
       self.set_minimum_size 250, 250
       self.windowIcon=Qt::Icon.fromTheme('mail-mark-task')
 
-      model = PlasmaToDo.new self
+      #model = PlasmaToDo.new self
+      model = ToDoQtModel.new self
       treeview = Qt::TreeView.new do #self
         # now we try to camouflage the treeview into a listview
         self.root_is_decorated = false
         self.all_columns_show_focus = true
-        self.items_expandable = false
+        #self.items_expandable = false
         self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model
-        self.item_delegate = PriorityDelegate.new self
-        (0..model.columnCount(0)).each { |i| resizeColumnToContents i }
-        self.alternatingRowColors = true
+        #self.item_delegate = PriorityDelegate.new self
+        #(0..model.columnCount(0)).each { |i| resizeColumnToContents i }
+        #self.alternatingRowColors = true
       end
+      treeview.expand_all
+      root_index = Qt::ModelIndex.new
+      (0...model.titleCount).each { |i| treeview.set_first_column_spanned(i, root_index, true)}
+
       self.layout = Qt::VBoxLayout.new do
         h_layout = Qt::HBoxLayout.new do
           line_edit = Qt::LineEdit.new do
