@@ -9,7 +9,7 @@ module RubyRubyDo
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
 
     # Number of title rows to display
-    TITLEROWS = 6
+    TITLEROWS = 7
     TITLEROWS.freeze
     # ToDo columns to display
     TODOCOLUMNS = 5
@@ -39,6 +39,7 @@ module RubyRubyDo
       next_days = ToDoQtModelItem.new('Next days', @root)
       next_weeks = ToDoQtModelItem.new('Next weeks', @root)
       no_date = ToDoQtModelItem.new('No date', @root)
+      done = ToDoQtModelItem.new('Done', @root)
       ToDoQtModelItem.new('overdue 1', overdue)
       ToDoQtModelItem.new('overdue 2', overdue)
       ToDoQtModelItem.new('overdue 3', overdue)
@@ -50,6 +51,8 @@ module RubyRubyDo
       ToDoQtModelItem.new('in the next weeks 1', next_weeks)
       ToDoQtModelItem.new('in the next weeks 2', next_weeks)
       ToDoQtModelItem.new('without a date 1', no_date)
+      ToDoQtModelItem.new('done 1', done)
+      ToDoQtModelItem.new('done 2', done)
     end
  
     # This treats an invalid index (returned by Qt::ModelIndex.new) as the index of @root.
@@ -93,9 +96,9 @@ module RubyRubyDo
     # Return data for ToDoQtModelItem. This only handles the case where Display 
     # Data (the text in the Tree) is r/equested.
     def data(index, role)
-      return Qt::Variant.new if (not index.valid?) or role != Qt::DisplayRole
+      return Qt::Variant.new if (not index.valid?) # or role != Qt::DisplayRole
       item = itemFromIndex(index)
-      item ? Qt::Variant.new(item.data(index.column)) : Qt::Variant.new
+      item ? item.data(index.column, role) : Qt::Variant.new
     end
 
     # Set data in a ToDoQtModelItem. This is just an example to show how the signal is emitted.
