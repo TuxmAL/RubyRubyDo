@@ -82,9 +82,16 @@ class TaskTest < Test::Unit::TestCase
   end
 
   must 'task be done' do
-    a_task = ToDo::Task.new('test task', 3, @today)
-    a_task.done
+    a_task = ToDo::Task.new('test task', 3, @today).done
     assert_equal(true, a_task.done?)
+  end
+
+  must 'task  returns self on done or undone method' do
+    a_task = ToDo::Task.new('test task', 3, @today)
+    x = a_task.done
+    y = a_task.undone
+    assert_same x, a_task, 'Done task differs from original!'
+    assert_same y, a_task, 'Undone task differs from original!'
   end
 
   must 'task be overdue' do
@@ -103,15 +110,12 @@ class TaskTest < Test::Unit::TestCase
   end
 
   must 'task done has fulfilled date set to the date of fulfilment' do
-    a_task = ToDo::Task.new('test task', 3)
-    a_task.done
+    a_task = ToDo::Task.new('test task', 3).done
     assert_equal(Date.today, a_task.fulfilled_date)
   end
 
   must 'task undone has fulfilled date reset to nil' do
-    a_task = ToDo::Task.new('test task', 3)
-    a_task.done
-    a_task.undone
+    a_task = (ToDo::Task.new('test task', 3)).done.undone
     assert_equal(nil, a_task.fulfilled_date)
   end
 

@@ -40,12 +40,14 @@ module ToDo
       @saved &= false
       @fulfilled_date = Date.today
       @done = true
+      self
     end
 
     def undone
       @saved &= false
       @fulfilled_date = nil
       @done = false
+      self
     end
 
     def done?
@@ -63,7 +65,7 @@ module ToDo
     end
 
     def saved
-      @saved = true
+      @saved = true      
     end
 
     def saved?
