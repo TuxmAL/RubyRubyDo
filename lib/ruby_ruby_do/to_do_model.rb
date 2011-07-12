@@ -40,19 +40,16 @@ module RubyRubyDo
       next_weeks = ToDoQtModelItem.new('Next weeks', @root)
       no_date = ToDoQtModelItem.new('No date', @root)
       done = ToDoQtModelItem.new('Done', @root)
-      ToDoQtModelItem.new('overdue 1', overdue)
-      ToDoQtModelItem.new('overdue 2', overdue)
-      ToDoQtModelItem.new('overdue 3', overdue)
-      ToDoQtModelItem.new('today 1', today)
-      ToDoQtModelItem.new('today 2', today)
-      ToDoQtModelItem.new('tomorrow 1', tomorrow)
-      ToDoQtModelItem.new('in the next days 1', next_days)
-      ToDoQtModelItem.new('in the next days 2', next_days)
-      ToDoQtModelItem.new('in the next weeks 1', next_weeks)
-      ToDoQtModelItem.new('in the next weeks 2', next_weeks)
-      ToDoQtModelItem.new('without a date 1', no_date)
-      ToDoQtModelItem.new('done 1', done)
-      ToDoQtModelItem.new('done 2', done)
+      todolist = setup_todo
+      todolist.due_for(Date.today).each {|t| ToDoQtModelItem.new(t, today)}
+      todolist.due_for(Date.today + 1).each {|t| ToDoQtModelItem.new(t, tomorrow)}
+      todolist.due_for(Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_weeks)}
+      todolist.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
+      todolist.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
+      todolist.done.each {|t| ToDoQtModelItem.new(t, done)}
+     
+      #ToDoQtModelItem.new('1', next_days)
+      #ToDoQtModelItem.new('2', next_days)
     end
  
     # This treats an invalid index (returned by Qt::ModelIndex.new) as the index of @root.
@@ -155,6 +152,26 @@ module RubyRubyDo
       end
     end
     
-  end
+    private
   
+    def setup_todo
+      today = Date.today
+      yesterday = today - 1
+      tomorrow = today + 1
+      todo_list = ToDo::ToDo.new
+      task1 = ToDo::Task.new 'Compra il latte', 1, today
+      task2 = ToDo::Task.new 'Telefonare!', 2, tomorrow
+      task3 = ToDo::Task.new 'Garage', 3
+      task4 = ToDo::Task.new 'Andare a pesca', 2, today - 9 
+      task5 = ToDo::Task.new('Procurarsi chiave inglese', 2, today).done
+      task6 = ToDo::Task.new('Procurarsi bulloni', 2, today + 7)
+      task7 = ToDo::Task.new('Aggiustare il razzo', 2, today + 15)
+      task8 = ToDo::Task.new 'Scrivere RubyRubyDo', 1
+      task9 = ToDo::Task.new 'Elenchi', 1, yesterday
+      todo_list << task1 << task2 << task3 << task4 << task5 << task6 <<
+        task7 << task8 << task9
+    end
+  
+  end
+    
 end
