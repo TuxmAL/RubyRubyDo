@@ -3,16 +3,40 @@
 # The ModelItem consists of a data member (the text displayed in the tree), a parent ToDoQtModelItem, and an array of child ToDoQtModelItems. This array corresponds directly to the Model 'rows' owned by this item.
 # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
 class ToDoQtModelItem
+
+  # Workaround for QT4.6.2 bug that prevent italic, underline, overline
+  # and strikeout on a font if the weight is Qt::Font.Normal.
+  QT_FONT_NORMAL = Qt::Font.Normal
+  QT_FONT_NORMAL += 1 if Qt.version[0...4] == '4.6.' and ((2..3).map {|i| i.to_s}).include? Qt.version[4].chr
+  QT_FONT_NORMAL.freeze
+
   attr_writer :data
   attr_accessor :parent
   attr_reader :children
+  
+  @@font = nil
+  #@@icons = {} #{:collapsed => nil, :expanded => nil}
 
+  def self.font=(font)
+    @@font = font
+  end
+  
+  def self.font
+    @@font
+  end
+  
+  def self.icons(args)
+    @@icons ||= args
+    @@icons.merge args
+  end
+  
   def initialize(data, parent = nil)
     @data = data
     @parent = parent
     @children = []
     parent.addChild(self) if parent
   end
+  
 
   # Return the ToDoQtModelItem at index 'row' in @children. This can be made lazy
   # by using a data source (e.g. database, filesystem) instead of an array for @children.
@@ -45,77 +69,61 @@ class ToDoQtModelItem
 
   #
   def data(column, role)
-    #return "#{@data}-c#{column}"
-    puts "role==Qt::DecorationRole" if role == Qt::DecorationRole
-    case role
-#      when Qt::CheckStateRole
-#        if index.column == 0
-#            ret_val = ((task.done?)? Qt::Checked: Qt::Unchecked).to_i
-#        else
-#          ret_val = nil
-#        end
-      when Qt::DisplayRole
-        #puts task
-        case column
-          when 0
-            ret_val = "#{@data}-c#{column}" # (task.done?) ? 'done': 'to do'
-          when 1
-            ret_val =  "#{@data}-c#{column}" #task.priority
-          when 2
-            ret_val =  "#{@data}-c#{column}" #task.description
-          when 3
-            ret_val = "#{@data}-c#{column}" #(task.overdue? and !task.done?)? '!': ''
-          when 4
-            #if task.done?
-            #  ret_val =  "#{@data}-c#{column}" #task.fulfilled_date
-            #else
-              ret_val =  "#{@data}-c#{column}" #(task.due_date.nil?)? '-': task.due_date
-            #end
+    ret_val = nil
+
+    if @data.class != ToDo::Task 
+      case role
+        when Qt::DisplayRole
+          ret_val = @data
+        when Qt::DecorationRole
+        if column == 0
+          return @@icons[:expanded]
+        else
+          return Qt::Variant.new
+        end
+      end
+    else
+      task = @data
+      case role
+        when Qt::CheckStateRole
+          if column == 0
+              ret_val = ((task.done?)? Qt::Checked: Qt::Unchecked).to_i
           else
             ret_val = nil
-        end
-      when Qt::StatusTipRole, Qt::ToolTipRole
-        case column
-          when 0
-            ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
-          when 1
-            ret_val = Qt::Object.trUtf8('Priority.')
-          when 2
-            ret_val = Qt::Object.trUtf8('Task description.')
-          when 3
-            ret_val = Qt::Object.trUtf8('Overdue if marked.')
-          when 4
-            ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
+          end
+        when Qt::DisplayRole
+          case column
+            when 0
+              ret_val = ''
+            when 1
+              ret_val = task.priority
+            when 2
+              ret_val = task.description
+            when 3
+              ret_val = (task.overdue? and !task.done?)? '!': ''
+            when 4
+              if task.done?
+                ret_val =  task.fulfilled_date
+              else
+                ret_val =  (task.due_date.nil?)? '-': task.due_date
+              end
+            else
+              ret_val = nil
+          end
+        when Qt::FontRole
+          ret_val = @@font
+          ret_val.weight = (column == 3)? Qt::Font.Bold: QT_FONT_NORMAL
+          ret_val.setStrikeOut(task.done?) if hasChildren
+          return Qt::Variant.fromValue(ret_val)
+        when Qt::TextAlignmentRole
+          if column == 3
+            ret_val = Qt::AlignHCenter.to_i
           else
-            ret_val = ''
-        end
-#      when Qt::FontRole
-#        ret_val = @font
-#        if column == 3
-#          ret_val.weight = Qt::Font.Bold
-#        else
-#          ret_val.weight = @font_normal
-#        end
-#        ret_val.setStrikeOut(true) #(task.done?)
-#        return Qt::Variant.fromValue(ret_val)
-      when Qt::TextAlignmentRole
-        if column == 3
-          ret_val = Qt::AlignHCenter.to_i
-        else
-          ret_val = Qt::AlignLeft.to_i
-        end
-      when Qt::DecorationRole
-        if column == 0 && hasChildren
-          return Qt::Variant.fromValue(Qt::Icon.fromTheme('arrow-down'))
-        else
-          ret_val = nil
-        end
-    else
-      ret_val = nil
-     end
-     puts "data: exit for role #{role}, ret_val= #{ret_val}"
-     return (ret_val.nil?)? Qt::Variant.new() : Qt::Variant.new(ret_val)
-
+            ret_val = Qt::AlignLeft.to_i
+          end
+       end
+    end
+    return (ret_val.nil?)? Qt::Variant.new() : Qt::Variant.new(ret_val)
   end
 
 end

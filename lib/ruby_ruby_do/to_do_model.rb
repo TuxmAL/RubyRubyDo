@@ -22,11 +22,9 @@ module RubyRubyDo
       super
       @root = nil
       load
-      @font = parent.font
-      # Workaround for QT4.6.2 bug that prevent italic, underline, overline
-      # and strikeout on a font if the weight is Qt::Font.Normal.
-      @font_normal = Qt::Font.Normal
-      @font_normal += 1 if Qt.version[0...4] == '4.6.' and ((2..3).map {|i| i.to_s}).include? Qt.version[4].chr
+      ToDoQtModelItem.font = parent.font
+      ToDoQtModelItem.icons :expanded => Qt::Variant.fromValue(Qt::Icon.fromTheme('arrow-down')),
+        :collapsed => Qt::Variant.fromValue(Qt::Icon.fromTheme('arrow-left'))
     end
 
     # Load data into model. This just creates a few fake items as an example. A full implementation would create and fill the top-level items after creating.
@@ -93,8 +91,27 @@ module RubyRubyDo
     # Return data for ToDoQtModelItem. This only handles the case where Display 
     # Data (the text in the Tree) is r/equested.
     def data(index, role)
-      return Qt::Variant.new if (not index.valid?) # or role != Qt::DisplayRole
+      return Qt::Variant.new if (not index.valid?) # or role != Qt::DisplayRole      
       item = itemFromIndex(index)
+      case role
+      when Qt::StatusTipRole, Qt::ToolTipRole
+        case index.column
+          when 0
+            ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
+          when 1
+            ret_val = Qt::Object.trUtf8('Priority.')
+          when 2
+            ret_val = Qt::Object.trUtf8('Task description.')
+          when 3
+            ret_val = Qt::Object.trUtf8('Overdue if marked.')
+          when 4
+            ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
+          else
+            ret_val = ''
+        end
+        return Qt::Variant.new(ret_val)
+      end
+
       item ? item.data(index.column, role) : Qt::Variant.new
     end
 
@@ -134,7 +151,6 @@ module RubyRubyDo
 
     # Don't supply any header data.
     def headerData(section, orientation, role)
-      return Qt::Variant.new
       if role != Qt::DisplayRole
         return Qt::Variant.new
       end
