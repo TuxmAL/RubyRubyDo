@@ -23,6 +23,7 @@ module RubyRubyDo
         # now we try to camouflage the treeview into a listview
         self.root_is_decorated = false
         self.all_columns_show_focus = true
+        self.header_hidden = false #true
         #self.items_expandable = false
         self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
