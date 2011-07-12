@@ -46,6 +46,31 @@ module ToDo
       @tasks.each { |t| yield t }
     end
 
+    # Returns all tasks due for a given _date_ not done yet.
+    def due_for(date)
+      @tasks.select { |t| t.due_date == date && ! t.done?}
+    end
+    
+    # Returns all overdue tasks not done yet .
+    def overdue
+      @tasks.select { |t| t.overdue? && ! t.done?}
+    end
+    
+    # Returns all done tasks.
+    def done
+      @tasks.select { |t| t.done?}
+    end
+    
+    # Returns all tasks due after a given _date_ not done yet.
+    def due_after(date)
+      @tasks.select { |t| ! t.due_date.nil? && t.due_date > date && ! t.done? }
+    end
+
+    # Returns all tasks without a due date not done yet.
+    def with_no_date()
+      @tasks.select { |t| t.due_date.nil? && ! t.done? }
+    end
+
     def [](index)
       @tasks[index]
     end
