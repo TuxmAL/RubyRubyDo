@@ -24,7 +24,10 @@ module RubyRubyDo
         self.root_is_decorated = false
         self.all_columns_show_focus = true
         self.header_hidden = false #true
-        #self.items_expandable = false
+        self.items_expandable = false #true
+        # To remove branch decoration we use QTreeview styles
+        # trick: 'background: palette(base);' is needed (in qt 4.6 at least) to effectively remove decoration!
+        self.style_sheet = 'QTreeView::branch {background: palette(base);border-image: none;}'
         self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model
