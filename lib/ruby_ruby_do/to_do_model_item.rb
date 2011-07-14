@@ -67,6 +67,28 @@ class ToDoQtModelItem
     @children << item
   end
 
+  # Items created as needed fro everi kind of row and column.
+  def flags(column)
+    if hasChildren
+      return Qt::ItemIsEnabled
+    else
+      case column
+        when 0
+          return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
+        when 1
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+        when 2
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+        when 3
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled
+        when 4
+          return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+        else
+          return Qt::NoItemFlags
+      end
+    end
+  end
+
   #
   def data(column, role)
     ret_val = nil

@@ -144,9 +144,12 @@ module RubyRubyDo
     def titleCount()
       TITLEROWS
     end
-    # All items can be enabled only.
+    
+    # Items created as needed fro everi kind of row and column.
     def flags(index)
-      Qt::ItemIsEnabled
+      return Qt::NoItemFlags unless index.is_valid
+      item = itemFromIndex(index)
+      item ? item.flags(index.column) : Qt::NoItemFlags
     end
 
     # Don't supply any header data.
