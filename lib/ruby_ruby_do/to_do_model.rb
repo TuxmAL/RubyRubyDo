@@ -91,8 +91,7 @@ module RubyRubyDo
     # Return data for ToDoQtModelItem. This only handles the case where Display 
     # Data (the text in the Tree) is r/equested.
     def data(index, role)
-      return Qt::Variant.new if (not index.valid?) # or role != Qt::DisplayRole      
-      item = itemFromIndex(index)
+      return Qt::Variant.new if (not index.valid?)
       case role
       when Qt::StatusTipRole, Qt::ToolTipRole
         case index.column
@@ -111,7 +110,7 @@ module RubyRubyDo
         end
         return Qt::Variant.new(ret_val)
       end
-
+      item = itemFromIndex(index)
       item ? item.data(index.column, role) : Qt::Variant.new
     end
 
@@ -140,7 +139,8 @@ module RubyRubyDo
       TODOCOLUMNS
     end
 
-    # We will have 5 columns: done, priority, description, overdue flag, due_date
+    # We will have 7 title rows:
+    #   overdue, today, tomorrow, next_days, next_weeks, no_date, done.
     def titleCount()
       TITLEROWS
     end
