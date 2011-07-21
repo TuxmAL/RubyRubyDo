@@ -10,10 +10,12 @@ require 'plasma_to_do'
 require 'plasma_edit_task'
 
 module RubyRubyDo
+  APP_NAME = 'RubyRubyDo'
+     
   line_edit = nil
   Qt::Application.new(ARGV) do
     Qt::Widget.new do
-      self.window_title = Qt::Object.trUtf8('RubyRubyDo')
+      self.window_title = Qt::Object.trUtf8(APP_NAME)
       self.set_minimum_size 250, 250
       self.windowIcon=Qt::Icon.fromTheme('mail-mark-task')
 
@@ -109,5 +111,5 @@ module RubyRubyDo
     end
     exec
   end
-
+  
 end
