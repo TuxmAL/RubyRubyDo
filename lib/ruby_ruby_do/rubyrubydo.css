@@ -1,0 +1,74 @@
+/* 
+    Document   : rubyrubydo.css
+    Created on : 21-lug-2011, 9.19.44
+    Author     : aliccardo
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+  QTreeView {
+     show-decoration-selected: 0;
+ }
+
+ QTreeView::item:has-children {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #dadada);
+ }
+
+ QTreeView::item:hover {
+ /*    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
+     border-top: 1px solid #bfcde4;
+     border-bottom: 1px solid #bfcde4;
+     border-right: 0px solid #bfcde4;
+     border-left: 0px solid #bfcde4;
+*/
+ }
+
+ QTreeView::item:selected:active{
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+ }
+
+ QTreeView::item:selected:!active {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);
+ }
+
+/* The branches of a QTreeView are styled using the ::branch subcontrol. The following stylesheet color codes the various states when drawing a branch.*/
+
+ QTreeView::branch {
+    border-image: none;
+    background: palette(base);
+ }
+
+/*
+ QTreeView::branch:has-siblings:!adjoins-item {
+         background: cyan;
+ }
+
+ QTreeView::branch:has-siblings:adjoins-item {
+         background: red;
+ }
+
+ QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+         background: blue;
+ }
+
+ QTreeView::branch:closed:has-children:has-siblings {
+         background: pink;
+ }
+
+ QTreeView::branch:has-children:!has-siblings:closed {
+         background: gray;
+ }
+
+ QTreeView::branch:open:has-children:has-siblings {
+         background: magenta;
+ }
+
+ QTreeView::branch:open:has-children:!has-siblings {
+         background: green;
+ }
+*/

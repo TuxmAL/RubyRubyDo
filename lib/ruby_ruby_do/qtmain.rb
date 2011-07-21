@@ -12,6 +12,20 @@ require 'plasma_edit_task'
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
      
+  def self.style_from_sheet(default = false)
+    filename = File.join(File.dirname(__FILE__), (APP_NAME + '.css').downcase)
+    if ! default && File.exist?(filename)
+      File.read(filename)
+    else
+       #self.style_sheet = 'QTreeView::branch {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb) ;border-image: none;}'
+       # 'QTreeView::item { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb);color:black;}'
+      #  To remove branch decoration we use QTreeview styles
+      # trick: 'background: palette(base);' is needed (in qt 4.6 at least) to effectively remove decoration!      
+      'QTreeView::branch {background: palette(base) ;border-image: none;}
+       QTreeView::item {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E1E1E1, stop: 0.4 #DDDDDD, stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3)}'
+    end
+  end
+
   line_edit = nil
   Qt::Application.new(ARGV) do
     Qt::Widget.new do
@@ -27,15 +41,13 @@ module RubyRubyDo
         self.all_columns_show_focus = true
         self.header_hidden = false #true
         self.items_expandable = false #true
-        # To remove branch decoration we use QTreeview styles
-        # trick: 'background: palette(base);' is needed (in qt 4.6 at least) to effectively remove decoration!
-        self.style_sheet = 'QTreeView::branch {background: palette(base);border-image: none;}'
-        self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
+        self.style_sheet = RubyRubyDo::style_from_sheet
+        #self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model
         #self.item_delegate = PriorityDelegate.new self
         #(0..model.columnCount(0)).each { |i| resizeColumnToContents i }
-        #self.alternatingRowColors = true
+        self.alternatingRowColors = true
       end
       treeview.expand_all
       root_index = Qt::ModelIndex.new
