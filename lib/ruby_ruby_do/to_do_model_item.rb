@@ -92,17 +92,16 @@ class ToDoQtModelItem
   #
   def data(column, role)
     ret_val = nil
-
     if @data.class != ToDo::Task 
       case role
         when Qt::DisplayRole
           ret_val = @data
         when Qt::DecorationRole
-        if column == 0
-          return @@icons[:expanded]
-        else
-          return Qt::Variant.new
-        end
+          if column == 0
+            return @@icons[:expanded]
+          else
+            return Qt::Variant.new
+          end
       end
     else
       task = @data
