@@ -35,6 +35,10 @@ class ToDoQtModelItem
     @parent = parent
     @children = []
     parent.addChild(self) if parent
+    lg = Qt::LinearGradient.new( 0, 0, 1, 1)
+    lg.setColorAt(0, Qt::Color.fromRgb(255, 0, 0, 0))  # 231, 231,231)) # '#e7e7e7'
+    lg.setColorAt(1, Qt::Color.fromRgb(0, 0, 255, 0)) #203, 203, 203)) # '#cbcbcb'
+    @brush_for_categories = Qt::Variant.fromValue(Qt::Brush.new(lg))
   end
   
 
@@ -102,6 +106,8 @@ class ToDoQtModelItem
           else
             return Qt::Variant.new
           end
+        when Qt::BackgroundRole
+          return @brush_for_categories 
       end
     else
       task = @data
