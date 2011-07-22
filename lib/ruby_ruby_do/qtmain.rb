@@ -17,12 +17,14 @@ module RubyRubyDo
     if ! default && File.exist?(filename)
       File.read(filename)
     else
-       #self.style_sheet = 'QTreeView::branch {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb) ;border-image: none;}'
-       # 'QTreeView::item { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb);color:black;}'
+      #self.style_sheet = 'QTreeView::branch {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb) ;border-image: none;}'
+      # 'QTreeView::item { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #cbcbcb);color:black;}'
       #  To remove branch decoration we use QTreeview styles
       # trick: 'background: palette(base);' is needed (in qt 4.6 at least) to effectively remove decoration!      
       'QTreeView::branch {background: palette(base) ;border-image: none;}
-       QTreeView::item {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E1E1E1, stop: 0.4 #DDDDDD, stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3)}'
+       /*QTreeView::item:has-children, */
+       QTreeView::item:!has-children:has-siblings:!adjoins-item
+          {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E1E1E1, stop: 0.4 #DDDDDD, stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3)}'
     end
   end
 
@@ -41,7 +43,7 @@ module RubyRubyDo
         self.all_columns_show_focus = true
         self.header_hidden = false #true
         self.items_expandable = false #true
-        self.style_sheet = RubyRubyDo::style_from_sheet
+        self.style_sheet = RubyRubyDo::style_from_sheet()
         #self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model

@@ -5,27 +5,55 @@
     Description:
         Purpose of the stylesheet follows.
 */
+QTreeView::branch {
+         background: palette(base);
+ }
 
-/* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
-*/
+ QTreeView::branch:has-siblings:!adjoins-item {
+         background: cyan;
+ }
 
+ /*QTreeView::branch:has-siblings:adjoins-item {background: red;}*/
+
+ QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+         background: blue;
+ }
+
+ QTreeView::branch:closed:has-children:has-siblings {
+         background: pink;
+ }
+
+ QTreeView::branch:has-children:!has-siblings:closed {
+         background: gray;
+ }
+
+/* QTreeView::branch:open:has-children:has-siblings {background: magenta;}*/
+
+ QTreeView::branch:open:has-children:!has-siblings {
+         background: green;
+ }
+/********************
   QTreeView {
      show-decoration-selected: 0;
  }
-
- QTreeView::item:has-children {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #dadada);
+*/
+ QTreeView::branch:open:has-children:has-siblings,
+ QTreeView::item:open:has-children:has-siblings,
+ QTreeView::branch:has-siblings:adjoins-item
+{
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e700e7, stop: 1 #da00da);
  }
+  /*QTreeView::branch:has-siblings:!has-children:!adjoins-item {background: chocolate}*/
+  QTreeView::item:has-siblings:!has-parent {background: chocolate}
 
+/****
  QTreeView::item:hover {
- /*    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
      border-top: 1px solid #bfcde4;
      border-bottom: 1px solid #bfcde4;
      border-right: 0px solid #bfcde4;
      border-left: 0px solid #bfcde4;
-*/
+
  }
 
  QTreeView::item:selected:active{
@@ -42,7 +70,7 @@
     border-image: none;
     background: palette(base);
  }
-
+*****************/
 /*
  QTreeView::branch:has-siblings:!adjoins-item {
          background: cyan;
