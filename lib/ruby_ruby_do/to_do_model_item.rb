@@ -98,6 +98,8 @@ class ToDoQtModelItem
   #
   def data(column, role)
     ret_val = nil
+    #if ! @data.respond_to?(:done?)
+    #Try to see if @data is a task
     if @data.class != ToDo::Task 
       case role
         when Qt::DisplayRole
