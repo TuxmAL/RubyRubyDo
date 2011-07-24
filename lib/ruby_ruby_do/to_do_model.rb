@@ -111,6 +111,9 @@ module RubyRubyDo
         return Qt::Variant.new(ret_val)
       end
       item = itemFromIndex(index)
+      if item
+        @widget.setRowHidden(index.row, index.parent, (item.hasChildren)? true:false)
+      end
       item ? item.data(index.column, role) : Qt::Variant.new
     end
 
