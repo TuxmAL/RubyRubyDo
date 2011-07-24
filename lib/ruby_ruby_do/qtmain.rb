@@ -35,9 +35,9 @@ module RubyRubyDo
       self.set_minimum_size 250, 250
       self.windowIcon=Qt::Icon.fromTheme('mail-mark-task')
 
-      #model = PlasmaToDo.new self
-      model = ToDoQtModel.new self
+      model = nil # PlasmaToDo.new self
       treeview = Qt::TreeView.new do #self
+        model = ToDoQtModel.new self
         # now we try to camouflage the treeview into a listview
         self.root_is_decorated = false
         self.all_columns_show_focus = true

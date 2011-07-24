@@ -20,6 +20,7 @@ module RubyRubyDo
 
     def initialize(parent = nil)
       super
+      @widget = parent
       @root = nil
       load
       ToDoQtModelItem.font = parent.font
@@ -88,8 +89,7 @@ module RubyRubyDo
       createIndex(pparent.childRow(parent), 0, parent)
     end
 
-    # Return data for ToDoQtModelItem. This only handles the case where Display 
-    # Data (the text in the Tree) is r/equested.
+    # Return data for ToDoQtModelItem.
     def data(index, role)
       return Qt::Variant.new if (not index.valid?)
       case role
