@@ -111,10 +111,11 @@ module RubyRubyDo
         return Qt::Variant.new(ret_val)
       end
       item = itemFromIndex(index)
-      if item and role == Qt::DisplayRole and item.parent == @root
+      # TODO: we must comment out this because the treeview is was slowed-down sensibly!
+      #if item and role == Qt::DisplayRole and item.parent == @root
         #puts item.data(0, role).to_s if item.hasChildren
-        @widget.setRowHidden(index.row, index.parent, (item.hasChildren)? false: true)
-      end
+      #  @widget.setRowHidden(index.row, index.parent, (item.hasChildren)? false: true)
+      #end
       item ? item.data(index.column, role) : Qt::Variant.new
     end
 
