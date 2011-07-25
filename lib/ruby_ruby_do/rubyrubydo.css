@@ -5,98 +5,43 @@
     Description:
         Purpose of the stylesheet follows.
 */
-QTreeView::branch {
-         background: palette(base);
+QTreeView {
+    show-decoration-selected: 0;
+}
+
+ QTreeView::branch {
+    border-image: none;
+    background: palette(base);
  }
 
- QTreeView::branch:has-siblings:!adjoins-item {
-         background: cyan;
- }
-
- /*QTreeView::branch:has-siblings:adjoins-item {background: red;}*/
-
- QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-         background: blue;
- }
-
- QTreeView::branch:closed:has-children:has-siblings {
-         background: pink;
- }
-
- QTreeView::branch:has-children:!has-siblings:closed {
-         background: gray;
- }
-
-/* QTreeView::branch:open:has-children:has-siblings {background: magenta;}*/
-
- QTreeView::branch:open:has-children:!has-siblings {
-         background: green;
- }
-/********************
-  QTreeView {
-     show-decoration-selected: 0;
- }
-*/
  QTreeView::branch:open:has-children:has-siblings,
  QTreeView::item:open:has-children:has-siblings,
- QTreeView::branch:has-siblings:adjoins-item
+ QTreeView::branch:open:has-children:!has-siblings,
+ QTreeView::item:open:has-children:!has-siblings
 {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e700e7, stop: 1 #da00da);
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #888888, stop: 1 #bbbbbb);
+    border-bottom: 1px solid #cccccc;
  }
-  /*QTreeView::branch:has-siblings:!has-children:!adjoins-item {background: chocolate}*/
-  QTreeView::item:has-siblings:!has-parent {background: chocolate}
-
-/****
+ 
  QTreeView::item:hover {
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
      border-top: 1px solid #bfcde4;
      border-bottom: 1px solid #bfcde4;
      border-right: 0px solid #bfcde4;
      border-left: 0px solid #bfcde4;
+ }
 
+ QTreeView::item, QTreeView::branch {
+     background: #b9b9b9;
  }
 
  QTreeView::item:selected:active{
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #aaaaaa, stop: 1 #dddddd);
  }
 
  QTreeView::item:selected:!active {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #dadada);
  }
 
 /* The branches of a QTreeView are styled using the ::branch subcontrol. The following stylesheet color codes the various states when drawing a branch.*/
 
- QTreeView::branch {
-    border-image: none;
-    background: palette(base);
- }
-*****************/
-/*
- QTreeView::branch:has-siblings:!adjoins-item {
-         background: cyan;
- }
-
- QTreeView::branch:has-siblings:adjoins-item {
-         background: red;
- }
-
- QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-         background: blue;
- }
-
- QTreeView::branch:closed:has-children:has-siblings {
-         background: pink;
- }
-
- QTreeView::branch:has-children:!has-siblings:closed {
-         background: gray;
- }
-
- QTreeView::branch:open:has-children:has-siblings {
-         background: magenta;
- }
-
- QTreeView::branch:open:has-children:!has-siblings {
-         background: green;
- }
-*/

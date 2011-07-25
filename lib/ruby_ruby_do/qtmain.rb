@@ -49,7 +49,7 @@ module RubyRubyDo
         self.model = model
         #self.item_delegate = PriorityDelegate.new self
         #(0..model.columnCount(0)).each { |i| resizeColumnToContents i }
-        self.alternatingRowColors = true
+        #self.alternatingRowColors = true
       end
       treeview.expand_all
       root_index = Qt::ModelIndex.new
