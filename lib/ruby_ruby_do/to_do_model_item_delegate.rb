@@ -1,10 +1,5 @@
 # <Copyright and license information goes here.>
 #
-#required libraries to rely on.
-#require 'rubygems'
-#require 'plasma_applet'
-#require 'task'
-
 module RubyRubyDo
 
   class CalendarDialog < Qt::Dialog
@@ -50,7 +45,7 @@ module RubyRubyDo
 
   end
 
-  class PriorityDelegate < Qt::StyledItemDelegate
+  class ToDoQtModelItemDelegate < Qt::StyledItemDelegate
 
     def initialize(parent = nil)
       super parent

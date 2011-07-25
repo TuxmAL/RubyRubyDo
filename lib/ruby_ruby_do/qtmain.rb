@@ -6,8 +6,7 @@ require 'Qt4'
 $:.unshift File.join(File.dirname(__FILE__))
 require 'to_do'
 require 'to_do_model'
-require 'plasma_to_do'
-require 'plasma_edit_task'
+require 'to_do_model_item_delegate'
 
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
@@ -47,7 +46,7 @@ module RubyRubyDo
         #self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
         # and more, into a checklistview
         self.model = model
-        #self.item_delegate = PriorityDelegate.new self
+        self.item_delegate = ToDoQtModelItemDelegate.new self
         #(0..model.columnCount(0)).each { |i| resizeColumnToContents i }
         #self.alternatingRowColors = true
       end
