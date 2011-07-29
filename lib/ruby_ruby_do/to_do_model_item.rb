@@ -15,6 +15,10 @@ module RubyRubyDo
     # Set the difference from normal font size used for Tasks and font size used for Category
     TODO_FONT_SIZE_DIFFERENCE = -1.0
     TODO_FONT_SIZE_DIFFERENCE.freeze
+    
+    #Set the date format for the undone task
+    TODO_DATE_FORMAT = '%a %d/%m'
+    TODO_DATE_FORMAT.freeze
 
     attr_writer :data
     attr_accessor :parent
@@ -150,7 +154,7 @@ module RubyRubyDo
                 if task.done?
                   ret_val =  task.fulfilled_date
                 else
-                  ret_val =  (task.due_date.nil?)? '-': task.due_date
+                  ret_val =  (task.due_date.nil?)? '-': task.due_date.strftime(TODO_DATE_FORMAT)
                 end
               else
                 ret_val = nil
