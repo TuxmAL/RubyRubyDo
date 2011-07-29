@@ -11,6 +11,10 @@ module RubyRubyDo
     QT_FONT_NORMAL = Qt::Font.Normal
     QT_FONT_NORMAL += 1 if Qt.version[0...4] == '4.6.' and ((2..3).map {|i| i.to_s}).include? Qt.version[4].chr
     QT_FONT_NORMAL.freeze
+    
+    # Set the difference from normal font size used for Tasks and font size used for Category
+    TODO_FONT_SIZE_DIFFERENCE = -1.0
+    TODO_FONT_SIZE_DIFFERENCE.freeze
 
     attr_writer :data
     attr_accessor :parent
@@ -21,6 +25,8 @@ module RubyRubyDo
 
     def self.font=(font)
       @@font = font
+      @@font_to_do = font.point_size_f
+      @@font_category = @@font_to_do + TODO_FONT_SIZE_DIFFERENCE
     end
 
     def self.font
@@ -106,6 +112,10 @@ module RubyRubyDo
         case role
           when Qt::DisplayRole
             ret_val = @data
+          when Qt::FontRole
+            ret_val = @@font            
+            ret_val.point_size_f = @@font_category
+            return Qt::Variant.fromValue(ret_val)
           when Qt::DecorationRole
             if column == 0
               return @@icons[:expanded]
@@ -147,6 +157,7 @@ module RubyRubyDo
             end
           when Qt::FontRole
             ret_val = @@font
+            ret_val.point_size_f = @@font_to_do
             ret_val.weight = (column == 3)? Qt::Font.Bold: QT_FONT_NORMAL
             ret_val.setStrikeOut(task.done?) if hasChildren
             return Qt::Variant.fromValue(ret_val)
