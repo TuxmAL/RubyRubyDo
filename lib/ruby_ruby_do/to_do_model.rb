@@ -46,7 +46,6 @@ module RubyRubyDo
       todolist.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
       todolist.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
       todolist.done.each {|t| ToDoQtModelItem.new(t, done)}
-     
       #ToDoQtModelItem.new('1', next_days)
       #ToDoQtModelItem.new('2', next_days)
     end
@@ -111,9 +110,9 @@ module RubyRubyDo
         return Qt::Variant.new(ret_val)
       end
       item = itemFromIndex(index)
-      # TODO: we must comment out this because the treeview is was slowed-down sensibly!
+      # TODO: we must comment out this because the treeview was slowed-down sensibly!
       #if item and role == Qt::DisplayRole and item.parent == @root
-        #puts item.data(0, role).to_s if item.hasChildren
+      #  # puts item.data(0, role).to_s if item.hasChildren
       #  @widget.setRowHidden(index.row, index.parent, (item.hasChildren)? false: true)
       #end
       item ? item.data(index.column, role) : Qt::Variant.new
