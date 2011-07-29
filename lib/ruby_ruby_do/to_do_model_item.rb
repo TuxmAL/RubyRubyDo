@@ -163,7 +163,7 @@ module RubyRubyDo
             ret_val = @@font
             ret_val.point_size_f = @@font_to_do
             ret_val.weight = (column == 3)? Qt::Font.Bold: QT_FONT_NORMAL
-            ret_val.setStrikeOut(task.done?) if hasChildren
+            ret_val.setStrikeOut(task.done?)
             return Qt::Variant.fromValue(ret_val)
           when Qt::TextAlignmentRole
             if column == 3
