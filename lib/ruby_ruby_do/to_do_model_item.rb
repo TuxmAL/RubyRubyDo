@@ -119,6 +119,8 @@ module RubyRubyDo
           when Qt::FontRole
             ret_val = @@font            
             ret_val.point_size_f = @@font_category
+            ret_val.weight = Qt::Font.Bold
+            ret_val.setStrikeOut(false)
             return Qt::Variant.fromValue(ret_val)
           when Qt::DecorationRole
             if column == 0
