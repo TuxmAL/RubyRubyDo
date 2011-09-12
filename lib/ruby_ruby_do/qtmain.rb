@@ -31,7 +31,7 @@ module RubyRubyDo
   Qt::Application.new(ARGV) do
     Qt::Widget.new do
       self.window_title = Qt::Object.trUtf8(APP_NAME)
-      self.set_minimum_size 250, 250
+      self.set_minimum_size 300, 350
       self.windowIcon=Qt::Icon.fromTheme('mail-mark-task')
 
       model = nil # PlasmaToDo.new self
