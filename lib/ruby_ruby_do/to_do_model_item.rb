@@ -178,5 +178,41 @@ module RubyRubyDo
       return (ret_val.nil?)? Qt::Variant.new() : Qt::Variant.new(ret_val)
     end
 
+    def set_data(column, value, role)
+      task = @data
+      if @data.class == ToDo::Task
+        case role
+        when Qt::CheckStateRole
+          if column == 0
+            case value.value
+            when (Qt::Checked).to_i
+              task.done
+            when (Qt::Unchecked).to_i
+              task.undone
+            end
+            true
+          else
+            false
+          end
+        when Qt::EditRole
+          case column
+          when 1
+            task.priority = (value.to_i)
+          when 2
+            task.description = value
+          when 4
+            task.due_date = nil
+            puts "setData: value=#{value.value}; isValid=#{value.is_valid}"
+            task.due_date = Date.jd(value.toDate.toJulianDay) if value.is_valid and value.value != '-'
+          end
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    end
+    
   end
 end

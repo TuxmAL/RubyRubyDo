@@ -120,12 +120,16 @@ module RubyRubyDo
 
     # Set data in a ToDoQtModelItem. This is just an example to show how the signal is emitted.
     def data=(index, value, role)
-      return false if (not index.valid?) or role != Qt::DisplayRole
+      return false if (not index.valid?) or (role != Qt::EditRole and role != Qt::CheckStateRole)
       item = itemFromIndex(index)
       return false if not item
-      item.data = value.to_s
-      emit dataChanged(index, index)
-      true
+      emit layoutAboutToBeChanged
+      # Update your internal data
+      changePersistentIndex(index, index)
+      changed = item.set_data(index.column, value, role)
+      emit dataChanged(index, index) if changed
+      emit layoutChanged
+      changed
     end
 
     alias :setData :data=
