@@ -85,22 +85,24 @@ module RubyRubyDo
       @children << item
     end
 
-    # Items created as needed fro everi kind of row and column.
+    # Items created as needed fro every kind of row and column.
     def flags(column)
       if hasChildren
         return Qt::ItemIsEnabled
       else
+        editable = 0        
+        editable = Qt::ItemIsEditable if @data.respond_to?(:done?) and (!@data.done?)
         case column
           when 0
             return Qt::ItemIsUserCheckable + Qt::ItemIsSelectable + Qt::ItemIsEnabled
           when 1
-            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + editable
           when 2
-            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + editable
           when 3
             return Qt::ItemIsSelectable + Qt::ItemIsEnabled
           when 4
-            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + Qt::ItemIsEditable
+            return Qt::ItemIsSelectable + Qt::ItemIsEnabled + editable
           else
             return Qt::NoItemFlags
         end
