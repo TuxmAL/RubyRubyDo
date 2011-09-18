@@ -25,10 +25,13 @@ module RubyRubyDo
     attr_reader :children
 
     @@font = nil
+    @@size_hint = nil
     #@@icons = {} #{:collapsed => nil, :expanded => nil}
 
     def self.font=(font)
       @@font = font
+      fi = Qt::FontInfo.new @@font
+      @@size_hint = Qt::Size.new(30, fi.pixel_size + 2)
       @@font_to_do = font.point_size_f
       @@font_category = @@font_to_do + TODO_FONT_SIZE_DIFFERENCE
     end
@@ -138,6 +141,8 @@ module RubyRubyDo
         case role
             #when Qt::BackgroundRole
             #  return @brush_for_data
+	when Qt::SizeHintRole
+	    return Qt::Variant.new(@@size_hint)
           when Qt::CheckStateRole
             if column == 0
                 ret_val = ((task.done?)? Qt::Checked: Qt::Unchecked).to_i
