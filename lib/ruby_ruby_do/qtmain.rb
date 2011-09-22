@@ -10,7 +10,7 @@ require 'to_do_model_item_delegate'
 
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
-     
+
   def self.style_from_sheet(default = false)
     filename = File.join(File.dirname(__FILE__), (APP_NAME + '.css').downcase)
     if ! default && File.exist?(filename)
@@ -67,7 +67,7 @@ module RubyRubyDo
                 #value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
               else
                 #value = Qt::Variant.new index.data.value
-              end               
+              end
             end
           end
           add_widget button
@@ -79,7 +79,7 @@ module RubyRubyDo
               puts "clear_button_shown or click_message not found!"
               nil # but that doesn't matter
             end
-          end          
+          end
           add_widget line_edit
           button_add = Qt::PushButton.new() do
             self.icon = Qt::Icon.fromTheme('list-add') #'view-task-add'
@@ -94,7 +94,7 @@ module RubyRubyDo
                 else
                   priority = 3
                   row = todo.count - 1
-                end              
+                end
                 todo.insert(row + 1, ToDo::Task.new(line_edit.display_text , priority ))
                 treeview.model.insertRow row
               end
@@ -141,5 +141,5 @@ module RubyRubyDo
     end
     exec
   end
-  
+
 end

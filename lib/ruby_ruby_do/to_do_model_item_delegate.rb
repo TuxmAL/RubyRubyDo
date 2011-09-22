@@ -8,9 +8,9 @@ module RubyRubyDo
 
     def initialize(parent = nil, name = nil)
       super
-      @selected_date = Date.today.jd      
+      @selected_date = Date.today.jd
       self.window_title = Qt::Object.trUtf8('Set due date')
-      self.modal = true      
+      self.modal = true
       cal = Qt::CalendarWidget.new self
       cal.grid_visible = true
       cal.vertical_header_format = Qt::CalendarWidget::NoVerticalHeader
