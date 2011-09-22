@@ -56,6 +56,21 @@ module RubyRubyDo
 
       self.layout = Qt::VBoxLayout.new do
         h_layout = Qt::HBoxLayout.new do
+          button = Qt::PushButton.new() do
+            self.icon = Qt::Icon.fromTheme('view-pim-calendar') #'view-calendar'
+            self.flat = true
+            #TODO: add the choosen date to the new task.
+            connect(SIGNAL :clicked) do
+              dlg = CalendarDialog.new(self)
+              if (dlg.exec == Qt::Dialog::Accepted)
+                puts "new task calendar (a): #{dlg.selected_date}"
+                #value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
+              else
+                #value = Qt::Variant.new index.data.value
+              end               
+            end
+          end
+          add_widget button
           line_edit = Qt::LineEdit.new do
             begin
               self.placeholder_text = Qt::Object.trUtf8('Add a new Task...')
@@ -120,6 +135,8 @@ module RubyRubyDo
         add_layout h_layout
         #self.activate
       end
+      # need to shift focus on line_edit instead of date button.
+      line_edit.set_focus(Qt::OtherFocusReason)
       show
     end
     exec
