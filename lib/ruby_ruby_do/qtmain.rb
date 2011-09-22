@@ -61,7 +61,7 @@ module RubyRubyDo
             self.flat = true
             #TODO: add the choosen date to the new task.
             connect(SIGNAL :clicked) do
-              dlg = CalendarDialog.new(self)
+              dlg = ToDoCalendarDialog.new(self)
               if (dlg.exec == Qt::Dialog::Accepted)
                 puts "new task calendar (a): #{dlg.selected_date}"
                 #value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
@@ -136,7 +136,7 @@ module RubyRubyDo
         #self.activate
       end
       # need to shift focus on line_edit instead of date button.
-      line_edit.set_focus(Qt::OtherFocusReason)
+      treeview.set_focus(Qt::OtherFocusReason)
       show
     end
     exec
