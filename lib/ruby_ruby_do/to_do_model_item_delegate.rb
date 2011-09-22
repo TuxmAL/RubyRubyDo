@@ -2,7 +2,7 @@
 #
 module RubyRubyDo
 
-  class CalendarDialog < Qt::Dialog
+  class ToDoCalendarDialog < Qt::Dialog
     attr_reader :selected_date
     slots 'goto_today()'
 
@@ -85,7 +85,7 @@ module RubyRubyDo
         puts "setModelData date: #{value.value}. #{value.is_valid}"
         value = Qt::Variant.new if value.to_s == '-'
         unless value.is_valid
-          dlg = CalendarDialog.new editor
+          dlg = ToDoCalendarDialog.new editor
           if (dlg.exec == Qt::Dialog::Accepted)
             puts "setModelData calendar (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
             value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
