@@ -63,9 +63,16 @@ module ToDo
     
     # Returns all tasks due after a given _date_ not done yet.
     def due_after(date)
-      @tasks.select { |t| ! t.due_date.nil? && t.due_date > date && ! t.done? }
+      @tasks.select { |t| ! t.due_date.nil? && ! t.done? && (t.due_date > date) }
     end
 
+    # Returns all tasks due between two given _dates_ not done yet.
+    # The first date must be less or equal to the secon one, else nil is returned.
+    def due_between(a_date, another_date)
+      #min_date, max_date = [a_date, another_date].minmax
+      @tasks.select { |t| ! t.due_date.nil? && ((a_date..another_date).include? t.due_date) && ! t.done? }
+    end
+    
     # Returns all tasks without a due date not done yet.
     def with_no_date()
       @tasks.select { |t| t.due_date.nil? && ! t.done? }

@@ -74,6 +74,17 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
 
+  must 'return all tasks due between two dates not yet done' do
+    between_dates = @todo_list.due_between(@tomorrow, @today + 6)
+    assert_block("Expected (non empty) #{between_dates.inspect} to be between dates") do     
+      between_dates.length != 0 && between_dates.each {|t| assert(((@tomorrow..(@today + 6)).include? t.due_date) && ! t.done?)}
+    end
+    assert_equal([], @todo_list.due_between(@today + 6, @tomorrow))
+  end
+
+  must 'return no task if 2nd date is grether than 1st' do
+    assert_equal([], @todo_list.due_between(@today + 6, @tomorrow))
+  end
 
   must 'return all overdue tasks not yet done' do
     overdue = @todo_list.overdue
