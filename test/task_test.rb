@@ -96,7 +96,7 @@ class TaskTest < Test::Unit::TestCase
 
   must 'task be overdue' do
     a_task = ToDo::Task.new('test task', 3, @yesterday)
-    assert_equal(true, a_task.overdue?)
+    assert_equal(true, a_task.overdue?) && !a_task.done
   end
 
   must 'task without due date never be overdue' do
@@ -123,7 +123,7 @@ class TaskTest < Test::Unit::TestCase
     a_task = ToDo::Task.new('test task', 3)
     a_task.done
     assert_raise NoMethodError do
-      a_task.fulfillment_date = Date.Today + 3
+      a_task.fulfillment_date = Date.today + 3
     end
   end
 
