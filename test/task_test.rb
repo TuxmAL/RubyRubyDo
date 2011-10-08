@@ -135,4 +135,25 @@ class TaskTest < Test::Unit::TestCase
     assert(t3.id != t4.id, "2/2) t3.id (#{t3.id.inspect}) same as t4.id (#{t4.id.inspect}).")
   end
 
+  must 'task due for today if queryed for' do
+    a_task = ToDo::Task.new('test task', 3, Date.today)
+    assert_equal(a_task.due_today?, true) && assert_equal(a_task.done, false)
+  end
+
+  must 'task due for tomorrow if queryed for' do
+    a_task = ToDo::Task.new('test task', 3, Date.today + 1)
+    assert_equal(a_task.due_tomorrow?, true) && assert_equal(a_task.done, false)
+  end
+
+  must 'task due for this week if queryed for' do
+    a_task = ToDo::Task.new('test task', 3, Date.today + 4)
+    assert_equal(a_task.due_this_week?, true) && assert_equal(a_task.done, false)
+    a_task = ToDo::Task.new('test task', 3, Date.today + 7)
+    assert_equal(a_task.due_this_week?, false) && assert_equal(a_task.done, false)
+  end
+
+  must 'task be due without date if queryed for' do
+    a_task = ToDo::Task.new('test task', 3)
+    assert_equal(a_task.due_with_no_date?, true) && assert_equal(a_task.done, false)
+  end
 end

@@ -61,7 +61,23 @@ module ToDo
     end
 
     def overdue?
-      !@due_date.nil? && (@due_date < Date.today)
+      !@done && !@due_date.nil? && (@due_date < Date.today)
+    end
+
+    def due_today?
+      !@done && !@due_date.nil? && (@due_date == Date.today)
+    end
+
+    def due_tomorrow?
+      !@done && !@due_date.nil? && (@due_date == Date.today+ 1)
+    end
+
+    def due_this_week?
+      !@done && !@due_date.nil? && ((Date.today..(Date.today + 6)).include? @due_date)
+    end
+
+    def due_with_no_date?
+      !@done && @due_date.nil?
     end
 
     def saved
