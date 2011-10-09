@@ -48,15 +48,16 @@ module RubyRubyDo
       next_weeks = ToDoQtModelItem.new('Next weeks', @root)
       no_date = ToDoQtModelItem.new('No date', @root)
       done = ToDoQtModelItem.new('Done', @root)
-      todolist = setup_todo
-      todolist.due_for(Date.today).each {|t| ToDoQtModelItem.new(t, today)}
-      todolist.due_for(Date.today + 1).each {|t| ToDoQtModelItem.new(t, tomorrow)}
-      todolist.due_for(Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_weeks)}
-      todolist.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
-      todolist.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
-      todolist.done.each {|t| ToDoQtModelItem.new(t, done)}
+      to_do = todo
+      to_do.due_for(Date.today).each {|t| ToDoQtModelItem.new(t, today)}
+      to_do.due_for(Date.today + 1).each {|t| ToDoQtModelItem.new(t, tomorrow)}
+      to_do.due_for(Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_weeks)}
+      to_do.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
+      to_do.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
+      to_do.done.each {|t| ToDoQtModelItem.new(t, done)}
       #ToDoQtModelItem.new('1', next_days)
       #ToDoQtModelItem.new('2', next_days)
+      return to_do
     end
  
     # This treats an invalid index (returned by Qt::ModelIndex.new) as the index of @root.
