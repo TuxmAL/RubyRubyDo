@@ -11,6 +11,11 @@ require 'to_do_model_item_delegate'
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
 
+  # Set the display date format
+  TODO_DATE_FORMAT = '%d/%m/%Y'
+  TODO_DATE_FORMAT.freeze
+
+
   def self.style_from_sheet(default = false)
     filename = File.join(File.dirname(__FILE__), (APP_NAME + '.css').downcase)
     if ! default && File.exist?(filename)
