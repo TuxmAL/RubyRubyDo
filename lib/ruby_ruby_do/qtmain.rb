@@ -45,7 +45,7 @@ module RubyRubyDo
         # now we try to camouflage the treeview into a listview
         self.root_is_decorated = false
         self.all_columns_show_focus = true
-        self.header_hidden = false #true
+        self.header_hidden = true #false
         self.items_expandable = false #true
         self.style_sheet = RubyRubyDo::style_from_sheet()
         #self.edit_triggers =Qt::AbstractItemView.SelectedClicked #| Qt::AbstractItemView.CurrentChanged
@@ -144,6 +144,7 @@ module RubyRubyDo
       end
       # need to shift focus on line_edit instead of date button.
       treeview.set_focus(Qt::OtherFocusReason)
+      (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
       show
     end
     exec
