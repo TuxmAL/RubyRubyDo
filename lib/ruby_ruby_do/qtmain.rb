@@ -56,6 +56,7 @@ module RubyRubyDo
 
       self.layout = Qt::VBoxLayout.new do
         h_layout = Qt::HBoxLayout.new do
+          date_show = Qt::Label.new
           button = Qt::PushButton.new() do
             self.icon = Qt::Icon.fromTheme('view-pim-calendar') #'view-calendar'
             self.flat = true
@@ -63,10 +64,9 @@ module RubyRubyDo
             connect(SIGNAL :clicked) do
               dlg = ToDoCalendarDialog.new(self)
               if (dlg.exec == Qt::Dialog::Accepted)
-                puts "new task calendar (a): #{dlg.selected_date}"
-                #value = Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date))
+                date_show.text = Date.jd(dlg.selected_date).strftime(TODO_DATE_FORMAT)
               else
-                #value = Qt::Variant.new index.data.value
+                date_show.text = ''
               end
             end
           end
@@ -81,12 +81,13 @@ module RubyRubyDo
             end
           end
           add_widget line_edit
+          add_widget date_show
           button_add = Qt::PushButton.new() do
             self.icon = Qt::Icon.fromTheme('list-add') #'view-task-add'
             self.flat = true
             connect(SIGNAL :clicked) do
               if line_edit.display_text != ""
-                todo = treeview.model.todo              
+                todo = treeview.model.todo
                 if treeview.selectionModel.hasSelection
                   puts "selection: #{treeview.selected_indexes.first.inspect}"
                   priority = treeview.selected_indexes.first.internal_pointer.priority
@@ -95,10 +96,11 @@ module RubyRubyDo
                   priority = 3
                   row = todo.count - 1
                 end
-                todo.insert(row + 1, ToDo::Task.new(line_edit.display_text , priority ))
-                treeview.model.insertRow row
+                # TODO: Date.parse(date_show.text) doesn't work if date is in european format (dd/mm/yyyy)!
+                new_task = ToDo::Task.new(line_edit.display_text, priority, ((date_show.text.nil?)? nil: Date.parse(date_show.text)))
+                treeview.model.insertRow new_task, 1
               end
-              line_edit.text = ""
+              line_edit.text = date_show.text = ''
             end
           end
           Qt::Object.connect(line_edit,  SIGNAL(:returnPressed), button_add, SIGNAL(:clicked) )

@@ -7,6 +7,7 @@ module RubyRubyDo
    # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
   class ToDoQtModel < Qt::AbstractItemModel
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
+    signals 'rowsInserted(const QModelIndex &, int, int)'
 
     @@todo_list = nil
 
@@ -194,7 +195,29 @@ module RubyRubyDo
         return Qt::Variant.new
       end
     end
-    
+
+    def insertRow(task, row, parent = Qt::ModelIndex.new)
+      return insertRows(task, row, 1, parent)
+    end
+
+    def insertRows(task, row, count, parent = Qt::ModelIndex.new)
+      p = index(4)
+      p = index(6) if task.done?
+      p = index(5) if task.due_with_no_date?
+      p = index(0) if task.overdue?
+      p = index(1) if task.due_today?
+      p = index(2) if task.due_tomorrow?
+      p = index(3) if task.due_this_week?
+      x = itemFromIndex(p)
+      r = rowCount p
+      beginInsertRows(p, r, (r + (count - 1)))
+      @todo_list << task
+      ToDoQtModelItem.new(task, x)
+      endInsertRows()
+      emit 	rowsInserted p, r,  (r + (count - 1))
+      return true
+    end
+
     private
   
     def setup_todo
