@@ -8,6 +8,8 @@ module RubyRubyDo
   class ToDoQtModel < Qt::AbstractItemModel
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
 
+    @@todo_list = nil
+
     # Number of title rows to display
     TITLEROWS = 7
     TITLEROWS.freeze
@@ -22,15 +24,22 @@ module RubyRubyDo
       super
       @widget = parent
       @root = nil
+      @todo_list = nil
       load
       ToDoQtModelItem.font = parent.font
       ToDoQtModelItem.icons :expanded => Qt::Variant.fromValue(Qt::Icon.fromTheme('arrow-down')),
         :collapsed => Qt::Variant.fromValue(Qt::Icon.fromTheme('arrow-left'))
     end
 
-    # Load data into model. This just creates a few fake items as an example. A full implementation would create and fill the top-level items after creating.
-    # Note: @root is created here in order to make clearing easy. A clear() method just needs to set root to ModelItem.new('').
-    def load()
+    def todo
+      @todo_list ||= setup_todo
+    end
+
+    # Load data into model.
+    # This just creates a few top-level items as categories, then loads todos items.
+    # Note: @root is created here in order to make clearing easy.
+    # A clear() method just needs to set root to ModelItem.new('').
+    def load
       @root = ToDoQtModelItem.new('',nil)
       overdue = ToDoQtModelItem.new('Overdue', @root)
       today = ToDoQtModelItem.new('Today', @root)
