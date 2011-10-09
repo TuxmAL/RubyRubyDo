@@ -17,7 +17,7 @@ module RubyRubyDo
     TODO_FONT_SIZE_DIFFERENCE.freeze
     
     #Set the date format for the undone task
-    TODO_DATE_FORMAT = '%a %d/%m'
+    TODO_DATE_FORMAT = '%d/%m/%Y'#'%a %d/%m'
     TODO_DATE_FORMAT.freeze
 
     attr_writer :data
