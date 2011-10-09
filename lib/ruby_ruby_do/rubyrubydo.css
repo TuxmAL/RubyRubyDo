@@ -5,6 +5,7 @@
     Description:
         Purpose of the stylesheet follows.
 */
+
 QTreeView {
     show-decoration-selected: 0;
 }
