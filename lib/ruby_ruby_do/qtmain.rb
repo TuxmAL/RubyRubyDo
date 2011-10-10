@@ -71,7 +71,7 @@ module RubyRubyDo
               if (dlg.exec == Qt::Dialog::Accepted)
                 date_show.text = Date.jd(dlg.selected_date).strftime(TODO_DATE_FORMAT)
               else
-                date_show.text = ''
+                date_show.text = nil
               end
             end
           end
