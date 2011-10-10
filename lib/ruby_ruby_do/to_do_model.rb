@@ -201,20 +201,21 @@ module RubyRubyDo
     end
 
     def insertRows(task, row, count, parent = Qt::ModelIndex.new)
-      p = index(4)
-      p = index(6) if task.done?
-      p = index(5) if task.due_with_no_date?
-      p = index(0) if task.overdue?
-      p = index(1) if task.due_today?
-      p = index(2) if task.due_tomorrow?
-      p = index(3) if task.due_this_week?
-      x = itemFromIndex(p)
+      # Correctly ordered index assignation, if you want show task appropriately
+      idx = 4
+      idx = 6 if task.done?
+      idx = 5 if task.due_with_no_date?
+      idx = 3 if task.due_this_week?
+      idx = 1 if task.due_today?
+      idx = 2 if task.due_tomorrow?
+      idx = 0 if task.overdue?
+      p = index(idx)
       r = rowCount p
       beginInsertRows(p, r, (r + (count - 1)))
       @todo_list << task
-      ToDoQtModelItem.new(task, x)
+      ToDoQtModelItem.new(task, itemFromIndex(p))
       endInsertRows()
-      emit 	rowsInserted p, r,  (r + (count - 1))
+      emit rowsInserted p, r,  (r + (count - 1))
       return true
     end
 
