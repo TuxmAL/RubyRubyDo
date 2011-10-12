@@ -140,12 +140,22 @@ module RubyRubyDo
       return false if (not index.valid?) or (role != Qt::EditRole and role != Qt::CheckStateRole)
       item = itemFromIndex(index)
       return false if not item
-      emit layoutAboutToBeChanged
-      # Update your internal data
-      changePersistentIndex(index, index)
       changed = item.set_data(index.column, value, role)
       emit dataChanged(index, index) if changed
-      emit layoutChanged
+      puts Qt::CheckStateRole
+      if role == Qt::CheckStateRole
+        case value.value
+        when (Qt::Checked).to_i
+          category = index(6)
+        when (Qt::Unchecked).to_i
+          category = index_from_due_date(item.task)
+        end
+        p = itemFromIndex(index.parent)
+        beginMoveRows(index.parent , index.row, index.row, category, rowCount(category))
+        p.removeChild item
+        itemFromIndex(category).addChild(item)
+        endMoveRows()
+      end
       changed
     end
 
@@ -201,14 +211,7 @@ module RubyRubyDo
     end
 
     def insertRows(task, row, count, parent = Qt::ModelIndex.new)
-      p = index(4)
-      p = index(6) if task.done?
-      p = index(5) if task.due_with_no_date?
-      p = index(0) if task.overdue?
-      p = index(1) if task.due_today?
-      p = index(2) if task.due_tomorrow?
-      p = index(3) if task.due_this_week?
-      x = itemFromIndex(p)
+      x = itemFromIndex(index_from_due_date(task))
       r = rowCount p
       beginInsertRows(p, r, (r + (count - 1)))
       @todo_list << task
@@ -219,6 +222,18 @@ module RubyRubyDo
     end
 
     private
+
+    def index_from_due_date(task)
+      # the assignation ordering must not be changed!
+      idx = 4                           # as default category is "Next weeks"
+      idx = 5 if task.due_with_no_date? # category is "No date"
+      idx = 0 if task.overdue?          # category is "Overdue"
+      idx = 3 if task.due_this_week?    # category is "This week" (but will include today and tomorrow!)
+      idx = 1 if task.due_today?        # category is "Today"
+      idx = 2 if task.due_tomorrow?     # category is "Tomorrow"
+      idx = 6 if task.done?             # category is "Done"
+      return index(idx)
+    end
   
     def setup_todo
       today = Date.today

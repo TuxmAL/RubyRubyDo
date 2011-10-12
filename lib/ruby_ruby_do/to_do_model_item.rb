@@ -86,6 +86,11 @@ module RubyRubyDo
       item.parent = self
       @children << item
     end
+    
+    def removeChild(item)
+      item.parent = nil
+      @children.delete(item)
+    end
 
     # Items created as needed fro every kind of row and column.
     def flags(column)
@@ -219,6 +224,9 @@ module RubyRubyDo
         false
       end
     end
-    
+
+    def task
+      @data if @data.respond_to?(:due_date)
+    end
   end
 end
