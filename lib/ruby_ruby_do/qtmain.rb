@@ -71,7 +71,7 @@ module RubyRubyDo
               if (dlg.exec == Qt::Dialog::Accepted)
                 date_show.text = Date.jd(dlg.selected_date).strftime(TODO_DATE_FORMAT)
               else
-                date_show.text = ''
+                date_show.text = nil
               end
             end
           end
@@ -95,17 +95,14 @@ module RubyRubyDo
                 todo = treeview.model.todo
                 if treeview.selectionModel.hasSelection
                   puts "selection: #{treeview.selected_indexes.first.inspect}"
-                  priority = treeview.selected_indexes.first.internal_pointer.priority
-                  row = treeview.selected_indexes.first.row
+                  pri = treeview.selected_indexes.first.internal_pointer.priority
                 else
-                  priority = 3
-                  row = todo.count - 1
+                  pri = 1
                 end
-                # TODO: Date.parse(date_show.text) doesn't work if date is in european format (dd/mm/yyyy)!
-                new_task = ToDo::Task.new(line_edit.display_text, priority, ((date_show.text.nil?)? nil: Date.parse(date_show.text)))
+                new_task = ToDo::Task.new(line_edit.display_text, pri, ((date_show.text.nil?)? nil: Date.strptime(date_show.text, TODO_DATE_FORMAT)))
                 treeview.model.insertRow new_task, 1
               end
-              line_edit.text = date_show.text = ''
+              line_edit.text = date_show.text = nil
             end
           end
           Qt::Object.connect(line_edit,  SIGNAL(:returnPressed), button_add, SIGNAL(:clicked) )

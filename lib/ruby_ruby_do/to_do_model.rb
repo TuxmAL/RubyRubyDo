@@ -215,9 +215,9 @@ module RubyRubyDo
       r = rowCount p
       beginInsertRows(p, r, (r + (count - 1)))
       @todo_list << task
-      ToDoQtModelItem.new(task, x)
+      ToDoQtModelItem.new(task, itemFromIndex(p))
       endInsertRows()
-      emit 	rowsInserted p, r,  (r + (count - 1))
+      emit rowsInserted p, r,  (r + (count - 1))
       return true
     end
 
