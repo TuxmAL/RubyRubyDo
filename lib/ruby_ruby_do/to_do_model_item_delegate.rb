@@ -65,8 +65,9 @@ module RubyRubyDo
           editor.current_index = 9
         else
           # TODO: this code, has been stolen by plasma_edit_task and *must* be _refactored_!
-          idx = editor.findData Qt::Variant.new(value)
-          puts "setEditorData: finda_data=#{idx}; value.to_date=#{value.to_date}"
+          due_date = Date.strptime(value, RubyRubyDo::TODO_DATE_FORMAT)
+          idx = editor.findData Qt::Variant.new(due_date)
+          puts "setEditorData: finda_data=#{idx}; value.to_date=#{Qt::Variant.new(due_date).to_date}"
           editor.current_index = (idx != -1)? idx: 10
           editor.showPopup
           #################################################################
@@ -92,7 +93,7 @@ module RubyRubyDo
             puts "setModelData calendar (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
           else
             value = Qt::Variant.new index.data.value
-          end          
+          end
         end
       else
         value = editor.text
