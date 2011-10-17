@@ -142,12 +142,16 @@ module RubyRubyDo
       return false if not item
       changed = item.set_data(index.column, value, role)
       emit dataChanged(index, index) if changed
-      puts Qt::CheckStateRole
-      if role == Qt::CheckStateRole
-        case value.value
-        when (Qt::Checked).to_i
-          category = index(6)
-        when (Qt::Unchecked).to_i
+      if [0, 4].include? index.column  
+        case index.column 
+        when 0 
+          case value.value
+          when (Qt::Checked).to_i
+            category = index(6)
+          when (Qt::Unchecked).to_i
+            category = index_from_due_date(item.task)
+          end
+        when 4
           category = index_from_due_date(item.task)
         end
         p = itemFromIndex(index.parent)
