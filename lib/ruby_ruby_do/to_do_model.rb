@@ -215,13 +215,13 @@ module RubyRubyDo
     end
 
     def insertRows(task, row, count, parent = Qt::ModelIndex.new)
-      x = itemFromIndex(index_from_due_date(task))
-      r = rowCount p
-      beginInsertRows(p, r, (r + (count - 1)))
+      y = index_from_due_date(task)
+      r = rowCount y
+      beginInsertRows(y, r, (r + (count - 1)))
       @todo_list << task
-      ToDoQtModelItem.new(task, itemFromIndex(p))
+      ToDoQtModelItem.new(task, itemFromIndex(y))
       endInsertRows()
-      emit rowsInserted p, r,  (r + (count - 1))
+      emit rowsInserted y, r,  (r + (count - 1))
       return true
     end
 
