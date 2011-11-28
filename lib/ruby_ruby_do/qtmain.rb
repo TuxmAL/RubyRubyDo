@@ -7,6 +7,7 @@ $:.unshift File.join(File.dirname(__FILE__))
 require 'to_do'
 require 'to_do_model'
 require 'to_do_model_item_delegate'
+require 'to_do_edit_task'
 
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
@@ -122,7 +123,7 @@ module RubyRubyDo
             connect(SIGNAL :clicked) do
               # TODO: set parameter correctly!
               task_idx ||= treeview.selectedIndexes.first if treeview.selectionModel.hasSelection
-              dlg = PlasmaEditTask.new self.parent, task_idx
+              dlg = ToDoQtEditTask.new self.parent, task_idx
               if (dlg.exec == Qt::Dialog::Accepted)
                 puts "ok"
               else
