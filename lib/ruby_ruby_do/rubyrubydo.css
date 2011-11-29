@@ -8,6 +8,7 @@
 
 QTreeView {
     show-decoration-selected: 0;
+     background: #888888;
 }
 
  QTreeView::branch {
@@ -18,9 +19,10 @@ QTreeView {
  QTreeView::branch:open:has-children:has-siblings,
  QTreeView::item:open:has-children:has-siblings,
  QTreeView::branch:open:has-children:!has-siblings,
- QTreeView::item:open:has-children:!has-siblings
+ QTreeView::item:open:has-children:!has-siblings,
+ QTreeView::item:open:has-children:hover 
 {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #888888, stop: 1 #bbbbbb);
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #888888, stop: 0.4 #bbbbbb, stop: 1 #888888);
     border-bottom: 1px solid #cccccc;
  }
  
@@ -30,7 +32,7 @@ QTreeView {
      border-bottom: 1px solid #bfcde4;
      border-right: 0px solid #bfcde4;
      border-left: 0px solid #bfcde4;
- }
+ } 
 
  QTreeView::item, QTreeView::branch {
      background: #b9b9b9;
