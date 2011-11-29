@@ -11,39 +11,46 @@ QTreeView {
      background: #888888;
 }
 
- QTreeView::branch {
+QTreeView::branch {
     border-image: none;
     background: palette(base);
- }
+}
 
- QTreeView::branch:open:has-children:has-siblings,
- QTreeView::item:open:has-children:has-siblings,
- QTreeView::branch:open:has-children:!has-siblings,
- QTreeView::item:open:has-children:!has-siblings,
- QTreeView::item:open:has-children:hover 
+QTreeView::item:open:has-children:has-siblings,
+QTreeView::item:open:has-children:!has-siblings,
+QTreeView::item:open:has-children:hover,
+QTreeView::item:open:has-children:has-siblings:hover,
+QTreeView::item:open:has-children:!has-siblings:hover,
+QTreeView::branch:open:has-children:has-siblings,
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:!has-siblings:hover,
+QTreeView::branch:open:has-children:has-siblings:hover
 {
     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #888888, stop: 0.4 #bbbbbb, stop: 1 #888888);
+    border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
  }
  
- QTreeView::item:hover {
+QTreeView::item:hover {
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
      border-top: 1px solid #bfcde4;
      border-bottom: 1px solid #bfcde4;
-     border-right: 0px solid #bfcde4;
-     border-left: 0px solid #bfcde4;
+/*     border-right: 0px solid #bfcde4;
+     border-left: 0px solid #bfcde4; */
  } 
 
  QTreeView::item, QTreeView::branch {
      background: #b9b9b9;
+     selection-background-color: #b9b9b9;
  }
 
- QTreeView::item:selected:active{
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #aaaaaa, stop: 1 #dddddd);
+ QTreeView::item:selected:active {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #aaaaaa, stop: 0.4 #dddddd, stop: 1 #aaaaaa);
  }
 
- QTreeView::item:selected:!active {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7e7e7, stop: 1 #dadada);
+ QTreeView::item:selected:!active
+ {
+     background: #dadada;
  }
 
 /* The branches of a QTreeView are styled using the ::branch subcontrol. The following stylesheet color codes the various states when drawing a branch.*/
