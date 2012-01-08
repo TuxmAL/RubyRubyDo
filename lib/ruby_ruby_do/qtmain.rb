@@ -93,10 +93,10 @@ module RubyRubyDo
             self.flat = true
             connect(SIGNAL :clicked) do
               if line_edit.display_text != ""
-                todo = treeview.model.todo
+                #todo = treeview.model.todo
                 if treeview.selectionModel.hasSelection
-                  puts "selection: #{treeview.selected_indexes.first.inspect}"
-                  pri = treeview.selected_indexes.first.internal_pointer.priority
+                  puts "selection: #{treeview.model.itemFromIndex(treeview.selected_indexes.first)}"
+                  pri = (treeview.model.itemFromIndex(treeview.selected_indexes.first)).task.priority
                 else
                   pri = 1
                 end

@@ -54,7 +54,7 @@ class ToDoQtEditTask < Qt::Dialog
     unless @description.to_plain_text.strip.empty?
       # TODO Now cannot create a new element the old way: @task ||= ToDo::Task.new() because we now use a Qt:ModelIndex object.
       #@task_idx.internal_pointer ||= ToDo::Task.new()
-      task = @task_idx.internal_pointer
+      task = @task_idx.model.itemFromIndex(@task_idx).task
       task.description = @description.to_plain_text.strip
       @tool_buttons.each_with_index { |itm, idx| task.priority = (idx+1) if itm.checked }
       value = @combo_box.item_data(@combo_box.current_index())
