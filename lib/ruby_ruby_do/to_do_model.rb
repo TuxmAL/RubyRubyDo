@@ -8,6 +8,7 @@ module RubyRubyDo
   class ToDoQtModel < Qt::AbstractItemModel
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
     signals 'rowsInserted(const QModelIndex &, int, int)'
+    signals 'rowsRemoved(const QModelIndex &, int, int)'
 
     @@todo_list = nil
 
@@ -214,6 +215,7 @@ module RubyRubyDo
       return insertRows(task, row, 1, parent)
     end
 
+    # Warning! insertRows implementation must depends on insertRow and not viceversa as now is!
     def insertRows(task, row, count, parent = Qt::ModelIndex.new)
       y = index_from_due_date(task)
       r = rowCount y
@@ -222,6 +224,24 @@ module RubyRubyDo
       ToDoQtModelItem.new(task, itemFromIndex(y))
       endInsertRows()
       emit rowsInserted y, r,  (r + (count - 1))
+      return true
+    end
+
+    def delete_row(index)
+      return removeRow(index.model.itemFromIndex(index), index.row, index.parent)
+    end
+    
+    def removeRow(task, row, parent = Qt::ModelIndex.new)
+      return removeRows(task, row, 1, parent)
+    end
+
+    # Warning! removeRows implementation must depends on removeRow and not viceversa as now is!
+    def removeRows(task, row, count, parent = Qt::ModelIndex.new)
+      beginRemoveRows(parent, row, (row + (count - 1)))
+      @todo_list.delete(task)
+      itemFromIndex(parent).removeChild(task)
+      endRemoveRows()
+      emit rowsRemoved parent, row,  (row + (count - 1))
       return true
     end
 

@@ -45,7 +45,8 @@ class ToDoQtEditTask < Qt::Dialog
          Qt::Object.trUtf8("Do you really want to delete this task?"), 
          Qt::MessageBox.Yes | Qt::MessageBox.No, Qt::MessageBox.No)
     if ret_val == Qt::MessageBox.Yes
-      @task_idx.model.removeRow(@task_idx.row)
+      @task_idx.model.delete_row(@task_idx)
+      @task_idx = nil
       emit accept
     end
   end
