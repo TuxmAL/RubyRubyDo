@@ -275,6 +275,8 @@ module RubyRubyDo
       task9 = ToDo::Task.new 'Elenchi', 1, yesterday
       todo_list << task1 << task2 << task3 << task4 << task5 << task6 <<
         task7 << task8 << task9
+      todo_list << ToDo::Task.new('Compra il latte 5', 5, today)
+      todo_list << ToDo::Task.new('Compra il latte 3', 3, today)
     end
   
   end

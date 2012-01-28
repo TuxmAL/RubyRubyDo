@@ -27,12 +27,21 @@ module ToDo
       @id = Time.now.tv_usec
     end
 
-    # TODO: see is correctly implemented the spaceship operator!
+    # Define how to order two  _tasks_.
+    # if not done yet, a task is ordered by due date (no due date are always at the
+    # bottom) and if equals by priority (_PRIORITYMAX_ being the highest and 
+    # __PRIORITYMIN__ the lowest).
+    # if the task is already done, then we first check if both are fulfilled: 
+    # in this case the ordering is first by fulfillment date 
+    #TODO: seems buggy yet 
     def <=>(a_task)
-      if due_date.nil?
-        @priority <=> a_task.priority
+#      puts "#{self.inspect} <=> #{a_task.inspect}"
+      if @fulfilled_date.nil? 
+        return -1 if !(a_task.fulfilled_date).nil?
+        compare_by_due_date(a_task)
       else
-        (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
+        return 1 if (a_task.fulfilled_date).nil?
+        (@fulfilled_date <=> a_task.fulfilled_date).nonzero? || compare_by_due_date(a_task)
       end
     end
 
@@ -88,6 +97,24 @@ module ToDo
       @saved
     end
 
+  private 
+
+    def compare_by_due_date(a_task)
+      if @due_date.nil?
+#        puts "    (@due_date == #{@due_date})"        
+#        puts "    (a_task.due_date == #{a_task.due_date})"        
+#        puts "    (pri => #{ @priority <=> a_task.priority})"        
+#        return -1 if !(a_task.due_date).nil?
+        return @priority <=> a_task.priority
+      else
+        return 1 if (a_task.due_date).nil?
+#        puts "  * (@due_date == #{@due_date})"        
+#        puts "  * (a_task.due_date == #{a_task.due_date})"        
+#        puts "  * ( => #{@due_date <=> a_task.due_date})"        
+        (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
+      end
+    end
+  
   end
   
 end

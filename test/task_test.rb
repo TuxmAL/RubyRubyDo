@@ -111,7 +111,7 @@ class TaskTest < Test::Unit::TestCase
 
   must 'task done has fulfilled date set to the date of fulfilment' do
     a_task = ToDo::Task.new('test task', 3).done
-    assert_equal(Date.today, a_task.fulfilled_date)
+    assert_equal(@today, a_task.fulfilled_date)
   end
 
   must 'task undone has fulfilled date reset to nil' do
@@ -123,7 +123,7 @@ class TaskTest < Test::Unit::TestCase
     a_task = ToDo::Task.new('test task', 3)
     a_task.done
     assert_raise NoMethodError do
-      a_task.fulfillment_date = Date.today + 3
+      a_task.fulfillment_date = @today + 3
     end
   end
 
@@ -136,19 +136,19 @@ class TaskTest < Test::Unit::TestCase
   end
 
   must 'task due for today if queryed for' do
-    a_task = ToDo::Task.new('test task', 3, Date.today)
+    a_task = ToDo::Task.new('test task', 3, @today)
     assert_equal(a_task.due_today?, true) && assert_equal(a_task.done, false)
   end
 
   must 'task due for tomorrow if queryed for' do
-    a_task = ToDo::Task.new('test task', 3, Date.today + 1)
+    a_task = ToDo::Task.new('test task', 3, @tomorrow)
     assert_equal(a_task.due_tomorrow?, true) && assert_equal(a_task.done, false)
   end
 
   must 'task due for this week if queryed for' do
-    a_task = ToDo::Task.new('test task', 3, Date.today + 4)
+    a_task = ToDo::Task.new('test task', 3, @today + 4)
     assert_equal(a_task.due_this_week?, true) && assert_equal(a_task.done, false)
-    a_task = ToDo::Task.new('test task', 3, Date.today + 7)
+    a_task = ToDo::Task.new('test task', 3, @today + 7)
     assert_equal(a_task.due_this_week?, false) && assert_equal(a_task.done, false)
   end
 
@@ -156,4 +156,31 @@ class TaskTest < Test::Unit::TestCase
     a_task = ToDo::Task.new('test task', 3)
     assert_equal(a_task.due_with_no_date?, true) && assert_equal(a_task.done, false)
   end
+  
+  must 'tasks be sorted correctly' do
+    list = []
+    list << ToDo::Task.new('t0', 2, @yesterday)
+    list << ToDo::Task.new('t-1', 1, @yesterday)
+    list << ToDo::Task.new('t8', 2).done
+    list << ToDo::Task.new('t7', 2, @yesterday).done
+    list << ToDo::Task.new('t1', 1, @today)
+    list << ToDo::Task.new('t2', 3, @today)
+    list << ToDo::Task.new('t3', 5, @tomorrow)
+    list << ToDo::Task.new('t4', 4, @tomorrow)
+    list << ToDo::Task.new('t6', 3)
+    list << ToDo::Task.new('t5', 2)
+    (list.sort).each {|t| puts t.description }
+    flunk 'sorted?'
+  end
 end
+
+t-1
+t5
+t0
+t1
+t6
+t2
+t4
+t3
+t8
+t7
