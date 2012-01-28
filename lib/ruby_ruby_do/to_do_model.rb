@@ -238,14 +238,27 @@ module RubyRubyDo
     # Warning! removeRows implementation must depends on removeRow and not viceversa as now is!
     def removeRows(task, row, count, parent = Qt::ModelIndex.new)
       beginRemoveRows(parent, row, (row + (count - 1)))
-      @todo_list.delete(task)
-      itemFromIndex(parent).removeChild(task)
+      ### nuovo codice
+      parent_item = itemFromIndex(parent)
+      for elem in ((row + count - 1)..row)
+        eradicate_row(elem, parent_item)
+      end
+      ### fine nuovo codice
+      #@todo_list.delete(task)
+      #itemFromIndex(parent).removeChild(task)
       endRemoveRows()
       emit rowsRemoved parent, row,  (row + (count - 1))
       return true
     end
 
     private
+
+    def eradicate_row(row, parent_item)
+      task = parent_item.child(row)
+      @todo_list.delete(task)
+      parent_item.removeChild(task)
+      return true
+    end
 
     def index_from_due_date(task)
       # the assignation ordering must not be changed!
