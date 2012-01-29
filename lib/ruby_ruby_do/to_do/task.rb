@@ -35,13 +35,12 @@ module ToDo
     # in this case the ordering is first by fulfillment date 
     #TODO: seems buggy yet 
     def <=>(a_task)
-#      puts "#{self.inspect} <=> #{a_task.inspect}"
-      if @fulfilled_date.nil? 
-        return -1 if !(a_task.fulfilled_date).nil?
-        compare_by_due_date(a_task)
-      else
-        return 1 if (a_task.fulfilled_date).nil?
+      if !(@fulfilled_date.nil? or a_task.fulfilled_date.nil?)
         (@fulfilled_date <=> a_task.fulfilled_date).nonzero? || compare_by_due_date(a_task)
+      else
+        compare_by_due_date(a_task) if (@fulfilled_date.nil? and a_task.fulfilled_date.nil?)
+        return 1 if @fulfilled_date.nil?
+        return -1 if a_task.fulfilled_date.nil?
       end
     end
 
@@ -100,18 +99,12 @@ module ToDo
   private 
 
     def compare_by_due_date(a_task)
-      if @due_date.nil?
-#        puts "    (@due_date == #{@due_date})"        
-#        puts "    (a_task.due_date == #{a_task.due_date})"        
-#        puts "    (pri => #{ @priority <=> a_task.priority})"        
-#        return -1 if !(a_task.due_date).nil?
-        return @priority <=> a_task.priority
-      else
-        return 1 if (a_task.due_date).nil?
-#        puts "  * (@due_date == #{@due_date})"        
-#        puts "  * (a_task.due_date == #{a_task.due_date})"        
-#        puts "  * ( => #{@due_date <=> a_task.due_date})"        
+      if !(@due_date.nil? or a_task.due_date.nil?)
         (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
+      else
+        return (@priority <=> a_task.priority) if @due_date.nil? and (a_task.due_date).nil?
+        return 1 if (@due_date).nil?
+        return -1 if (a_task.due_date).nil?
       end
     end
   

@@ -159,28 +159,21 @@ class TaskTest < Test::Unit::TestCase
   
   must 'tasks be sorted correctly' do
     list = []
-    list << ToDo::Task.new('t0', 2, @yesterday)
-    list << ToDo::Task.new('t-1', 1, @yesterday)
-    list << ToDo::Task.new('t8', 2).done
-    list << ToDo::Task.new('t7', 2, @yesterday).done
-    list << ToDo::Task.new('t1', 1, @today)
-    list << ToDo::Task.new('t2', 3, @today)
-    list << ToDo::Task.new('t3', 5, @tomorrow)
-    list << ToDo::Task.new('t4', 4, @tomorrow)
-    list << ToDo::Task.new('t6', 3)
-    list << ToDo::Task.new('t5', 2)
-    (list.sort).each {|t| puts t.description }
-    flunk 'sorted?'
+    list << (ToDo::Task.new('t12', 2).done)
+    list << ToDo::Task.new('t11', 1, @yesterday).done
+    list << ToDo::Task.new('t10', 3)
+    list << ToDo::Task.new('t09', 1)
+    list << ToDo::Task.new('t07', 3, @today + 4)
+    list << ToDo::Task.new('t06', 2, @today + 4)
+    list << ToDo::Task.new('t08', 1, @today + 5)
+    list << ToDo::Task.new('t01', 2, @yesterday)
+    list << ToDo::Task.new('t00', 1, @yesterday)
+    list << ToDo::Task.new('t05', 5, @tomorrow)
+    list << ToDo::Task.new('t04', 4, @tomorrow)
+    list << ToDo::Task.new('t03', 3, @today)
+    list << ToDo::Task.new('t02', 1, @today)
+
+    oredered_list = list.sort.map {|t| t.description }
+    assert_equal(%w[t00 t01 t02 t03 t04 t05 t06 t07 t08 t09 t10 t11 t12], oredered_list)
   end
 end
-
-t-1
-t5
-t0
-t1
-t6
-t2
-t4
-t3
-t8
-t7
