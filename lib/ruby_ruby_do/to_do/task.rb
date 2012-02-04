@@ -33,14 +33,13 @@ module ToDo
     # __PRIORITYMIN__ the lowest).
     # if the task is already done, then we first check if both are fulfilled: 
     # in this case the ordering is first by fulfillment date 
-    #TODO: seems buggy yet 
     def <=>(a_task)
       if !(@fulfilled_date.nil? or a_task.fulfilled_date.nil?)
-        (@fulfilled_date <=> a_task.fulfilled_date).nonzero? || compare_by_due_date(a_task)
+        return (-(@fulfilled_date <=> a_task.fulfilled_date)).nonzero? || compare_by_due_date(a_task)
       else
-        compare_by_due_date(a_task) if (@fulfilled_date.nil? and a_task.fulfilled_date.nil?)
-        return 1 if @fulfilled_date.nil?
-        return -1 if a_task.fulfilled_date.nil?
+        return compare_by_due_date(a_task) if (@fulfilled_date.nil? and a_task.fulfilled_date.nil?)
+        return -1 if @fulfilled_date.nil?
+        return 1 if a_task.fulfilled_date.nil?
       end
     end
 
