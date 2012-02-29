@@ -1,7 +1,6 @@
+=This is RubyRubyDo (ready for you)
+
 == Description
-
-This is RubyRubyDo ready for you.
-
 RubyRubyDo is a Ruby ToDo application, aiming to be used as a KDE plasmoid.
 I really missed this feature on KDE and whay I found already was too overkill
 (integration with nepomuk, web server on local machine!) or required to give
@@ -44,6 +43,27 @@ Unmark a task as done:
 Retrieve a saved todo:
   todo_list = ToDo::ToDo.new
   todo_list.load
+
+Retrieve all done tasks
+  done_list = todo_list.done()
+
+Retrieve all tasks due after a given date and not done yet
+  due_after_today_list = todo_list.due_after(Date.today)
+
+Retrieve all tasks due between two given dates not done yet. The first date must be less 
+or equal to the second one, otherwise nil is returned
+  due_list = todo_list.due_between(Date.today - 1, Date.today + 1)
+
+Retrieve all tasks due for a given date not done yet 
+  due_today_list = todo_list.due_for(Date.today)
+ 
+Retrieve all tasks without a due date not done yet. 
+  due_list = todo_list.with_no_date()
+
+Retrieve all overdue tasks not done yet 
+  overdue_list = todo_list.overdue()
+
+
 
 = Installing RubyRubyDo
 To be completed.
