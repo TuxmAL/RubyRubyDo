@@ -1,0 +1,1 @@
+I just gave it a try using a font of 25pt --just to be sure enough ;-)-- resulting in the same oddity: text rendered as Qt::Font.Bold is rendered at 25pt, whereas text rendered as normal is rendered with the standard pitch (10pt, 
