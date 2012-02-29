@@ -24,7 +24,7 @@ module ToDo
   class ToDo
     include Enumerable
 
-    # where we sill store our tasks
+    # where we will store our tasks
     TODOFILE = File.expand_path('~/.RubyRuby.Do')
 
     def initialize
@@ -65,7 +65,7 @@ module ToDo
       (@tasks.select { |t| t.due_date == date && ! t.done? }).sort
     end
     
-    # Returns all overdue tasks not done yet .
+    # Returns all overdue tasks not done yet.
     def overdue
       (@tasks.select { |t| t.overdue? && ! t.done? }).sort
     end
@@ -81,7 +81,7 @@ module ToDo
     end
 
     # Returns all tasks due between two given _dates_ not done yet.
-    # The first date must be less or equal to the secon one, else nil is returned.
+    # The first date must be less or equal to the second one, else nil is returned.
     def due_between(a_date, another_date)
       #min_date, max_date = [a_date, another_date].minmax
       (@tasks.select { |t| ! t.due_date.nil? && ((a_date..another_date).include? t.due_date) && ! t.done? }).sort
@@ -104,7 +104,7 @@ module ToDo
     def length
       @tasks.length
     end
-    
+
     def save
       File.open(@filename, 'w') do |f|
         @tasks.each {|t| t.saved}
