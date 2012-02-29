@@ -1,8 +1,29 @@
+# This ToDoQtModelItem class is largely inspired to an example of a ModelItem
+# from mkfs blog
+# See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] 
+# Author::    TuxmAL (mailto:tuxmal@tiscali.it)
+# Copyright:: Copyright (c) 2011 TuxmAL
+# License::
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+# 
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+# 
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module RubyRubyDo
 
-  # An example of a ModelItem for use in RQtModel. Note that it does not need to descend from QObject.
-  #
-  # The ModelItem consists of a data member (the text displayed in the tree), a parent ToDoQtModelItem, and an array of child ToDoQtModelItems. This array corresponds directly to the Model 'rows' owned by this item.
+  # An example of a ModelItem for use in RQtModel. Note that it does not need to
+  # descend from QObject.
+  # The ModelItem consists of a data member (the text displayed in the tree), a 
+  # parent ToDoQtModelItem, and an array of child ToDoQtModelItems. This array 
+  # corresponds directly to the Model 'rows' owned by this item.
   # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
   class ToDoQtModelItem
 

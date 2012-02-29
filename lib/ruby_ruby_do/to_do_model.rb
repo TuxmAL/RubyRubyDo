@@ -1,10 +1,29 @@
+# This ToDoQtModel class is largely inspired to an example of a ModelItem
+# from mkfs blog
+# See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
+# Author::    TuxmAL (mailto:tuxmal@tiscali.it)
+# Copyright:: Copyright (c) 2011 TuxmAL
+# License::
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+# 
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+# 
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 require 'to_do_model_item'
 
 module RubyRubyDo
 
-   # A basic tree model. The contents of all tree nodes are determined by the model items, 
-   # not the model, so they may be loaded lazily.
-   # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
+  # A basic tree model. The contents of all tree nodes are determined by the 
+  # model items, not the model, so they may be loaded lazily.
+  # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
   class ToDoQtModel < Qt::AbstractItemModel
     signals 'dataChanged(const QModelIndex &, const QModelIndex &)'
     signals 'rowsInserted(const QModelIndex &, int, int)'
@@ -290,6 +309,14 @@ module RubyRubyDo
         task7 << task8 << task9
       todo_list << ToDo::Task.new('Compra il latte 5', 5, today)
       todo_list << ToDo::Task.new('Compra il latte 3', 3, today)
+#      t = ToDo::Task.new('Chiave inglese 1', 1).done
+#      todo_list << t
+      t =  ToDo::Task.new('Chiave inglese 4', 4).done
+      todo_list << t
+#      t =  ToDo::Task.new('Procurarsi chiave a pappagallo domani 3', 3).done
+#      todo_list << t
+#      t =  ToDo::Task.new('Procurarsi chiave a pappagallo domani 1', 1, tomorrow)
+#      todo_list << t.done
     end
   
   end
