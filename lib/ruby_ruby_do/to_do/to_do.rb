@@ -106,6 +106,11 @@ module ToDo
       @tasks.length
     end
 
+    # Return true if todo list is empty
+    def empty?
+      @tasks.empty?
+    end
+
     def save
       File.open(@filename, 'w') do |f|
         @tasks.each {|t| t.saved}
