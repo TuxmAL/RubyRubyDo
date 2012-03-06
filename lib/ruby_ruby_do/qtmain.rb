@@ -72,6 +72,15 @@ module RubyRubyDo
         self.item_delegate = ToDoQtModelItemDelegate.new self
         #(0..model.columnCount(0)).each { |i| resizeColumnToContents i }
         #self.alternatingRowColors = true
+        self.model.connect(SIGNAL('dataChanged(const QModelIndex &, const QModelIndex &)')) do
+          self.model.todo.save
+        end
+        self.model.connect(SIGNAL('rowsInserted(const QModelIndex &, int, int)')) do
+          self.model.todo.save
+        end
+        self.model.connect(SIGNAL('rowsRemoved(const QModelIndex &, int, int)')) do
+          self.model.todo.save
+        end        
       end
       treeview.expand_all
       root_index = Qt::ModelIndex.new
@@ -142,6 +151,7 @@ module RubyRubyDo
               task_idx ||= treeview.selectedIndexes.first if treeview.selectionModel.hasSelection
               dlg = ToDoQtEditTask.new self.parent, task_idx
               if (dlg.exec == Qt::Dialog::Accepted)
+                treeview.model.todo.save
                 puts "ok"
               else
                 puts "cancel"

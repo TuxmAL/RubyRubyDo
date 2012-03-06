@@ -292,31 +292,8 @@ module RubyRubyDo
     end
   
     def setup_todo
-      today = Date.today
-      yesterday = today - 1
-      tomorrow = today + 1
       todo_list = ToDo::ToDo.new
-      task1 = ToDo::Task.new 'Compra il latte', 1, today
-      task2 = ToDo::Task.new 'Telefonare!', 2, tomorrow
-      task3 = ToDo::Task.new 'Garage', 3
-      task4 = ToDo::Task.new 'Andare a pesca', 2, today - 9 
-      task5 = ToDo::Task.new('Procurarsi chiave inglese', 2, today).done
-      task6 = ToDo::Task.new('Procurarsi bulloni', 2, today + 7)
-      task7 = ToDo::Task.new('Aggiustare il razzo', 2, today + 15)
-      task8 = ToDo::Task.new 'Scrivere RubyRubyDo', 1
-      task9 = ToDo::Task.new 'Elenchi', 1, yesterday
-      todo_list << task1 << task2 << task3 << task4 << task5 << task6 <<
-        task7 << task8 << task9
-      todo_list << ToDo::Task.new('Compra il latte 5', 5, today)
-      todo_list << ToDo::Task.new('Compra il latte 3', 3, today)
-#      t = ToDo::Task.new('Chiave inglese 1', 1).done
-#      todo_list << t
-      t =  ToDo::Task.new('Chiave inglese 4', 4).done
-      todo_list << t
-#      t =  ToDo::Task.new('Procurarsi chiave a pappagallo domani 3', 3).done
-#      todo_list << t
-#      t =  ToDo::Task.new('Procurarsi chiave a pappagallo domani 1', 1, tomorrow)
-#      todo_list << t.done
+      todo_list.load
     end
   
   end
