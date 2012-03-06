@@ -273,9 +273,9 @@ module RubyRubyDo
     private
 
     def eradicate_row(row, parent_item)
-      task = parent_item.child(row)
-      @todo_list.delete(task)
-      parent_item.removeChild(task)
+      item = parent_item.child(row)
+      @todo_list.delete(item.task)
+      parent_item.removeChild(item)
       return true
     end
 
