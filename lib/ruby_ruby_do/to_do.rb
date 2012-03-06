@@ -1,5 +1,5 @@
 # -*- encoding: UTF-8 -*-
-# QT main for RubyRubyDo todo application.
+# ToDo module for RubyRubyDo todo library.
 # Author::    TuxmAL (mailto:tuxmal@tiscali.it)
 # Copyright:: Copyright (c) 2011 TuxmAL
 # License::
