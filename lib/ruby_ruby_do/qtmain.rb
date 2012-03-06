@@ -159,7 +159,9 @@ module RubyRubyDo
       end
       # need to shift focus on line_edit instead of date button.
       treeview.set_focus(Qt::OtherFocusReason)
-      (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
+      unless treeview.model.todo.empty?
+        (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
+      end
       show
     end
     exec
