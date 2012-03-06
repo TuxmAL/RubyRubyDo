@@ -112,8 +112,9 @@ module ToDo
       end
     end
 
-    def load
-      @tasks = YAML::load( File.open(@filename, 'r')) # YAML::load_stream( File.open(@filename) )
+    def load      
+      @tasks = YAML::load( File.open(@filename, 'r')) if File.exist?(@filename)
+      return self
     end
 
   end
