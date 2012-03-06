@@ -101,6 +101,7 @@ module ToDo
       @tasks.last
     end
 
+    # Return the number of total tasks
     def length
       @tasks.length
     end
