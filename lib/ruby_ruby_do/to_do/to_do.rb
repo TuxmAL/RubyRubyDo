@@ -111,6 +111,7 @@ module ToDo
         @tasks.each {|t| t.saved}
         f.write(@tasks.to_yaml)
       end
+      return self
     end
 
     def load      
