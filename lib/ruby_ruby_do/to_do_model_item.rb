@@ -54,6 +54,7 @@ module RubyRubyDo
       @@font_metrics = Qt::FontMetrics.new(font)
       @@font_to_do = font.point_size_f
       @@font_category = @@font_to_do + TODO_FONT_SIZE_DIFFERENCE
+      @@text_min_size = @@font_metrics.size(Qt::TextSingleLine, 'x'*10)
     end
 
     def self.font
@@ -167,7 +168,18 @@ module RubyRubyDo
             #when Qt::BackgroundRole
             #  return @brush_for_data
           when Qt::SizeHintRole
-            ret_val = @@font_metrics.size(Qt::TextSingleLine, task.description)+ Qt::Size.new(0, 2) if column == 2
+            case column
+            when 0
+              ret_val = Qt::Size.new(20, 20)
+            when 1
+              ret_val = @@font_metrics.size(Qt::TextSingleLine, 'xx')
+            when 2
+              size = @@text_min_size.expanded_to(@@font_metrics.size(Qt::TextSingleLine, task.description))
+              puts "size(#{size.width},#{size.height})"
+              ret_val = (Qt::Size.new(0, 2) + size)
+            else
+              ret_val = Qt::Size.new(20, 20)              
+            end
           when Qt::CheckStateRole
             if column == 0
                 ret_val = ((task.done?)? Qt::Checked: Qt::Unchecked).to_i
