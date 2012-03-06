@@ -113,7 +113,7 @@ module RubyRubyDo
                 #todo = treeview.model.todo
                 if treeview.selectionModel.hasSelection
                   puts "selection: #{treeview.model.itemFromIndex(treeview.selected_indexes.first)}"
-                  pri = (treeview.model.itemFromIndex(treeview.selected_indexes.first)).task.priority
+                  pri = 1 || (treeview.model.itemFromIndex(treeview.selected_indexes.first)).task.priority
                 else
                   pri = 1
                 end
