@@ -59,12 +59,23 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
 
+  must 'return empty list if no task due for a given date (today) not yet done' do
+    empty_todo = ToDo::ToDo.new 
+    assert_empty empty_todo.due_for(@today)
+  end
+
   must 'return all tasks due after a given date (next week) not yet done' do
     next_week = @today + 7
     due_next_week = @todo_list.due_after(next_week)
     assert_block("Expected (non empty) #{due_next_week.inspect} to be due for (next week)") do     
       due_next_week.length != 0 && due_next_week.each {|t| assert(t.due_date > next_week && ! t.done?)}
     end
+  end
+
+  must 'return empty list if no task due for a given date (next week) not yet done' do
+    next_week = @today + 7
+    empty_todo = ToDo::ToDo.new
+    assert_empty empty_todo.due_for(@today)
   end
 
   must 'return all tasks with no due date not yet done' do
@@ -74,16 +85,26 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
 
+  must 'return empty list if no task exists without date not yet done' do
+    empty_todo = ToDo::ToDo.new 
+    assert_empty empty_todo.with_no_date
+  end
+
   must 'return all tasks due between two dates not yet done' do
     between_dates = @todo_list.due_between(@tomorrow, @today + 6)
     assert_block("Expected (non empty) #{between_dates.inspect} to be between dates") do     
       between_dates.length != 0 && between_dates.each {|t| assert(((@tomorrow..(@today + 6)).include? t.due_date) && ! t.done?)}
     end
-    assert_equal([], @todo_list.due_between(@today + 6, @tomorrow))
+    assert_empty @todo_list.due_between(@today + 6, @tomorrow)
+  end
+
+  must 'return empty list if no task due between two dates not yet done' do
+    empty_todo = ToDo::ToDo.new 
+    assert_empty empty_todo.due_between(@today + 6, @tomorrow)
   end
 
   must 'return no task if 2nd date is grether than 1st' do
-    assert_equal([], @todo_list.due_between(@today + 6, @tomorrow))
+    assert_empty @todo_list.due_between(@today + 6, @tomorrow)
   end
 
   must 'return all overdue tasks not yet done' do
@@ -93,6 +114,11 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
   
+  must 'return empty list if no overdue task not yet done' do
+    empty_todo = ToDo::ToDo.new 
+    assert_empty empty_todo.overdue
+  end
+
   must 'return all done tasks' do
     done = @todo_list.done
     assert_block("Expected (non empty) #{done.inspect} to be done") do
@@ -100,4 +126,9 @@ class ToDoTest < Test::Unit::TestCase
     end
   end
  
+  must 'return empty list if no done task exists' do
+    empty_todo = ToDo::ToDo.new 
+    assert_empty empty_todo.done
+  end
+
 end
