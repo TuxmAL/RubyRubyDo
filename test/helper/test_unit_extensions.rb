@@ -21,6 +21,10 @@ module Test::Unit
         end
       end
     end
-
+    
+    def assert_empty(list)
+      assert list.empty?, "Expected empty list #{list.inspect}."
+    end
+    
   end
 end
