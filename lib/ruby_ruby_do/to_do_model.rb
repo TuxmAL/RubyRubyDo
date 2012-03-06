@@ -161,7 +161,7 @@ module RubyRubyDo
       item = itemFromIndex(index)
       return false if not item
       changed = item.set_data(index.column, value, role)
-      emit dataChanged(index, index) if changed
+      emit dataChanged(index, index) if changed      
       if [0, 4].include? index.column  
         case index.column 
         when 0 
