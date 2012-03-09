@@ -13,12 +13,20 @@ require 'rake/testtask'
 spec = Gem::Specification.new do |s|
   s.name = 'RubyRubyDo'
   s.version = '0.0.1'
+  s.platform = Gem::Platform::RUBY
   s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'Your summary here'
-  s.description = s.summary
+  s.summary = 'RubyRubyDo is a todo application written entirely in Ruby, aiming to be used as a KDE plasmoid.'
+  s.description = s.summary + "\n" + <<SUMMARY
+  RubyRubyDo is a todo application written entirely in Ruby, aiming to be used as a KDE plasmoid. 
+  Currently is under development as QT desktop application, as playground for the plasmoid itself.
+SUMMARY
+  s.requirements << 'ruby-qt4 or qt4-qtruby package needed: install it with your favourite package manager.'
+  s.requirements << 'For mswin32 platform you\'ll need also qtruby4 gem.'
+
   s.author = 'TuxmAL'
   s.email = 'tuxmal@tiscali.it'
-   s.executables = ['qtrubyrubydo']
+  s.homepage = "http://github.com/TuxmAL/RubyRubyDo"  
+  s.executables = ['qtrubyrubydo']
   s.files = %w(LICENSE README Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
   s.require_path = "lib"
   s.bindir = "bin"
