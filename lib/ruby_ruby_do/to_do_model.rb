@@ -72,7 +72,8 @@ module RubyRubyDo
       to_do = todo
       to_do.due_for(Date.today).each {|t| ToDoQtModelItem.new(t, today)}
       to_do.due_for(Date.today + 1).each {|t| ToDoQtModelItem.new(t, tomorrow)}
-      to_do.due_for(Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_weeks)}
+      to_do.due_between(Date.today + 2, Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_days)}
+      to_do.due_after(Date.today + 7).each {|t| ToDoQtModelItem.new(t, next_weeks)}
       to_do.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
       to_do.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
       to_do.done.each {|t| ToDoQtModelItem.new(t, done)}
