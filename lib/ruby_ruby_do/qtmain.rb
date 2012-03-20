@@ -33,6 +33,11 @@ module RubyRubyDo
   TODO_DATE_FORMAT = '%d/%m/%Y'
   TODO_DATE_FORMAT.freeze
 
+  def self.resize_treeview(treeview)
+    unless treeview.model.todo.empty?
+      (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
+    end    
+  end
 
   def self.style_from_sheet(default = false)
     filename = File.join(File.dirname(__FILE__), (APP_NAME + '.css').downcase)
@@ -128,6 +133,7 @@ module RubyRubyDo
                 end
                 new_task = ToDo::Task.new(line_edit.display_text, pri, ((date_show.text.nil?)? nil: Date.strptime(date_show.text, TODO_DATE_FORMAT)))
                 treeview.model.insertRow new_task, 1
+                RubyRubyDo.resize_treeview(treeview)
               end
               line_edit.text = date_show.text = nil
             end
@@ -158,7 +164,7 @@ module RubyRubyDo
               end
             end
           end
-          add_widget(button_detail, 0, Qt::AlignCenter)
+          add_widget(button_detail, 0, Qt::AlignLeft)
           button_quit = Qt::PushButton.new(Qt::Object.trUtf8('Quit')) do
             connect(SIGNAL :clicked) { Qt::Application.instance.quit }
           end
@@ -169,6 +175,7 @@ module RubyRubyDo
       end
       # need to shift focus on line_edit instead of date button.
       treeview.set_focus(Qt::OtherFocusReason)
+      RubyRubyDo::resize_treeview(treeview)
       unless treeview.model.todo.empty?
         (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
       end
@@ -176,5 +183,5 @@ module RubyRubyDo
     end
     exec
   end
-
+ 
 end
