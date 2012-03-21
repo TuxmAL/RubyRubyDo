@@ -137,6 +137,24 @@ module RubyRubyDo
           addWidget(label)
           combo_box = Qt::ComboBox.new() do
             self.sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
+            #TODO: Visually change the value into the combobox when a date is 
+            # selected within the calendar widget, inserting a row if needed or 
+            # reverting to the previous value if cancel is pressed. 
+            self.connect(SIGNAL('currentIndexChanged(int)')) do |idx|
+              value = self.item_data(idx)
+              puts "setModelData date: #{value.value}. #{value.is_valid}"
+              value = Qt::Variant.new if value.to_s == '-'
+              unless value.is_valid
+                dlg = ToDoCalendarDialog.new self
+                if (dlg.exec == Qt::Dialog::Accepted)
+                  puts "returned calendar date (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
+                  self.set_item_data(idx, Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date)))
+                  puts "returned calendar date (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
+                else
+                  self.set_item_data(idx, Qt::Variant.new())
+                end
+              end
+            end
           end
           addWidget(combo_box)
           label.buddy = combo_box
