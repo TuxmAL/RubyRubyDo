@@ -131,4 +131,13 @@ class ToDoTest < Test::Unit::TestCase
     assert_empty empty_todo.done
   end
 
+  must 'remove all done tasks' do
+    task_count = @todo_list.length
+    done_task_count = (@todo_list.done).length
+    @todo_list.purge
+    purged_todo_count = @todo_list.length
+    assert_equal task_count - done_task_count, purged_todo_count
+    assert_empty(@todo_list.done)
+  end
+
 end

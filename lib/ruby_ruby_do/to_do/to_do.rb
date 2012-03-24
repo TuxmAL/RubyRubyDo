@@ -55,6 +55,12 @@ module ToDo
       @tasks.delete_at index
       self
     end
+    
+    # Remove all done tasks
+    def purge
+      @tasks.each_with_index { |t, idx| @tasks.delete_at idx if t.done? }
+      self
+    end
 
     def each
       @tasks.each { |t| yield t }
