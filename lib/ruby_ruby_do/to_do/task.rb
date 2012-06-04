@@ -25,8 +25,7 @@ module ToDo
     PRIORITYMAX = 1
     PRIORITYMIN = 5
 
-    attr_accessor :description, :due_date, :category
-    attr_reader :id, :priority, :fulfilled_date
+    attr_reader :description, :due_date, :category, :id, :priority, :fulfilled_date
 
     def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
         due_date = nil,category = nil)
@@ -37,8 +36,8 @@ module ToDo
       @due_date = due_date
       @fulfilled_date = nil
       @category = category
-      @saved = false
       @id = Time.now.tv_usec
+      @changed_attributes = nil
     end
 
     # Define how to order two  _tasks_.
@@ -58,16 +57,20 @@ module ToDo
     end
 
     def done
-      @saved &= false
-      @fulfilled_date = Date.today
-      @done = true
+      if ! @done
+        changed_attributes[:done] = @done
+        @fulfilled_date = Date.today
+        @done = true
+      end
       self
     end
 
     def undone
-      @saved &= false
-      @fulfilled_date = nil
-      @done = false
+      if @done
+        changed_attributes[:done] = @done
+        @fulfilled_date = nil
+        @done = false
+      end
       self
     end
 
@@ -77,10 +80,33 @@ module ToDo
 
     def priority=(value)
       raise RangeError, "Priority out of range (was #{value.inspect}, expected #{PRIORITYMAX}-#{PRIORITYMIN})" unless !value.nil? && value.between?(PRIORITYMAX, PRIORITYMIN)
-      @priority = value
-      @saved &= false
+      if @priority != value
+        changed_attributes[:priority] = @priority
+        @priority = value
+      end
+    end
+    
+    def description=(value)
+      if @description != value 
+        changed_attributes[:description] = @description
+        @description = value
+      end
     end
 
+    def due_date=(value)
+      if @due_date != value 
+        changed_attributes[:due_date] = @due_date
+        @due_date = value
+      end
+      
+    end
+    def category=(value)
+      if @category != value 
+        changed_attributes[:category] = @category
+        @category = value
+      end
+    end
+    
     def overdue?
       !@done && !@due_date.nil? && (@due_date < Date.today)
     end
@@ -102,15 +128,51 @@ module ToDo
     end
 
     def saved
-      @saved = true      
-    end
+      changed_attributes.clear
+    end  
 
     def saved?
-      @saved
+      ! changed?
     end
 
-  private 
+    # Do any attributes have unsaved changes?
+    #   task.changed? # => false
+    #   task.priority = 5
+    #   task.changed? # => true
+    def changed?
+      !changed_attributes.empty?
+    end
+    
 
+    # List of attributes with unsaved changes.
+    #   task.changed # => []
+    #   task.description = 'take a beer'
+    #   task.changed # => ['description']
+    def changed
+      changed_attributes.keys
+    end
+
+    # Map of changed attrs => [original value, new value].
+    #   task.changes # => {}
+    #   task.description = 'take a beer'
+    #   task.changes # => { 'description' => ['go fishing', 'take a beer'] }
+    def changes
+      changed.inject({}) { |h, attr| h[attr] = attribute_change(attr); h }
+    end
+
+
+  private
+
+      # Map of change <tt>attr => original value</tt>.
+    def changed_attributes
+      @changed_attributes ||= {}
+    end
+
+      # Handle <tt>*_changed?</tt> for +method_missing+.
+    def attribute_changed?(attr)
+      changed_attributes.include?(attr)
+    end
+        
     def compare_by_due_date(a_task)
       if !(@due_date.nil? or a_task.due_date.nil?)
         (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority

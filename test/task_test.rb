@@ -174,6 +174,34 @@ class TaskTest < Test::Unit::TestCase
     list << ToDo::Task.new('t02', 1, @today)
 
     oredered_list = list.sort.map {|t| t.description }
-    assert_equal(%w[t00 t01 t02 t03 t04 t05 t06 t07 t08 t09 t10 t11 t12], oredered_list)
+    assert_equal(%w[t00 t01 t02 t03 t04 t05 t06 t07 t08 t09 t10 t11 t12], oredered_list)    
+  end
+  
+  must 'task_have_changes' do 
+    a_task = ToDo::Task.new('test task', 3, @today + 4)    
+    a_task.description=('new description')
+    assert(a_task.changed?, 'Change in description not registered!')
+    a_task.category = 'new category'
+    assert(a_task.changed?, 'Change in category registered!')
+    a_task.due_date = @today
+    assert(a_task.changed?, 'Change in due date not registered!')
+    a_task.priority = 1
+    assert(a_task.changed?, 'Change in priority not registered!')
+    a_task.done 
+    assert(a_task.changed?, 'Task done not registered!')
+    a_task.undone 
+    assert(a_task.changed?, 'Task undone not registered!')
+  end
+
+  must 'task_have_total_changes' do 
+    a_task = ToDo::Task.new('test task', 3, @today + 4)    
+    a_task.description=('new description')
+    a_task.category = 'new category'
+    a_task.due_date = @today
+    a_task.priority = 1
+    a_task.done 
+    changed = [:description, :due_date, :done, :priority, :category]
+    assert_equal(a_task.changed.length, changed.length)
+    changed.each {|a| assert(a_task.changed.include? a)}
   end
 end
