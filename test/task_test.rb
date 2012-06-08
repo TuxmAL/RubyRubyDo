@@ -187,10 +187,6 @@ class TaskTest < Test::Unit::TestCase
     assert(a_task.changed?, 'Change in due date not registered!')
     a_task.priority = 1
     assert(a_task.changed?, 'Change in priority not registered!')
-    a_task.done 
-    assert(a_task.changed?, 'Task done not registered!')
-    a_task.undone 
-    assert(a_task.changed?, 'Task undone not registered!')
   end
 
   must 'task_have_total_changes' do 
@@ -199,9 +195,35 @@ class TaskTest < Test::Unit::TestCase
     a_task.category = 'new category'
     a_task.due_date = @today
     a_task.priority = 1
-    a_task.done 
-    changed = [:description, :due_date, :done, :priority, :category]
+    changed = [:description, :due_date, :priority, :category]
     assert_equal(a_task.changed.length, changed.length)
     changed.each {|a| assert(a_task.changed.include? a)}
+  end
+
+  must 'task_have_methodchanged' do 
+    a_task = ToDo::Task.new('test task', 3, @today + 4)    
+    a_task.description = 'new description'
+    assert(a_task.description_changed?, 'Change in description not registered!')
+    a_task.category = 'new category'
+    assert(a_task.category_changed?, 'Change in category registered!')
+    a_task.due_date = @today
+    assert(a_task.due_date_changed?, 'Change in due date not registered!')
+    a_task.priority = 1
+    assert(a_task.priority_changed?, 'Change in priority not registered!')
+  end
+
+  must 'task_have_methodchange' do 
+    a_task = ToDo::Task.new('test task', 3, @today + 4)    
+    value = 'new description'
+    a_task.description = value
+    assert_equal(a_task.description_change, ['test task', value], 'Change in description not registered!')
+    value = 'new category'
+    a_task.category = value
+    assert_equal(a_task.category_change, [nil, value], 'Change in category registered!')
+    a_task.due_date = @today
+    assert_equal(a_task.due_date_change, [@today + 4, @today], 'Change in due date not registered!')
+    value = 1
+    a_task.priority = value
+    assert_equal(a_task.priority_change, [3, value], 'Change in priority not registered!')
   end
 end

@@ -21,6 +21,8 @@ require 'date'
 
 $KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 module ToDo
+  # Part of this class (the one dealing with "dirtyness" and changes of some of 
+  # the attributes) is stolen from the ActiveRecord::Dirty module.
   class Task
     PRIORITYMAX = 1
     PRIORITYMIN = 5
@@ -159,19 +161,31 @@ module ToDo
       changed.inject({}) { |h, attr| h[attr] = attribute_change(attr); h }
     end
 
-
+    # For the attributes :description, :due_date, :done, :priority, :category
+    # this handle <tt>*_changed?</tt>, <tt>*_was</tt> and <tt>*_change</tt>.
+    [:description, :due_date, :priority, :category].each do |attr|
+      define_method("#{attr}_changed?") do
+        changed_attributes.include?(attr)
+      end
+      define_method("#{attr}_was") do
+        attribute_changed?(attr) ? changed_attributes[attr] : __send__(attr)
+      end
+      define_method("#{attr}_change") do
+        [changed_attributes[attr], __send__(attr)] if attribute_changed?(attr)
+      end
+    end
+      
   private
+      # Handle <tt>*_changed?</tt> for +method_missing+.
+      def attribute_changed?(attr)
+        changed_attributes.include?(attr)
+      end
 
       # Map of change <tt>attr => original value</tt>.
     def changed_attributes
       @changed_attributes ||= {}
     end
-
-      # Handle <tt>*_changed?</tt> for +method_missing+.
-    def attribute_changed?(attr)
-      changed_attributes.include?(attr)
-    end
-        
+       
     def compare_by_due_date(a_task)
       if !(@due_date.nil? or a_task.due_date.nil?)
         (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
