@@ -179,7 +179,7 @@ class TaskTest < Test::Unit::TestCase
   
   must 'task_have_changes' do 
     a_task = ToDo::Task.new('test task', 3, @today + 4)    
-    a_task.description=('new description')
+    a_task.description = 'new description' 
     assert(a_task.changed?, 'Change in description not registered!')
     a_task.category = 'new category'
     assert(a_task.changed?, 'Change in category registered!')
@@ -195,7 +195,7 @@ class TaskTest < Test::Unit::TestCase
 
   must 'task_have_total_changes' do 
     a_task = ToDo::Task.new('test task', 3, @today + 4)    
-    a_task.description=('new description')
+    a_task.description = 'new description'
     a_task.category = 'new category'
     a_task.due_date = @today
     a_task.priority = 1

@@ -143,7 +143,6 @@ module ToDo
       !changed_attributes.empty?
     end
     
-
     # List of attributes with unsaved changes.
     #   task.changed # => []
     #   task.description = 'take a beer'
