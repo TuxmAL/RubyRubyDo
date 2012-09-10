@@ -176,12 +176,17 @@ module ToDo
     end
       
   private
-      # Handle <tt>*_changed?</tt> for +method_missing+.
-      def attribute_changed?(attr)
-        changed_attributes.include?(attr)
-      end
+    # Handle <tt>*_changed?</tt> for +method_missing+.
+    def attribute_changed?(attr)
+      changed_attributes.include?(attr)
+    end
 
-      # Map of change <tt>attr => original value</tt>.
+    # Handle <tt>*_change</tt> for +method_missing+.
+    def attribute_change(attr)
+      [changed_attributes[attr], __send__(attr)] if attribute_changed?(attr)
+    end
+
+    # Map of change <tt>attr => original value</tt>.
     def changed_attributes
       @changed_attributes ||= {}
     end
