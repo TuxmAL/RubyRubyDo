@@ -16,10 +16,10 @@
 # 
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+$KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 
 require 'date'
 
-$KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 module ToDo
   # Part of this class (the one dealing with "dirtyness" and changes of some of 
   # the attributes) is stolen from the ActiveRecord::Dirty module.
