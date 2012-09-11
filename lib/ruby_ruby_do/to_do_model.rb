@@ -235,7 +235,7 @@ module RubyRubyDo
       return insertRows(task, row, 1, parent)
     end
 
-    # Warning! insertRows implementation must depends on insertRow and not viceversa as now is!
+    # TODO: Warning! insertRows implementation must depends on insertRow and not viceversa as now is!
     def insertRows(task, row, count, parent = Qt::ModelIndex.new)
       y = index_from_due_date(task)
       r = rowCount y
@@ -255,7 +255,7 @@ module RubyRubyDo
       return removeRows(task, row, 1, parent)
     end
 
-    # Warning! removeRows implementation must depends on removeRow and not viceversa as now is!
+    # TODO: Warning! removeRows implementation must depends on removeRow and not viceversa as now is!
     def removeRows(task, row, count, parent = Qt::ModelIndex.new)
       beginRemoveRows(parent, row, (row + (count - 1)))
       ### nuovo codice

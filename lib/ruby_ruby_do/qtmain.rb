@@ -158,6 +158,7 @@ module RubyRubyDo
               dlg = ToDoQtEditTask.new self.parent, task_idx
               if (dlg.exec == Qt::Dialog::Accepted)
                 treeview.model.todo.save
+                #TODO: here I must control dirty flags!
                 puts "ok"
               else
                 puts "cancel"
