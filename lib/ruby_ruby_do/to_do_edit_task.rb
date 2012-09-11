@@ -42,12 +42,13 @@ module RubyRubyDo
         (@tool_buttons[task.priority - 1]).checked = true
         puts "task.due_date=#{task.due_date.inspect}"
 
-        data = Qt::Variant.new((task.due_date.nil?)? '-': task.due_date)
-        idx = @combo_box.findData data
-
-        puts "find_data=#{idx}; data=#{data.inspect}"
-        @combo_box.insert_item(10, task.due_date.strftime('%a %d/%m/%Y'), Qt::Variant.new(task.due_date)) if idx == -1
-        @combo_box.current_index = (idx != -1)? idx: 10
+        @combo_box.date = Qt::Date.fromJulianDay(task.due_date.jd)
+#        data = Qt::Variant.new((task.due_date.nil?)? '-': task.due_date)
+#        idx = @combo_box.findData data
+#
+#        puts "find_data=#{idx}; data=#{data.inspect}"
+#        @combo_box.insert_item(10, task.due_date.strftime('%a %d/%m/%Y'), Qt::Variant.new(task.due_date)) if idx == -1
+#        @combo_box.current_index = (idx != -1)? idx: 10
         @done_check.checked = task.done?
         msg = []
         msg << Qt::Object.trUtf8('overdue') if task.overdue?
@@ -76,9 +77,11 @@ module RubyRubyDo
         task = @task_idx.model.itemFromIndex(@task_idx).task
         task.description = @description.to_plain_text.strip
         @tool_buttons.each_with_index { |itm, idx| task.priority = (idx+1) if itm.checked }
-        value = @combo_box.item_data(@combo_box.current_index())
-        puts "current_index=#{@combo_box.current_index()}; value=#{value.value.to_s}"
-        task.due_date = value.value.to_s == '-'? nil: Date.jd(value.toDate.toJulianDay)
+#        value = @combo_box.item_data(@combo_box.current_index())
+#        puts "current_index=#{@combo_box.current_index()}; value=#{value.value.to_s}"
+#        task.due_date = value.value.to_s == '-'? nil: Date.jd(value.toDate.toJulianDay)
+        task.due_date = Date.jd(@combo_box.date.toJulianDay)
+        puts "task.due_date=#{task.due_date}"
         if @done_check.checked
           task.done
         else
@@ -136,27 +139,34 @@ module RubyRubyDo
         horizontal_layout = Qt::HBoxLayout.new() do
           label = Qt::Label.new(Qt::Object.trUtf8('Due for:'))
           addWidget(label)
-          combo_box = Qt::ComboBox.new() do
-            self.sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
-            #TODO: Visually change the value into the combobox when a date is 
-            # selected within the calendar widget, inserting a row if needed or 
-            # reverting to the previous value if cancel is pressed. 
-            self.connect(SIGNAL('currentIndexChanged(int)')) do |idx|
-              value = self.item_data(idx)
-              puts "setModelData date: #{value.value}. #{value.is_valid}"
-              value = Qt::Variant.new if value.to_s == '-'
-              unless value.is_valid
-                dlg = ToDoCalendarDialog.new self
-                if (dlg.exec == Qt::Dialog::Accepted)
-                  puts "returned calendar date (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
-                  self.set_item_data(idx, Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date)))
-                  puts "returned calendar date (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
-                else
-                  self.set_item_data(idx, Qt::Variant.new())
-                end
-              end
-            end
+          # TODO: trying a more standard DateEdit widget.
+#           combo_box = Qt::ComboBox.new() do
+#             self.sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
+#             #TODO: Visually change the value into the combobox when a date is 
+#             # selected within the calendar widget, inserting a row if needed or 
+#             # reverting to the previous value if cancel is pressed. 
+#             self.connect(SIGNAL('currentIndexChanged(int)')) do |idx|
+#               value = self.item_data(idx)
+#               puts "setModelData date: #{value.value}. #{value.is_valid}"
+#               value = Qt::Variant.new if value.to_s == '-'
+#               unless value.is_valid
+#                 dlg = ToDoCalendarDialog.new self
+#                 if (dlg.exec == Qt::Dialog::Accepted)
+#                   puts "returned calendar date (a): #{dlg.selected_date} {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
+#                   self.set_item_data(idx, Qt::Variant.new(Qt::Date.fromJulianDay(dlg.selected_date)))
+#                   puts "returned calendar date (b): #{value}, {#dlg.selected_date.day}/{#dlg.selected_date.month}/{#dlg.selected_date.year}"
+#                 else
+#                   self.set_item_data(idx, Qt::Variant.new())
+#                 end
+#               end
+#             end
+          combo_box = Qt::DateEdit.new do
+            self.calendar_popup = true
+            self.display_format = 'dd/MM/yyyy'
           end
+#          combo_box = Qt::ComboBox.new() do
+#            self.sizeAdjustPolicy = Qt::ComboBox::AdjustToContents
+#          end
           addWidget(combo_box)
           label.buddy = combo_box
           addItem(Qt::SpacerItem.new(40, 20, Qt::SizePolicy::Expanding, Qt::SizePolicy::Minimum))
@@ -172,25 +182,25 @@ module RubyRubyDo
           addButton(delete_button, Qt::DialogButtonBox::ActionRole)
         end
         addWidget(button_box)
-        # TODO: this code, stolen from plasma_task, *must* be _refactored_!
-        a_date = Date.today
-        combo_box.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
-        a_date += 1
-        combo_box.add_item a_date.strftime('%a %d/%m/%y - Tomorrow'), Qt::Variant.new(a_date)
-        a_date += 1
-        a_date.upto(a_date + 5) do |d|
-          combo_box.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
-        end
-        a_date += 6
-        combo_box.add_item((a_date).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
-        combo_box.add_item Qt::Object.trUtf8('No date'), Qt::Variant.new('-')
-        combo_box.add_item Qt::Object.trUtf8('Choose date...'), Qt::Variant.new()
-        # get the minimum width that fits the largest item.
-        width = combo_box.minimum_size_hint.width
-        # set the ComboBox to that width.
-        combo_box.minimum_width = width
-        ############################################
-        combo_box.max_visible_items = 11
+#        # TODO: this code, stolen from plasma_task, *must* be _refactored_!
+#        a_date = Date.today
+#        combo_box.add_item a_date.strftime('%a %d/%m/%y - Today'), Qt::Variant.new(a_date)
+#        a_date += 1
+#        combo_box.add_item a_date.strftime('%a %d/%m/%y - Tomorrow'), Qt::Variant.new(a_date)
+#        a_date += 1
+#        a_date.upto(a_date + 5) do |d|
+#          combo_box.add_item d.strftime('%a %d/%m/%y'), Qt::Variant.new(d)
+#        end
+#        a_date += 6
+#        combo_box.add_item((a_date).strftime('%a %d/%m/%y - Next week'), Qt::Variant.new(a_date))
+#        combo_box.add_item Qt::Object.trUtf8('No date'), Qt::Variant.new('-')
+#        combo_box.add_item Qt::Object.trUtf8('Choose date...'), Qt::Variant.new()
+#        # get the minimum width that fits the largest item.
+#        width = combo_box.minimum_size_hint.width
+#        # set the ComboBox to that width.
+#        combo_box.minimum_width = width
+#        ############################################
+#        combo_box.max_visible_items = 11
       end
       connect(button_box, SIGNAL('accepted()'), dialog, SLOT('edit_ok()'))
       connect(button_box, SIGNAL('rejected()'), dialog, SLOT('reject()'))
