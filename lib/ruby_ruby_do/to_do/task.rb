@@ -32,7 +32,7 @@ module ToDo
     def initialize(description = '<empty task>', priority = Task::PRIORITYMIN,
         due_date = nil,category = nil)
       raise RangeError, "Priority out of range (was #{priority.inspect}, expected #{PRIORITYMAX}-#{PRIORITYMIN})" unless !priority.nil? && priority.between?(PRIORITYMAX, PRIORITYMIN)
-      @done=false
+      @fulfilled=false
       @description = description
       @priority = priority
       @due_date = due_date
@@ -46,7 +46,7 @@ module ToDo
     # if not done yet, a task is ordered by due date (no due date are always at the
     # bottom) and if equals by priority (_PRIORITYMAX_ being the highest and 
     # __PRIORITYMIN__ the lowest).
-    # if the task is already done, then we first check if both are fulfilled: 
+    # if the task is already done, then we first check if both are fulfilled:
     # in this case the ordering is first by fulfillment date 
     def <=>(a_task)
       if !(@fulfilled_date.nil? or a_task.fulfilled_date.nil?)
@@ -59,26 +59,28 @@ module ToDo
     end
 
     def done
-      if ! @done
-        changed_attributes[:done] = @done
+      if ! @fulfilled
+        changed_attributes[:fulfilled] = @fulfilled
         @fulfilled_date = Date.today
-        @done = true
+        @fulfilled = true
       end
       self
     end
 
     def undone
-      if @done
-        changed_attributes[:done] = @done
+      if @fulfilled
+        changed_attributes[:fulfilled] = @fulfilled
         @fulfilled_date = nil
-        @done = false
+        @fulfilled = false
       end
       self
     end
 
     def done?
-      return @done
+      return @fulfilled
     end
+
+    alias_method :fulfilled, :done?
 
     def priority=(value)
       raise RangeError, "Priority out of range (was #{value.inspect}, expected #{PRIORITYMAX}-#{PRIORITYMIN})" unless !value.nil? && value.between?(PRIORITYMAX, PRIORITYMIN)
@@ -110,23 +112,23 @@ module ToDo
     end
     
     def overdue?
-      !@done && !@due_date.nil? && (@due_date < Date.today)
+      !@fulfilled && !@due_date.nil? && (@due_date < Date.today)
     end
 
     def due_today?
-      !@done && !@due_date.nil? && (@due_date == Date.today)
+      !@fulfilled && !@due_date.nil? && (@due_date == Date.today)
     end
 
     def due_tomorrow?
-      !@done && !@due_date.nil? && (@due_date == Date.today+ 1)
+      !@fulfilled && !@due_date.nil? && (@due_date == Date.today+ 1)
     end
 
     def due_this_week?
-      !@done && !@due_date.nil? && ((Date.today..(Date.today + 6)).include? @due_date)
+      !@fulfilled && !@due_date.nil? && ((Date.today..(Date.today + 6)).include? @due_date)
     end
 
     def due_with_no_date?
-      !@done && @due_date.nil?
+      !@fulfilled && @due_date.nil?
     end
 
     def saved
@@ -190,7 +192,7 @@ module ToDo
     def changed_attributes
       @changed_attributes ||= {}
     end
-       
+
     def compare_by_due_date(a_task)
       if !(@due_date.nil? or a_task.due_date.nil?)
         (@due_date <=> a_task.due_date).nonzero? || @priority <=> a_task.priority
