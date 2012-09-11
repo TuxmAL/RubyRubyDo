@@ -16,10 +16,10 @@
 # 
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+$KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 
 require 'date'
 
-$KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 module ToDo
   # Part of this class (the one dealing with "dirtyness" and changes of some of 
   # the attributes) is stolen from the ActiveRecord::Dirty module.
@@ -176,12 +176,17 @@ module ToDo
     end
       
   private
-      # Handle <tt>*_changed?</tt> for +method_missing+.
-      def attribute_changed?(attr)
-        changed_attributes.include?(attr)
-      end
+    # Handle <tt>*_changed?</tt> for +method_missing+.
+    def attribute_changed?(attr)
+      changed_attributes.include?(attr)
+    end
 
-      # Map of change <tt>attr => original value</tt>.
+    # Handle <tt>*_change</tt> for +method_missing+.
+    def attribute_change(attr)
+      [changed_attributes[attr], __send__(attr)] if attribute_changed?(attr)
+    end
+
+    # Map of change <tt>attr => original value</tt>.
     def changed_attributes
       @changed_attributes ||= {}
     end
