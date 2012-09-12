@@ -168,6 +168,7 @@ module RubyRubyDo
                   puts "Task changes: #{task_changes.to_a}"
                 end
                 treeview.model.todo.save
+                #TODO: here I must control dirty flags!
                 puts "ok"
               else
                 puts "cancel"
