@@ -168,7 +168,7 @@ module RubyRubyDo
         button_box = Qt::DialogButtonBox.new(Qt::DialogButtonBox::Cancel|Qt::DialogButtonBox::Ok, Qt::Horizontal) do
           self.centerButtons = false
           delete_button = Qt::PushButton.new(Qt::Object.trUtf8('Delete'))
-          addButton(delete_button, Qt::DialogButtonBox::ActionRole)
+          addButton(delete_button, Qt::DialogButtonBox::DestructiveRole)
         end
         addWidget(button_box)
         # TODO: this code, stolen from plasma_task, *must* be _refactored_!
