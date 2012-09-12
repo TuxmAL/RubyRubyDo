@@ -156,7 +156,17 @@ module RubyRubyDo
               # TODO: set parameter correctly!
               task_idx ||= treeview.selectedIndexes.first if treeview.selectionModel.hasSelection
               dlg = ToDoQtEditTask.new self.parent, task_idx
-              if (dlg.exec == Qt::Dialog::Accepted)
+              if dlg.exec == Qt::Dialog::Accepted
+                a_task = task_idx.model.itemFromIndex(task_idx).task
+                if a_task.changed?
+                  task_changes = a_task.changes
+                  puts 'due date changed' if task_changes.include? :due_date
+                  puts 'done changed' if task_changes.include? :fulfilled
+                  puts "Task changes (key, val):"
+                  puts task_changes.inspect
+                  task_changes.each {|k, v| puts "\t#{k.inspect}->#{v.inspect}; "}
+                  puts "Task changes: #{task_changes.to_a}"
+                end
                 treeview.model.todo.save
                 puts "ok"
               else
