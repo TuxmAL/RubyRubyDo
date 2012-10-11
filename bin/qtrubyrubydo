@@ -1,2 +1,8 @@
-#!/bin/bash
-ruby ../lib/ruby_ruby_do/qtmain.rb
+#!/usr/bin/env ruby
+#required libraries to rely on.
+
+if RUBY_VERSION =~ /1\.8/
+  require "#{File.dirname(__FILE__)}/../lib/ruby_ruby_do/qtmain"
+else
+  require_relative "../lib/ruby_ruby_do/qtmain"
+end
