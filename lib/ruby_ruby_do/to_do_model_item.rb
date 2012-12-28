@@ -178,7 +178,7 @@ module RubyRubyDo
             else
               ret_val = Qt::Size.new(10, 15)              
             end
-            retval = Qt::Size.new(0, 2) + ret_val
+            ret_val = Qt::Size.new(0, 2) + ret_val
             puts "column: #{column}->size(#{ret_val.width},#{ret_val.height})"
           when Qt::CheckStateRole
             if column == 0
