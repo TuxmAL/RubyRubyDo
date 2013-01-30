@@ -22,10 +22,9 @@ $KCODE = "UTF-8" if RUBY_VERSION =~ /1\.8/
 require 'yaml'
 require 'date'
 
-$:.unshift File.join(File.dirname(__FILE__))
 # Our libraries
-require 'to_do/task'
-require 'to_do/to_do.rb'
+require_relative 'to_do/task'
+require_relative 'to_do/to_do.rb'
 
 module ToDo
     MAJOR = 0

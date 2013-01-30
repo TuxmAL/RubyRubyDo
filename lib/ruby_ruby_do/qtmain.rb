@@ -20,11 +20,11 @@
 #required libraries to rely on.
 require 'Qt4'
 
-$:.unshift File.join(File.dirname(__FILE__))
-require 'to_do'
-require 'to_do_model'
-require 'to_do_model_item_delegate'
-require 'to_do_edit_task'
+require "#{File.dirname(__FILE__)}/kernel_relative"
+require_relative 'to_do'
+require_relative 'to_do_model'
+require_relative 'to_do_model_item_delegate'
+require_relative 'to_do_edit_task'
 
 module RubyRubyDo
   APP_NAME = 'RubyRubyDo'
@@ -190,7 +190,7 @@ module RubyRubyDo
       unless treeview.model.todo.empty?
         (0..treeview.model.columnCount(0)).each { |i| treeview.resizeColumnToContents i }
       end
-      show
+      self.show
     end
     exec
   end

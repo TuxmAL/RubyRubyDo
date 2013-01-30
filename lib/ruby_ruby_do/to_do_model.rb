@@ -1,3 +1,5 @@
+# -*- encoding: UTF-8 -*-
+#
 # This ToDoQtModel class is largely inspired to an example of a ModelItem
 # from mkfs blog
 # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] from mkfs blog
@@ -17,7 +19,7 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'to_do_model_item'
+require_relative 'to_do_model_item'
 
 module RubyRubyDo
 
@@ -77,8 +79,6 @@ module RubyRubyDo
       to_do.overdue.each {|t| ToDoQtModelItem.new(t, overdue)}
       to_do.with_no_date.each {|t| ToDoQtModelItem.new(t, no_date)}
       to_do.done.each {|t| ToDoQtModelItem.new(t, done)}
-      #ToDoQtModelItem.new('1', next_days)
-      #ToDoQtModelItem.new('2', next_days)
       return to_do
     end
  
@@ -129,23 +129,25 @@ module RubyRubyDo
     def data(index, role)
       return Qt::Variant.new if (not index.valid?)
       case role
-      when Qt::StatusTipRole, Qt::ToolTipRole
-        case index.column
-          when 0
-            ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
-          when 1
-            ret_val = Qt::Object.trUtf8('Priority.')
-          when 2
-            ret_val = Qt::Object.trUtf8('Task description.')
-          when 3
-            ret_val = Qt::Object.trUtf8('Overdue if marked.')
-          when 4
-            ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
-          else
-            ret_val = ''
-        end
-        return Qt::Variant.new(ret_val)
+#        when Qt::StatusTipRole, Qt::ToolTipRole
+        when Qt::ToolTipRole
+          case index.column
+            when 0
+              ret_val = Qt::Object.trUtf8('Checked if fulfilled.')
+            when 1
+              ret_val = Qt::Object.trUtf8('Priority.')
+            when 2
+             ret_val = Qt::Object.trUtf8('Task description.')
+            when 3
+              ret_val = Qt::Object.trUtf8('Overdue if marked.')
+            when 4
+              ret_val = Qt::Object.trUtf8('Due or fulfillment date.')
+            else
+              ret_val = ''
+          end
+          return Qt::Variant.new(ret_val)
       end
+
       item = itemFromIndex(index)
       # TODO: we must comment out this because the treeview was slowed-down sensibly!
       #if item and role == Qt::DisplayRole and item.parent == @root
@@ -205,7 +207,7 @@ module RubyRubyDo
       TITLEROWS
     end
     
-    # Items created as needed fro everi kind of row and column.
+    # Items created as needed fro every kind of row and column.
     def flags(index)
       return Qt::NoItemFlags unless index.is_valid
       item = itemFromIndex(index)

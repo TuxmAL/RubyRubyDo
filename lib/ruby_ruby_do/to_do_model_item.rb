@@ -1,3 +1,5 @@
+# -*- encoding: UTF-8 -*-
+#
 # This ToDoQtModelItem class is largely inspired to an example of a ModelItem
 # from mkfs blog
 # See: {Ruby, Qt4, and AbstractItemModel}[http://entrenchant.blogspot.com/2011/03/ruby-qt4-and-abstractitemmodel.html] 
@@ -98,7 +100,7 @@ module RubyRubyDo
       @children.size
     end
 
-    # Used to determine if the item is expandible.
+    # Used to determine if the item is expandable.
     def hasChildren
       rowCount > 0
     end
