@@ -1,6 +1,6 @@
-=This is RubyRubyDo (ready for you)
+# This is RubyRubyDo (ready for you)
 
-== Description
+## Description
 RubyRubyDo is a Ruby ToDo application, aiming to be used as a KDE plasmoid.
 I really missed this feature on KDE and whay I found already was too overkill
 (integration with nepomuk, web server on local machine!) or required to give
@@ -10,12 +10,12 @@ writing the plasmoid itself.
 Aside that, I hope to create even a CLI interface and a web interface and, for
 free, an API to manage ToDo lists of your own in your projects.
 
-== Documentation
+## Documentation
 See ToDo::ToDo and ToDo::Task for the core todo list and task management.
 More information will be posted here as I'll develop the QT app, plasmoid, CLI
 and web interface.
 
-== Examples
+## Examples
 Basic usage:
 
   todo_list = ToDo::ToDo.new  
@@ -65,12 +65,12 @@ Retrieve all overdue tasks not done yet
 
 
 
-= Installing RubyRubyDo
+# Installing RubyRubyDo
 To be completed.
-== Installing the Gem
+## Installing the Gem
 To be completed.
-== Installing Manually
+## Installing Manually
 To be completed.
 
-== Comments, Info and/or Questions
+## Comments, Info and/or Questions
 Feel free to email {TuxmAL}[mailto:tuxmal@tiscali.it] for any question or info.
